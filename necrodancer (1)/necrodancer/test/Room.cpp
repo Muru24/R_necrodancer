@@ -1,4 +1,4 @@
-﻿#include "Room.h"
+#include "Room.h"
 #include <ctime>
 #include <cstdlib>
 #include <algorithm>
@@ -6,25 +6,20 @@
 
 using namespace std;
 
-// 방 객체를 초기화하고 분할 영역 및 타입을 설정합니다.
 Room::Room(int x, int y, int w, int h, RoomType type)
 	: x(x), y(y), w(w), h(h), rx(0), ry(0), rw(0), rh(0), cx(0), cy(0), left(nullptr), right(nullptr), roomtype(type) {
 }
 
-// 재귀적으로 자식 노드들을 삭제하여 메모리를 해제합니다.
 Room::~Room() {
 	if (left) delete left;
 	if (right) delete right;
 }
 
-// 영역을 무작위로 분할하여 이진 트리 구조를 형성합니다.
-// - minSize: 분할 가능한 최소 너비/높이
 void Room::Split(int minSize) {
 	if (left || right) return;
 
 	bool isHorizontal = (rand() % 2 == 0);
 
-	// 가로/세로 비율이 일정 수준 이상이면 강제로 분할 방향 결정
 	if (w > h && (double)w / h >= 1.25) isHorizontal = false;
 	else if (h > w && (double)h / w >= 1.25) isHorizontal = true;
 
@@ -43,7 +38,6 @@ void Room::Split(int minSize) {
 	}
 }
 
-// 리프 노드 영역 내에 실제 방의 좌표와 크기를 무작위로 결정합니다.
 void Room::CreateRoom() {
 	if (left != nullptr || right != nullptr) {
 		if (left) left->CreateRoom();
@@ -65,7 +59,6 @@ void Room::CreateRoom() {
 	hasRoom = true;
 }
 
-// 방의 중심점 좌표를 계산합니다. (통로 연결용)
 void Room::UpdateCenter() {
 	if (left && right) {
 		left->UpdateCenter();
@@ -98,8 +91,6 @@ void Room::UpdateCenter() {
 	}
 }
 
-// 두 자식 노드의 중심점을 연결하는 통로를 생성합니다.
-// - mapData: 통로 정보를 기록할 맵 배열
 void Room::ConnectRooms(vector<vector<MapTile>>& mapData) {
 	if (left) left->ConnectRooms(mapData);
 	if (right) right->ConnectRooms(mapData);
@@ -111,7 +102,6 @@ void Room::ConnectRooms(vector<vector<MapTile>>& mapData) {
 		int y2 = right->cy;
 
 		if (rand() % 2 == 0) {
-			// 'ㄱ'자 형태로 경로 생성 (가로 먼저)
 			for (int x = min(x1, x2); x <= max(x1, x2); x++) {
 				for (int dy = 0; dy <= 1; dy++) {
 					int ty = y1 + dy;
@@ -127,7 +117,6 @@ void Room::ConnectRooms(vector<vector<MapTile>>& mapData) {
 			}
 		}
 		else {
-			// 'ㄱ'자 형태로 경로 생성 (세로 먼저)
 			for (int y = min(y1, y2); y <= max(y1, y2); y++) {
 				if (y >= 0 && y < MAP_HEIGHT && x1 >= 0 && x1 < MAP_WIDTH) {
 					mapData[y][x1] = {TILE_FLOOR, 0};
@@ -145,7 +134,6 @@ void Room::ConnectRooms(vector<vector<MapTile>>& mapData) {
 	}
 }
 
-// 생성된 방의 총 개수를 반환합니다.
 int Room::GetRoomCount() const {
 	if (left == nullptr && right == nullptr) {
 		return hasRoom ? 1 : 0;
