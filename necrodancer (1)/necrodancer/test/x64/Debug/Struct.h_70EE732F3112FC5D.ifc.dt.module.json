@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\Struct.obj",
+            "outputs": [
+                "x64\\Debug\\Struct.h_70EE732F3112FC5D.ifc.dt.module.json",
+                "x64\\Debug\\Struct.h_70EE732F3112FC5D.ifc.dt.d.json",
+                "x64\\Debug\\Struct.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\git\\necrodancer (1)\\necrodancer\\test\\Struct.h",
+                    "source-path": "c:\\git\\necrodancer (1)\\necrodancer\\test\\struct.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

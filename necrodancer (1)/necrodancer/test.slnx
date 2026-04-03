@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/솔루션 항목/">
+    <File Path="test/Sprite/Characters.png" />
+    <File Path="test/Sprite/Floor/Containers.png" />
+    <File Path="test/Sprite/Floor/Floors.png" />
+    <File Path="test/Sprite/Floor/Shrines.png" />
+    <File Path="test/Sprite/Floor/Traps.png" />
+    <File Path="test/Sprite/Floor/Walls.png" />
+  </Folder>
+  <Project Path="test/test.vcxproj" Id="31cc8a77-8676-49bf-b78a-ce9f1470b823" />
+</Solution>

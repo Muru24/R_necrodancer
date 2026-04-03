@@ -1,0 +1,12 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\git\\necrodancer (1)\\necrodancer\\test\\struct.h",
+        "ProvidedModule": "",
+        "Includes": [
+            "c:\\git\\necrodancer (1)\\necrodancer\\test\\define.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
