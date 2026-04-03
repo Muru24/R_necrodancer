@@ -128,29 +128,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="ObjectContainer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Render.cpp" />
+    <ClCompile Include="Sliem.cpp" />
     <ClCompile Include="Struct.h" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Room.cpp" />
-    <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="UnitBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Collider.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapTemplte.h" />
+    <ClInclude Include="MonsterMovePatten.h" />
+    <ClInclude Include="ObjectContainer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="Sliem.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Room.h" />
-    <ClInclude Include="Unit.h" />
+    <ClInclude Include="UnitBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,16 @@
+# 컴파일 및 빌드 결과물 무시
+*.exe
+*.obj
+*.o
+*.out
+*.pdb
+*.ilk
+
+# 폴더 통째로 무시 (Visual Studio 등 IDE 폴더)
+.vs/
+Debug/
+Release/
+x64/
+x86/
+out/
+build/

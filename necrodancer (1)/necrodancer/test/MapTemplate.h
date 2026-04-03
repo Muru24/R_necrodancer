@@ -1,10 +1,6 @@
-﻿#pragma once
+#pragma once
 #include <vector>
 
-// 특수 구역(상점, 보스 방) 생성을 위한 격자 데이터 템플릿
-// - 5: TILE_FLOOR (바닥 타일)
-
-// 상점 구역의 내부 공간 템플릿
 inline std::vector<std::vector<int>> m_ShopMapData = {
 	{5,5,5,5,5},
 	{5,5,5,5,5},
@@ -15,7 +11,6 @@ inline std::vector<std::vector<int>> m_ShopMapData = {
 	{5,5,5,5,5}
 };
 
-// 보스 방의 내부 공간 템플릿
 inline std::vector<std::vector<int>> m_BossMapData = {
 	{5,5,5,5,5},
 	{5,5,5,5,5},

@@ -1,15 +1,17 @@
-﻿#include "Define.h"
+#include "Define.h"
 #include "Render.h"
+#include "UnitBase.h"
 #include "Player.h"
 #include "Map.h"
 #include "Camera.h"
+#include "ObjectContainer.h"
 #include <iostream>
 #include <algorithm>
 #include <cmath>
 
 using namespace Gdiplus;
 
-Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr),
+Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr), m_pSlimeImg(nullptr),
 		m_pCachedBackground(nullptr), m_bCacheDirty(true)
 {
 }
@@ -18,41 +20,29 @@ Render::~Render()
 {
 }
 
-// GDI+ 초기화 및 게임에 필요한 외부 이미지 자산들을 로드합니다.
 void Render::Initialize(ULONG_PTR& gdiplusToken)
 {
 	GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-	m_pSpriteAtlas = new Image(L"Sprite/Characters.png");
-	if (m_pSpriteAtlas->GetLastStatus() != Ok) {
-		std::cerr << "캐릭터 이미지 로드 실패! (Sprite/Characters.png)\n";
-	}
-
-	m_pTileImg = new Image(L"Sprite/Floor/Floors.png");
-	if (m_pTileImg->GetLastStatus() != Ok) {
-		std::cerr << "배경 이미지 로드 실패! (Sprite/Floor/Floors.png)\n";
-	}
-
-	m_pWallImg = new Image(L"Sprite/Floor/Walls.png");
-	if (m_pWallImg->GetLastStatus() != Ok) {
-		std::cerr << "벽 이미지 로드 실패! (Sprite/Floor/Walls.png)\n";
-	}
+	m_pSpriteAtlas = new Gdiplus::Image(SPRITEPATH_CHARACTERS);
+	m_pTileImg = new Gdiplus::Image(SPRITEPATH_FLOORS);
+	m_pWallImg = new Gdiplus::Image(SPRITEPATH_WALLS);
+	m_pSlimeImg = new Gdiplus::Image(SPRITEPATH_SLIMES);
 }
 
-// 할당된 이미지 자원 및 GDI+ 토큰을 해제합니다.
 void Render::Finalize(ULONG_PTR gdiplusToken)
 {
 	if (m_pSpriteAtlas)    delete m_pSpriteAtlas;
 	if (m_pTileImg)        delete m_pTileImg;
 	if (m_pWallImg)        delete m_pWallImg;
+	if (m_pSlimeImg)       delete m_pSlimeImg;
 	if (m_pCachedBackground) delete m_pCachedBackground;
 
 	GdiplusShutdown(gdiplusToken);
 }
 
-// 맵 구역을 한 장의 비트맵으로 구워 캐싱한 뒤 화면에 출력합니다.
-void Render::DrawBackground(Graphics& graphics, const RECT& rect, Map& map, Camera& camera)
+void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& map, Camera& camera)
 {
 	graphics.SetInterpolationMode(InterpolationModeNearestNeighbor);
 
@@ -60,7 +50,6 @@ void Render::DrawBackground(Graphics& graphics, const RECT& rect, Map& map, Came
 	float camX = camera.GetX();
 	float camY = camera.GetY();
 
-	// 캐시가 유효하지 않거나 비트맵이 없으면 전체 지형을 다시 그립니다.
 	if (m_bCacheDirty || !m_pCachedBackground) {
 		if (m_pCachedBackground) {
 			delete m_pCachedBackground;
@@ -112,7 +101,6 @@ void Render::DrawBackground(Graphics& graphics, const RECT& rect, Map& map, Came
 			}
 		}
 
-		// 안내용 그리드 라인도 비트맵에 미리 그려 최적화합니다.
 		Pen gridPen(Color(120, 255, 255, 255), 2.0f);
 		for (float x = 0; x <= (float)(MAP_WIDTH * gridSize); x += gridSize) {
 			cacheG.DrawLine(&gridPen, (REAL)x, 0.0f, (REAL)x, (REAL)(MAP_HEIGHT * gridSize));
@@ -124,64 +112,104 @@ void Render::DrawBackground(Graphics& graphics, const RECT& rect, Map& map, Came
 		m_bCacheDirty = false;
 	}
 
-	// 캐싱된 배경 비트맵을 카메라 오프셋에 맞춰 한 번에 출력합니다.
 	if (m_pCachedBackground) {
 		graphics.DrawImage(m_pCachedBackground, -camX, -camY);
 	}
 }
 
-// 플레이어를 월드 좌표에 맞춰 화면에 그립니다.
-void Render::DrawPlayer(Graphics& graphics, Player& player, Camera& camera)
+void Render::DrawPlayer(Graphics& graphics, ::UnitBase& unit, Camera& camera)
 {
 	if (!m_pSpriteAtlas || m_pSpriteAtlas->GetLastStatus() != Ok) return;
 
-	int currentFrame = player.GetCurrentFrame();
+	int currentFrame = unit.GetCurrentFrame();
+
+	int bSrcX = currentFrame * FRAME_SIZE;
+	int bSrcY = FRAME_SIZE * 2;
+	int hSrcX = currentFrame * FRAME_SIZE;
+	int hSrcY = 0;
+
+	DrawUnitInternal(graphics, m_pSpriteAtlas, unit, camera, bSrcX, bSrcY, (float)DRAW_SCALE);
+	DrawUnitInternal(graphics, m_pSpriteAtlas, unit, camera, hSrcX, hSrcY, 0.0f);
+}
+
+void Render::DrawUnitInternal(Gdiplus::Graphics& graphics, Gdiplus::Image* pImg, class UnitBase& unit, Camera& camera, int srcX, int srcY, float offsetDrawY)
+{
+	if (!pImg || pImg->GetLastStatus() != Ok) return;
+
 	int camX = camera.GetX();
 	int camY = camera.GetY();
 
-	float playerX = (float)player.GetX() - camX;
-	float playerY = (float)player.GetY() - camY;
+	float unitX = (float)unit.GetX() - camX;
+	float unitY = (float)unit.GetY() - camY;
 
-	// 이동 중에만 점프 애니메이션 오프셋 적용
 	float jumpOffsetY = 0.0f;
-	if (player.GetIsMoving()) {
-		float progress = player.GetMoveProgress();
-		float jumpHeight = player.GetJumpHeight();
+	if (unit.GetIsMoving()) {
+		float progress = unit.GetMoveProgress();
+		float jumpHeight = unit.GetJumpHeight();
 		jumpOffsetY = sinf(progress * 3.141592f) * jumpHeight;
 	}
 
-	bool isLookLeft = player.GetIsLookLeft();
-
-	int bSrcX = currentFrame * FRAME_SIZE;
-	int bSrcY = FRAME_SIZE * 2; // 몸체 스프라이트 Y 좌표
-	int hSrcX = currentFrame * FRAME_SIZE;
-	int hSrcY = 0;              // 머리 스프라이트 Y 좌표
-
+	bool isLookLeft = unit.GetIsLookLeft();
 	float drawWidth = (float)(FRAME_SIZE * DRAW_SCALE);
 	float drawHeight = (float)(FRAME_SIZE * DRAW_SCALE);
 
 	if (isLookLeft) {
-		graphics.DrawImage(m_pSpriteAtlas,
-			RectF(playerX + drawWidth, (playerY - jumpOffsetY) + (float)DRAW_SCALE, -drawWidth, drawHeight),
-			(REAL)bSrcX, (REAL)bSrcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE, UnitPixel);
-
-		graphics.DrawImage(m_pSpriteAtlas,
-			RectF(playerX + drawWidth, (playerY - jumpOffsetY), -drawWidth, drawHeight),
-			(REAL)hSrcX, (REAL)hSrcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE, UnitPixel);
+		graphics.DrawImage(pImg,
+			RectF(unitX + drawWidth, (unitY - jumpOffsetY) + offsetDrawY, -drawWidth, drawHeight),
+			(REAL)srcX, (REAL)srcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE, UnitPixel);
 	}
 	else {
-		graphics.DrawImage(m_pSpriteAtlas,
-			RectF(playerX, (playerY - jumpOffsetY) + (float)DRAW_SCALE, drawWidth, drawHeight),
-			(REAL)bSrcX, (REAL)bSrcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE, UnitPixel);
-
-		graphics.DrawImage(m_pSpriteAtlas,
-			RectF(playerX, (playerY - jumpOffsetY), drawWidth, drawHeight),
-			(REAL)hSrcX, (REAL)hSrcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE, UnitPixel);
+		graphics.DrawImage(pImg,
+			RectF(unitX, (unitY - jumpOffsetY) + offsetDrawY, drawWidth, drawHeight),
+			(REAL)srcX, (REAL)srcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE, UnitPixel);
 	}
 }
 
-// 윈도우 핸들을 받아 더블 버퍼링 방식으로 최종 화면을 출력합니다.
-void Render::Draw(HWND hWnd, Player& player, Map& map, Camera& camera)
+void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
+{
+	const auto& unitContainer = ObjectContainer::getInstance().GetUnitContainer();
+
+	for (auto* unit : unitContainer)
+	{
+		if (!unit || !unit->GetIsAlive()) continue;
+
+		if (unit->GetTag() == PLAYER)
+		{
+			DrawPlayer(graphics, *unit, camera);
+		}
+		else if (unit->GetTag() == ENEMY)
+		{
+			int currentFrame = unit->GetCurrentFrame();
+			int srcX = currentFrame * FRAME_SIZE + 5;
+			int srcY = 0;
+
+			DrawUnitInternal(graphics, m_pSlimeImg, *unit, camera, srcX, srcY);
+		}
+
+		// 실시간 디버그 정보 (HP 등) 출력
+		float unitX = (float)unit->GetX() - camera.GetX();
+		float unitY = (float)unit->GetY() - camera.GetY();
+
+		WCHAR szBuf[128];
+		swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), (unit->GetTag() == PLAYER ? 10 : 5), unit->GetAttack());
+
+		Gdiplus::Font font(L"맑은 고딕", 12, FontStyleBold);
+		Gdiplus::SolidBrush brush(Color(255, 255, 255, 255));
+		Gdiplus::PointF point(unitX, unitY - 30.0f);
+
+		// 외곽선 효과 (검은색)
+		Gdiplus::SolidBrush shadowBrush(Color(255, 0, 0, 0));
+		for (int ox = -1; ox <= 1; ++ox) {
+			for (int oy = -1; oy <= 1; ++oy) {
+				if (ox == 0 && oy == 0) continue;
+				graphics.DrawString(szBuf, -1, &font, PointF(point.X + ox, point.Y + oy), &shadowBrush);
+			}
+		}
+		graphics.DrawString(szBuf, -1, &font, point, &brush);
+	}
+}
+
+void Render::Draw(HWND hWnd, Map& map, Camera& camera)
 {
 	PAINTSTRUCT ps;
 	HDC hdc = BeginPaint(hWnd, &ps);
@@ -202,7 +230,7 @@ void Render::Draw(HWND hWnd, Player& player, Map& map, Camera& camera)
 	{
 		Graphics graphics(memDC);
 		DrawBackground(graphics, rect, map, camera);
-		DrawPlayer(graphics, player, camera);
+		DrawUnit(graphics, camera);
 	}
 
 	BitBlt(hdc, 0, 0, w, h, memDC, 0, 0, SRCCOPY);
@@ -213,8 +241,7 @@ void Render::Draw(HWND hWnd, Player& player, Map& map, Camera& camera)
 	EndPaint(hWnd, &ps);
 }
 
-// 화면 갱신을 요청합니다.
-void Render::DrawUpdate(HWND hWnd, Player& player)
+void Render::DrawUpdate(HWND hWnd, UnitBase& player)
 {
 	InvalidateRect(hWnd, NULL, FALSE);
 }

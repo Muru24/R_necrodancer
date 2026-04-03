@@ -10,6 +10,19 @@
     <File Path="test/Sprite/Floor/Shrines.png" />
     <File Path="test/Sprite/Floor/Traps.png" />
     <File Path="test/Sprite/Floor/Walls.png" />
+    <File Path="test/Sprite/Item/Items_Armor.png" />
+    <File Path="test/Sprite/Item/items_Consumables.png" />
+    <File Path="test/Sprite/Item/items_Footwear.png" />
+    <File Path="test/Sprite/Item/items_Headwear.png" />
+    <File Path="test/Sprite/Item/items_Resources.png" />
+    <File Path="test/Sprite/Item/items_Shovels.png" />
+    <File Path="test/Sprite/Item/items_Torches.png" />
+    <File Path="test/Sprite/Item/items_Weapons.png" />
+    <File Path="test/Sprite/Monster/Monsters_Skeletons.png" />
+    <File Path="test/Sprite/Monster/Monsters_Slimes.png" />
+    <File Path="test/Sprite/Monster/Monsters_Wraiths.png" />
+    <File Path="test/Sprite/Monster/Monster_Dragons.png" />
+    <File Path="test/Sprite/Monster/Monster_Minotaurs.png" />
   </Folder>
   <Project Path="test/test.vcxproj" Id="31cc8a77-8676-49bf-b78a-ce9f1470b823" />
 </Solution>

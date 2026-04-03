@@ -28,19 +28,19 @@
     <Filter Include="MainGame">
       <UniqueIdentifier>{fda87f2a-10ed-4cc0-bf58-b6715f693c78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Collider">
-      <UniqueIdentifier>{84641d6e-d3dc-45c6-9858-0df9124dec19}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Timer">
       <UniqueIdentifier>{9f53d191-eb76-429c-b67e-be21a0fe7a25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Unit\Monster">
+      <UniqueIdentifier>{d27d4806-e2d1-498e-bdbf-e0b94609bf9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ObjectContainer">
+      <UniqueIdentifier>{c1da979f-c370-4e8f-87c8-86f2c10e9b6f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
       <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Unit.cpp">
-      <Filter>Unit</Filter>
     </ClCompile>
     <ClCompile Include="Struct.h">
       <Filter>헤더 파일</Filter>
@@ -60,22 +60,25 @@
     <ClCompile Include="MainGame.cpp">
       <Filter>MainGame</Filter>
     </ClCompile>
-    <ClCompile Include="Collider.cpp">
-      <Filter>Collider</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Timer</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>Map</Filter>
     </ClCompile>
+    <ClCompile Include="UnitBase.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Sliem.cpp">
+      <Filter>Unit\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectContainer.cpp">
+      <Filter>ObjectContainer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>Unit</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Unit</Filter>
@@ -92,9 +95,6 @@
     <ClInclude Include="MainGame.h">
       <Filter>MainGame</Filter>
     </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Collider</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Timer</Filter>
     </ClInclude>
@@ -103,6 +103,18 @@
     </ClInclude>
     <ClInclude Include="MapTemplte.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBase.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Sliem.h">
+      <Filter>Unit\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectContainer.h">
+      <Filter>ObjectContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterMovePatten.h">
+      <Filter>Unit\Monster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
