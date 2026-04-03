@@ -9,6 +9,7 @@ struct Vector2
 struct UnitStatus
 {
 	int Hp;
+	int MaxHp;
 	int Attack;
 	int MoveDistance;
 	bool IsAlive;

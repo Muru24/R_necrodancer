@@ -84,6 +84,6 @@ void MainGame::Render(HWND hWnd)
 {
 	if (m_pMap && m_pCamera)
 	{
-		Render::getInstance().Draw(hWnd, *m_pMap, *m_pCamera);
+		Render::getInstance().Draw(hWnd, *m_pMap, *m_pCamera, *m_pPlayer);
 	}
 }

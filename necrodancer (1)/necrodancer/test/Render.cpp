@@ -12,7 +12,7 @@
 using namespace Gdiplus;
 
 Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr), m_pSlimeImg(nullptr),
-		m_pCachedBackground(nullptr), m_bCacheDirty(true)
+m_pCachedBackground(nullptr), m_bCacheDirty(true)
 {
 }
 
@@ -29,6 +29,7 @@ void Render::Initialize(ULONG_PTR& gdiplusToken)
 	m_pTileImg = new Gdiplus::Image(SPRITEPATH_FLOORS);
 	m_pWallImg = new Gdiplus::Image(SPRITEPATH_WALLS);
 	m_pSlimeImg = new Gdiplus::Image(SPRITEPATH_SLIMES);
+	m_HUD = new Gdiplus::Image(SPRITEPATH_HUD);
 }
 
 void Render::Finalize(ULONG_PTR gdiplusToken)
@@ -38,8 +39,26 @@ void Render::Finalize(ULONG_PTR gdiplusToken)
 	if (m_pWallImg)        delete m_pWallImg;
 	if (m_pSlimeImg)       delete m_pSlimeImg;
 	if (m_pCachedBackground) delete m_pCachedBackground;
+	if (m_HUD) delete m_HUD;
 
 	GdiplusShutdown(gdiplusToken);
+}
+
+
+void Render::DrawString(Gdiplus::Graphics& graphics,WCHAR buf[], int size, int x, int y)
+{
+	Gdiplus::Font font(L"맑은 고딕", 24, FontStyleBold);
+	Gdiplus::SolidBrush brush(Color(255, 255, 255, 255));
+	Gdiplus::PointF point(x, y);
+
+	Gdiplus::SolidBrush shadowBrush(Color(255, 0, 0, 0));
+	for (int ox = -1; ox <= 1; ++ox) {
+		for (int oy = -1; oy <= 1; ++oy) {
+			if (ox == 0 && oy == 0) continue;
+			graphics.DrawString(buf, -1, &font, PointF(point.X + ox, point.Y + oy), &shadowBrush);
+		}
+	}
+	graphics.DrawString(buf, -1, &font, point, &brush);
 }
 
 void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& map, Camera& camera)
@@ -191,7 +210,7 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 		float unitY = (float)unit->GetY() - camera.GetY();
 
 		WCHAR szBuf[128];
-		swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), (unit->GetTag() == PLAYER ? 10 : 5), unit->GetAttack());
+		swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack());
 
 		Gdiplus::Font font(L"맑은 고딕", 12, FontStyleBold);
 		Gdiplus::SolidBrush brush(Color(255, 255, 255, 255));
@@ -209,7 +228,7 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 	}
 }
 
-void Render::Draw(HWND hWnd, Map& map, Camera& camera)
+void Render::Draw(HWND hWnd, Map& map, Camera& camera, UnitBase& player)
 {
 	PAINTSTRUCT ps;
 	HDC hdc = BeginPaint(hWnd, &ps);
@@ -231,6 +250,7 @@ void Render::Draw(HWND hWnd, Map& map, Camera& camera)
 		Graphics graphics(memDC);
 		DrawBackground(graphics, rect, map, camera);
 		DrawUnit(graphics, camera);
+		DrawUi(graphics, player, camera);
 	}
 
 	BitBlt(hdc, 0, 0, w, h, memDC, 0, 0, SRCCOPY);
@@ -244,4 +264,80 @@ void Render::Draw(HWND hWnd, Map& map, Camera& camera)
 void Render::DrawUpdate(HWND hWnd, UnitBase& player)
 {
 	InvalidateRect(hWnd, NULL, FALSE);
+}
+
+void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camera)
+{
+	if (!m_HUD || m_HUD->GetLastStatus() != Ok) return;
+
+	graphics.SetInterpolationMode(InterpolationModeNearestNeighbor);
+
+	float drawSize = (float)(FRAME_SIZE * DRAW_SCALE);
+	int hp = player.GetHp();
+	int maxHp = player.GetMaxHp();
+
+	float startX = UI_HP_POS_X;
+	float startY = UI_HP_POS_Y;
+	float offset = drawSize * 1.05f;
+
+	for (int i = 0; i < maxHp; ++i)
+	{
+		float srcX, srcY;
+		if (i < hp) {
+			srcX = (float)UI_HP_SCR_X;
+			srcY = (float)UI_HP_SCR_Y;
+		}
+		else {
+			srcX = (float)UI_NULL_HP_SCR_X;
+			srcY = (float)UI_NULL_HP_SCR_Y;
+		}
+
+		int xMultiplier = i % 5;
+		int rowIndex = (i / 5) * 8;
+
+		float currentY = startY + (rowIndex * 10.0f);
+
+		graphics.DrawImage(m_HUD,
+			RectF(startX - (xMultiplier * offset), currentY, drawSize, drawSize),
+			(REAL)srcX, (REAL)srcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE,
+			UnitPixel);
+	}
+
+	float uiDrawHeight = drawSize * UI_DRAW_SCALE;
+	float uiDrawWidth = uiDrawHeight * (UI_INVEN_FRAME_X / (float)UI_INVEN_FRAME_Y);
+	for (int i = 0; i < 6; i++)
+	{
+		float destX = UI_INVEN_POS_X + i * (uiDrawWidth + UI_GAP);
+		float srcX = (float)(UI_INVEN_PNG_X + i * (UI_INVEN_FRAME_X + UI_GAP));
+		graphics.DrawImage(m_HUD,
+			RectF(destX, UI_INVEN_POS_Y, uiDrawWidth, uiDrawHeight),
+			(REAL)srcX, (REAL)UI_INVEN_PNG_Y, (REAL)UI_INVEN_FRAME_X, (REAL)UI_INVEN_FRAME_Y,
+			UnitPixel);
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		float destY = UI_ITEM_POS_Y + i * (uiDrawHeight + UI_GAP);
+		float srcY = (float)(UI_ITEM_PNG_Y + i * (UI_ITEM_FRAME_PNG_Y + UI_ITEM_GAP_Y));
+		graphics.DrawImage(m_HUD,
+			RectF(UI_ITEM_POS_X, destY, uiDrawWidth, uiDrawHeight),
+			(REAL)UI_ITEM_PNG_X, (REAL)srcY, (REAL)UI_ITEM_FRAME_PNG_X, (REAL)UI_ITEM_FRAME_PNG_Y,
+			UnitPixel);
+	}
+
+	graphics.DrawImage(m_HUD,
+		RectF(UI_MONEY_POS_X, UI_MONEY_POS_Y, drawSize, drawSize),
+		(REAL)UI_MONEY_SCR_X, (REAL)UI_MONEY_SCR_Y, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE,
+		UnitPixel);
+
+	graphics.DrawImage(m_HUD,
+		RectF(UI_JEWEL_POS_X, UI_JEWEL_POS_Y, drawSize, drawSize),
+		(REAL)UI_JEWEL_SCR_X, (REAL)UI_JEWEL_SCR_Y, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE,
+		UnitPixel);
+
+	WCHAR szBuf[128];
+	swprintf_s(szBuf, L" x%d", 0);
+	DrawString(graphics, szBuf,24, UI_MONEY_FONT_POS_X, UI_MONEY_FONT_POS_Y);
+	DrawString(graphics, szBuf,24, UI_JEWEL_FONT_POS_X, UI_JEWEL_FONT_POS_Y);
+	
 }

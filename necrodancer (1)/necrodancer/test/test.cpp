@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <stdio.h>
 #include "MainGame.h"
 #include "Define.h"
 
@@ -13,6 +14,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 	case WM_PAINT:
 	{
 		MainGame::getInstance().Render(hWnd); 
+	}
+	break;
+
+	case WM_LBUTTONDOWN:
+	{
+		int x = LOWORD(lParam);
+		int y = HIWORD(lParam);
+		printf("[Debug] Screen Mouse Click : X(%d), Y(%d)\n", x, y);
 	}
 	break;
 

@@ -23,6 +23,7 @@
     <File Path="test/Sprite/Monster/Monsters_Wraiths.png" />
     <File Path="test/Sprite/Monster/Monster_Dragons.png" />
     <File Path="test/Sprite/Monster/Monster_Minotaurs.png" />
+    <File Path="test/Sprite/Ui/HUD.png" />
   </Folder>
   <Project Path="test/test.vcxproj" Id="31cc8a77-8676-49bf-b78a-ce9f1470b823" />
 </Solution>

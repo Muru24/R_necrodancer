@@ -22,6 +22,8 @@ protected:
 
 public:
 	UnitBase() : isLookLeft(false), m_currentFrame(0), m_lastAnimTime(0), m_isMoving(false), moveProgress(0.0f), jumpHeight(30.0f), m_isBumping(false) {
+		status.Hp = 0;
+		status.MaxHp = 0;
 		m_vTargetPos = { 0, 0 };
 		m_vStartPos = { 0, 0 };
 	}
@@ -29,6 +31,7 @@ public:
 		: isLookLeft(false), m_currentFrame(0), m_lastAnimTime(0), m_isMoving(false), moveProgress(0.0f), jumpHeight(30.0f), m_isBumping(false)
 	{
 		status.Hp = hp;
+		status.MaxHp = hp;
 		status.Attack = attack;
 		status.MoveDistance = movedistance;
 		obj.Position = pos;
@@ -51,6 +54,7 @@ public:
 	virtual void Update();
 
 	const int GetHp() const { return status.Hp; }
+	const int GetMaxHp() const { return status.MaxHp; }
 	const int GetAttack() const { return status.Attack; }
 	const int GetDistance() const { return status.MoveDistance; }
 	const float GetX() const { return obj.Position.X; }

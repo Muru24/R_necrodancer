@@ -143,8 +143,12 @@ void UnitBase::TakeDamage(int atk)
 	status.Hp -= atk;
 	if (status.Hp <= 0)
 	{
-		status.IsAlive = false;
-		Die();
+		if (GetTag() == PLAYER) {
+			status.Hp = 0; // 테스트를 위해 0으로 고정하고 죽지 않음
+		} else {
+			status.IsAlive = false;
+			Die();
+		}
 	}
 }
 
