@@ -16,6 +16,7 @@ public:
 	MapTile GetTile(int x, int y) const;
 
 	Vector2 GetRandomFloorPos() const;
+	bool DigTile(int x, int y, int digLevel);
 	const std::vector<Room*>& GetRooms() const { return m_rooms; }
 
 

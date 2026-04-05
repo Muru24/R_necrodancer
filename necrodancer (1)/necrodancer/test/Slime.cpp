@@ -20,7 +20,6 @@ void Slime::Move()
 	if (!pMap) return;
 
 	int dx = 0, dy = 0;
-	// Slime_Move_Pattens는 외부(MonsterMovePatten.h)에 정의된 것으로 가정
 	if (Slime_Move_Pattens.empty() || Slime_Move_Pattens[0].empty()) return;
 
 	Vector2 dir = Slime_Move_Pattens[0][MoveCount];

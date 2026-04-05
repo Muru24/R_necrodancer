@@ -1,13 +1,11 @@
 #pragma once
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
 #include <windows.h>
 #include <gdiplus.h>
 
 class Map;
 class Camera;
 class UnitBase;
+struct MapTile;
 
 class Render
 {
@@ -54,8 +52,9 @@ public:
 
 	void DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camera);
 
-	void DrawString(Gdiplus::Graphics& graphics,WCHAR buf[], int size, int x, int y);
+	void DrawString(Gdiplus::Graphics& graphics, wchar_t buf[], int size, int x, int y);
 
+	void UpdateTileCache(int x, int y, Map* pMap);
 	void InvalidateBackgroundCache() { m_bCacheDirty = true; }
 
 };

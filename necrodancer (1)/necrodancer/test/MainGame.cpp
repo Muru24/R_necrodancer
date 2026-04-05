@@ -9,6 +9,7 @@
 #include "ObjectContainer.h"
 #include "Slime.h"
 #include "Light.h"
+#include "ItemFactory.h"
 
 #include <iostream>
 
@@ -34,6 +35,8 @@ void MainGame::Initialize()
 	Vector2 startPos = m_pMap->GetRandomFloorPos();
 	m_pPlayer = new Player(10, 2, MOVE_SPEED, startPos, PLAYER);
 	ObjectContainer::getInstance().PushUnit(m_pPlayer);
+
+	m_pPlayer->Equip(ItemFactory::Create(ITEM_SHOVEL_IRON));
 
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
 

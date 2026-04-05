@@ -10,7 +10,7 @@
 using namespace std;
 
 Map::Map() : m_currentSplitCount(0), m_pRoot(nullptr) {
-	m_mapData.resize(MAP_HEIGHT, vector<MapTile>(MAP_WIDTH, {TILE_WALL_DEFAULT, 0}));
+	m_mapData.resize(MAP_HEIGHT, vector<MapTile>(MAP_WIDTH, {TILE_WALL_DEFAULT, 0, 1}));
 }
 
 Map::~Map() {
@@ -127,6 +127,7 @@ void Map::Generate() {
 			int shopRw = (shopRh > 0) ? (int)m_ShopMapData[0].size() : 0;
 			int sRx = room->GetRx();
 			int sRy = room->GetRy();
+
 			for (int y = 0; y < shopRh; ++y) {
 				for (int x = 0; x < shopRw; ++x) {
 					if (sRy + y < MAP_HEIGHT && sRx + x < MAP_WIDTH) {
@@ -139,9 +140,31 @@ void Map::Generate() {
 				for (int x = sRx - 1; x <= sRx + shopRw; ++x) {
 					if (x >= sRx && x < sRx + shopRw && y >= sRy && y < sRy + shopRh) continue;
 					if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
-						if (m_mapData[y][x].type == TILE_WALL_DEFAULT) {
-							m_mapData[y][x] = {TILE_WALL_SHOP, 0};
-						}
+						m_mapData[y][x] = {TILE_WALL_SHOP, 0, 2};
+					}
+				}
+			}
+
+			int doorX = sRx + shopRw / 2;
+			int doorY = sRy + shopRh; 
+			if (doorY < MAP_HEIGHT) {
+				m_mapData[doorY][doorX] = {TILE_FLOOR, 0};
+
+				int targetY = -1;
+				for (int ty = doorY + 1; ty < MAP_HEIGHT; ++ty) {
+					if (m_mapData[ty][doorX].type == TILE_FLOOR) {
+						targetY = ty;
+						break;
+					}
+				}
+
+				if (targetY != -1) {
+					for (int ty = doorY + 1; ty < targetY; ++ty) {
+						m_mapData[ty][doorX] = {TILE_FLOOR, 0};
+					}
+				} else {
+					for (int ty = doorY + 1; ty < min(doorY + 4, MAP_HEIGHT); ++ty) {
+						m_mapData[ty][doorX] = {TILE_FLOOR, 0};
 					}
 				}
 			}
@@ -188,14 +211,17 @@ void Map::Generate() {
 				if (d == 1) { 
 					m_mapData[y][x].type = TILE_WALL_DEFAULT;
 					m_mapData[y][x].variant = rand() % (WALL_DEFAULT_RANGE + 1);
+					m_mapData[y][x].durability = 1;
 				}
 				else if (d == 2) { 
 					m_mapData[y][x].type = TILE_WALL_HARD;
 					m_mapData[y][x].variant = 0; 
+					m_mapData[y][x].durability = 2;
 				}
 				else { 
 					m_mapData[y][x].type = TILE_WALL_BADROCK;
 					m_mapData[y][x].variant = 0; 
+					m_mapData[y][x].durability = 999;
 				}
 			}
 		}
@@ -205,8 +231,42 @@ void Map::Generate() {
 }
 
 MapTile Map::GetTile(int x, int y) const {
-	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) return {TILE_WALL_DEFAULT, 0};
+	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) return {TILE_WALL_DEFAULT, 0, 1};
 	return m_mapData[y][x];
+}
+
+bool Map::DigTile(int x, int y, int digLevel)
+{
+	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) return false;
+
+	MapTile& tile = m_mapData[y][x];
+
+	if (tile.type == TILE_WALL_BADROCK) return false;
+
+	if (tile.type == TILE_WALL_DEFAULT) {
+		if (digLevel >= 1) {
+			tile.type = TILE_FLOOR;
+			Render::getInstance().UpdateTileCache(x, y, this);
+			return true;
+		}
+	}
+	else if (tile.type == TILE_WALL_HARD || tile.type == TILE_WALL_SHOP) {
+		if (digLevel >= 3) {
+			tile.type = TILE_FLOOR;
+			Render::getInstance().UpdateTileCache(x, y, this);
+			return true;
+		}
+		else if (digLevel == 2) {
+			tile.durability--;
+			if (tile.durability <= 0) {
+				tile.type = TILE_FLOOR;
+				Render::getInstance().UpdateTileCache(x, y, this);
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 Vector2 Map::GetRandomFloorPos() const {

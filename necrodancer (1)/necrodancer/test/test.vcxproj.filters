@@ -40,6 +40,9 @@
     <Filter Include="Light">
       <UniqueIdentifier>{27d3fce2-a4db-4987-8987-ce2b47fbe341}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Item">
+      <UniqueIdentifier>{26397689-56de-4e5e-8820-28a73c515204}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -80,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemFactory.cpp">
+      <Filter>Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +133,12 @@
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemFactory.h">
+      <Filter>Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

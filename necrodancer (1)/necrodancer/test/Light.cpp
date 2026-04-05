@@ -33,7 +33,7 @@ void Light::Update(Vector2 playerPos, int radius, const std::vector<Room*>& room
 			int rw = room->GetRw();
 			int rh = room->GetRh();
 
-			if (pGridX >= rx && pGridX < rx + rw && pGridY >= ry && pGridY < ry + rh) {
+			if (pGridX >= rx - 1 && pGridX < rx + rw + 1 && pGridY >= ry - 1 && pGridY < ry + rh + 1) {
 				for (int y = ry - 1; y <= ry + rh; ++y) {
 					for (int x = rx - 1; x <= rx + rw; ++x) {
 						if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
@@ -60,7 +60,7 @@ void Light::Update(Vector2 playerPos, int radius, const std::vector<Room*>& room
 	}
 }
 
-VisibilityType Light::GetVisibility(int x, int y) const
+Visibility Light::GetVisibility(int x, int y) const
 {
 	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) return VIS_HIDDEN;
 	return m_visibility[y][x];

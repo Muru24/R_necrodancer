@@ -57,7 +57,7 @@ void Render::Finalize(ULONG_PTR gdiplusToken)
 }
 
 
-void Render::DrawString(Gdiplus::Graphics& graphics, WCHAR buf[], int size, int x, int y)
+void Render::DrawString(Gdiplus::Graphics& graphics, wchar_t buf[], int size, int x, int y)
 {
 	if (!m_pBigFont || !m_pWhiteBrush || !m_pBlackBrush) return;
 
@@ -99,44 +99,36 @@ void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& 
 					if (tile.type == TILE_FLOOR) {
 						cacheG.DrawImage(m_pTileImg,
 							RectF((float)x * gridSize, (float)y * gridSize, gridSize, gridSize),
-							(REAL)TILE_DEFAULT_X, (REAL)TILE_DEFAULT_Y, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE,
+							(float)TILE_DEFAULT_X, (float)TILE_DEFAULT_Y, (float)FRAME_SIZE, (float)FRAME_SIZE,
 							UnitPixel);
 					}
 					else if (tile.type == TILE_WALL_DEFAULT) {
-						REAL srcX = (REAL)WALL_DEFAULT_X + (tile.variant * FRAME_SIZE);
+						float srcX = (float)WALL_DEFAULT_X + (tile.variant * FRAME_SIZE);
 						cacheG.DrawImage(m_pWallImg,
 							RectF((float)x * gridSize, (float)y * gridSize - gridSize, gridSize, gridSize * 2.0f),
-							srcX, (REAL)WALL_DEFAULT_Y, (REAL)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
+							srcX, (float)WALL_DEFAULT_Y, (float)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
 							UnitPixel);
 					}
 					else if (tile.type == TILE_WALL_HARD) {
 						cacheG.DrawImage(m_pWallImg,
 							RectF((float)x * gridSize, (float)y * gridSize - gridSize, gridSize, gridSize * 2.0f),
-							(REAL)WALL_HARD_X, (REAL)WALL_HARD_Y, (REAL)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
+							(float)WALL_HARD_X, (float)WALL_HARD_Y, (float)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
 							UnitPixel);
 					}
 					else if (tile.type == TILE_WALL_BADROCK) {
 						cacheG.DrawImage(m_pWallImg,
 							RectF((float)x * gridSize, (float)y * gridSize - gridSize, gridSize, gridSize * 2.0f),
-							(REAL)WALL_BADROCK_X, (REAL)WALL_BADROCK_Y, (REAL)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
+							(float)WALL_BADROCK_X, (float)WALL_BADROCK_Y, (float)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
 							UnitPixel);
 					}
 					else if (tile.type == TILE_WALL_SHOP) {
 						cacheG.DrawImage(m_pWallImg,
 							RectF((float)x * gridSize, (float)y * gridSize - gridSize, gridSize, gridSize * 2.0f),
-							(REAL)WALL_SHOP_X, (REAL)WALL_SHOP_Y, (REAL)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
+							(float)WALL_SHOP_X, (float)WALL_SHOP_Y, (float)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
 							UnitPixel);
 					}
 				}
 			}
-		}
-
-		Pen gridPen(Color(120, 255, 255, 255), 2.0f);
-		for (float x = 0; x <= (float)(MAP_WIDTH * gridSize); x += gridSize) {
-			cacheG.DrawLine(&gridPen, (REAL)x, 0.0f, (REAL)x, (REAL)(MAP_HEIGHT * gridSize));
-		}
-		for (float y = 0; y <= (float)(MAP_HEIGHT * gridSize); y += gridSize) {
-			cacheG.DrawLine(&gridPen, 0.0f, (REAL)y, (REAL)(MAP_WIDTH * gridSize), (REAL)y);
 		}
 
 		m_bCacheDirty = false;
@@ -146,10 +138,9 @@ void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& 
 		graphics.DrawImage(m_pCachedBackground, -camX, -camY);
 	}
 
-	// 전장의 안개 (Fog of War) 및 시야 효과 적용
 	for (int y = 0; y < MAP_HEIGHT; y++) {
 		for (int x = 0; x < MAP_WIDTH; x++) {
-			VisibilityType vis = Light::getInstance().GetVisibility(x, y);
+			Visibility vis = Light::getInstance().GetVisibility(x, y);
 
 			if (vis == VIS_VISIBLE) continue;
 
@@ -157,12 +148,10 @@ void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& 
 			float drawY = (float)y * gridSize - camY;
 
 			if (vis == VIS_HIDDEN) {
-				// 미탐사 구역: 완전 검정
 				SolidBrush blackBrush(Color(255, 0, 0, 0));
 				graphics.FillRectangle(&blackBrush, RectF(drawX, drawY, gridSize, gridSize));
 			}
 			else if (vis == VIS_EXPLORED) {
-				// 탐사된 구역: 반투명 검정 레이어 (어둡게 처리)
 				SolidBrush shadowBrush(Color(180, 0, 0, 0));
 				graphics.FillRectangle(&shadowBrush, RectF(drawX, drawY, gridSize, gridSize));
 			}
@@ -209,12 +198,12 @@ void Render::DrawUnitInternal(Gdiplus::Graphics& graphics, Gdiplus::Image* pImg,
 	if (isLookLeft) {
 		graphics.DrawImage(pImg,
 			RectF(unitX + drawWidth, (unitY - jumpOffsetY) + offsetDrawY, -drawWidth, drawHeight),
-			(REAL)srcX, (REAL)srcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE, UnitPixel);
+			(float)srcX, (float)srcY, (float)FRAME_SIZE, (float)FRAME_SIZE, UnitPixel);
 	}
 	else {
 		graphics.DrawImage(pImg,
 			RectF(unitX, (unitY - jumpOffsetY) + offsetDrawY, drawWidth, drawHeight),
-			(REAL)srcX, (REAL)srcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE, UnitPixel);
+			(float)srcX, (float)srcY, (float)FRAME_SIZE, (float)FRAME_SIZE, UnitPixel);
 	}
 }
 
@@ -232,7 +221,6 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 		}
 		else if (unit->GetTag() == ENEMY)
 		{
-			// 적 유닛은 시야가 VIS_VISIBLE일 때만 출력
 			int gridX = (int)(unit->GetX() / (FRAME_SIZE * DRAW_SCALE));
 			int gridY = (int)(unit->GetY() / (FRAME_SIZE * DRAW_SCALE));
 			if (Light::getInstance().GetVisibility(gridX, gridY) != VIS_VISIBLE) continue;
@@ -244,24 +232,26 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 			DrawUnitInternal(graphics, m_pSlimeImg, *unit, camera, srcX, srcY);
 		}
 
-		// 실시간 디버그 정보 (HP 등) 출력
 		float unitX = (float)unit->GetX() - camera.GetX();
 		float unitY = (float)unit->GetY() - camera.GetY();
 
-		// 적 유닛의 경우 시야(VIS_VISIBLE) 내에 있을 때만 디버그 정보 출력
 		if (unit->GetTag() == ENEMY) {
 			int gridX = (int)(unit->GetX() / (FRAME_SIZE * DRAW_SCALE));
 			int gridY = (int)(unit->GetY() / (FRAME_SIZE * DRAW_SCALE));
 			if (Light::getInstance().GetVisibility(gridX, gridY) != VIS_VISIBLE) continue;
 		}
 
-		WCHAR szBuf[128];
-		swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack());
+		wchar_t szBuf[128];
+		if (unit->GetTag() == PLAYER) {
+			swprintf_s(szBuf, L"HP: %d/%d\nATK: %d\nDig: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack(), static_cast<Player*>(unit)->GetDigLevel());
+		}
+		else {
+			swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack());
+		}
 
 		Gdiplus::PointF point(unitX, unitY - 30.0f);
 
 		if (m_pDefaultFont && m_pWhiteBrush && m_pBlackBrush) {
-			// 외곽선 효과 (검은색)
 			for (int ox = -1; ox <= 1; ++ox) {
 				for (int oy = -1; oy <= 1; ++oy) {
 					if (ox == 0 && oy == 0) continue;
@@ -311,6 +301,53 @@ void Render::DrawUpdate(HWND hWnd, UnitBase& player)
 	InvalidateRect(hWnd, NULL, FALSE);
 }
 
+void Render::UpdateTileCache(int x, int y, Map* pMap)
+{
+	if (!m_pCachedBackground || !pMap) return;
+
+	float gridSize = (float)(FRAME_SIZE * DRAW_SCALE);
+	Gdiplus::Graphics graphics(m_pCachedBackground);
+	graphics.SetInterpolationMode(InterpolationModeNearestNeighbor);
+
+	Gdiplus::SolidBrush blackBrush(Gdiplus::Color(255, 0, 0, 0));
+	graphics.FillRectangle(&blackBrush, (float)x * gridSize, 0.0f, gridSize, (float)(MAP_HEIGHT * gridSize));
+
+	for (int targetY = 0; targetY < MAP_HEIGHT; ++targetY) {
+		MapTile tile = pMap->GetTile(x, targetY);
+
+		if (tile.type == TILE_FLOOR) {
+			graphics.DrawImage(m_pTileImg,
+				RectF((float)x * gridSize, (float)targetY * gridSize, gridSize, gridSize),
+				(float)TILE_DEFAULT_X, (float)TILE_DEFAULT_Y, (float)FRAME_SIZE, (float)FRAME_SIZE,
+				UnitPixel);
+		}
+		else if (tile.type == TILE_WALL_DEFAULT) {
+			graphics.DrawImage(m_pWallImg,
+				RectF((float)x * gridSize, (float)targetY * gridSize - gridSize, gridSize, gridSize * 2.0f),
+				(float)WALL_DEFAULT_X + (tile.variant * FRAME_SIZE), (float)WALL_DEFAULT_Y, (float)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
+				UnitPixel);
+		}
+		else if (tile.type == TILE_WALL_HARD) {
+			graphics.DrawImage(m_pWallImg,
+				RectF((float)x * gridSize, (float)targetY * gridSize - gridSize, gridSize, gridSize * 2.0f),
+				(float)WALL_HARD_X, (float)WALL_HARD_Y, (float)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
+				UnitPixel);
+		}
+		else if (tile.type == TILE_WALL_BADROCK) {
+			graphics.DrawImage(m_pWallImg,
+				RectF((float)x * gridSize, (float)targetY * gridSize - gridSize, gridSize, gridSize * 2.0f),
+				(float)WALL_BADROCK_X, (float)WALL_BADROCK_Y, (float)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
+				UnitPixel);
+		}
+		else if (tile.type == TILE_WALL_SHOP) {
+			graphics.DrawImage(m_pWallImg,
+				RectF((float)x * gridSize, (float)targetY * gridSize - gridSize, gridSize, gridSize * 2.0f),
+				(float)WALL_SHOP_X, (float)WALL_SHOP_Y, (float)FRAME_SIZE, FRAME_SIZE + (FRAME_SIZE * 0.5f),
+				UnitPixel);
+		}
+	}
+}
+
 void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camera)
 {
 	if (!m_HUD || m_HUD->GetLastStatus() != Ok) return;
@@ -344,7 +381,7 @@ void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camer
 
 		graphics.DrawImage(m_HUD,
 			RectF(startX - (xMultiplier * offset), currentY, drawSize, drawSize),
-			(REAL)srcX, (REAL)srcY, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE,
+			(float)srcX, (float)srcY, (float)FRAME_SIZE, (float)FRAME_SIZE,
 			UnitPixel);
 	}
 
@@ -356,7 +393,7 @@ void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camer
 		float srcX = (float)(UI_INVEN_PNG_X + i * (UI_INVEN_FRAME_X + UI_GAP));
 		graphics.DrawImage(m_HUD,
 			RectF(destX, UI_INVEN_POS_Y, uiDrawWidth, uiDrawHeight),
-			(REAL)srcX, (REAL)UI_INVEN_PNG_Y, (REAL)UI_INVEN_FRAME_X, (REAL)UI_INVEN_FRAME_Y,
+			(float)srcX, (float)UI_INVEN_PNG_Y, (float)UI_INVEN_FRAME_X, (float)UI_INVEN_FRAME_Y,
 			UnitPixel);
 	}
 
@@ -366,23 +403,23 @@ void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camer
 		float srcY = (float)(UI_ITEM_PNG_Y + i * (UI_ITEM_FRAME_PNG_Y + UI_ITEM_GAP_Y));
 		graphics.DrawImage(m_HUD,
 			RectF(UI_ITEM_POS_X, destY, uiDrawWidth, uiDrawHeight),
-			(REAL)UI_ITEM_PNG_X, (REAL)srcY, (REAL)UI_ITEM_FRAME_PNG_X, (REAL)UI_ITEM_FRAME_PNG_Y,
+			(float)UI_ITEM_PNG_X, (float)srcY, (float)UI_ITEM_FRAME_PNG_X, (float)UI_ITEM_FRAME_PNG_Y,
 			UnitPixel);
 	}
 
 	graphics.DrawImage(m_HUD,
 		RectF(UI_MONEY_POS_X, UI_MONEY_POS_Y, drawSize, drawSize),
-		(REAL)UI_MONEY_SCR_X, (REAL)UI_MONEY_SCR_Y, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE,
+		(float)UI_MONEY_SCR_X, (float)UI_MONEY_SCR_Y, (float)FRAME_SIZE, (float)FRAME_SIZE,
 		UnitPixel);
 
 	graphics.DrawImage(m_HUD,
 		RectF(UI_JEWEL_POS_X, UI_JEWEL_POS_Y, drawSize, drawSize),
-		(REAL)UI_JEWEL_SCR_X, (REAL)UI_JEWEL_SCR_Y, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE,
+		(float)UI_JEWEL_SCR_X, (float)UI_JEWEL_SCR_Y, (float)FRAME_SIZE, (float)FRAME_SIZE,
 		UnitPixel);
 
-	WCHAR szBuf[128];
+	wchar_t szBuf[128];
 	swprintf_s(szBuf, L" x%d", 0);
-	DrawString(graphics, szBuf,24, UI_MONEY_FONT_POS_X, UI_MONEY_FONT_POS_Y);
-	DrawString(graphics, szBuf,24, UI_JEWEL_FONT_POS_X, UI_JEWEL_FONT_POS_Y);
+	DrawString(graphics, szBuf,24, (float)UI_MONEY_FONT_POS_X, (float)UI_MONEY_FONT_POS_Y);
+	DrawString(graphics, szBuf,24, (float)UI_JEWEL_FONT_POS_X, (float)UI_JEWEL_FONT_POS_Y);
 	
 }

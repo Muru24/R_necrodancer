@@ -27,8 +27,8 @@ public:
 	}
 
 	void Initialize();
-
 	void Finalize();
+
 
 	void Update(HWND hWnd);
 	void Render(HWND hWnd);

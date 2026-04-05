@@ -1,4 +1,5 @@
-#pragma once
+﻿#pragma once
+#include "Define.h"
 
 struct Vector2
 {
@@ -39,10 +40,10 @@ struct Object
 	Vector2 Position;
 };
 
-#include "Define.h"
 
 struct MapTile
 {
 	TileType type;
 	int variant;
+	int durability;
 };
