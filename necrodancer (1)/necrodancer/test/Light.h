@@ -11,7 +11,7 @@ private:
 	Light();
 	~Light();
 
-	VisibilityType m_visibility[MAP_HEIGHT][MAP_WIDTH];
+	Visibility m_visibility[MAP_HEIGHT][MAP_WIDTH];
 
 public:
 	static Light& getInstance()
@@ -21,6 +21,6 @@ public:
 	}
 
 	void Update(Vector2 playerPos, int radius, const std::vector<Room*>& rooms);
-	VisibilityType GetVisibility(int x, int y) const;
+	Visibility GetVisibility(int x, int y) const;
 	void Clear();
 };

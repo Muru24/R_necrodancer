@@ -3,6 +3,7 @@
 #include "Define.h"
 #include "Map.h"
 #include "ObjectContainer.h"
+#include "Player.h"
 #include <cmath>
 #include <iostream>
 
@@ -49,8 +50,6 @@ void UnitBase::Update()
 		SetLastAnimTime(GetTickCount());
 	}
 }
-
-
 
 void UnitBase::StartMoving(Vector2 targetPos, bool isBumping)
 {
@@ -110,6 +109,12 @@ bool UnitBase::TryMove(int dx, int dy)
 	bool isWallTop = (tTop == TILE_WALL_DEFAULT || tTop == TILE_WALL_HARD || tTop == TILE_WALL_BADROCK || tTop == TILE_WALL_SHOP);
 
 	if (isWall || isWallTop) {
+		if (GetTag() == PLAYER) {
+			if (isWallTop)
+				pMap->DigTile(gridX, gridY + 1, static_cast<Player*>(this)->GetDigLevel());
+			else if (isWall)
+				pMap->DigTile(gridX, gridY, static_cast<Player*>(this)->GetDigLevel());
+		}
 		StartMoving({ (float)nextX, (float)nextY }, true);
 		return false;
 	}
@@ -133,7 +138,7 @@ void UnitBase::TakeDamage(int atk)
 	if (status.Hp <= 0)
 	{
 		if (GetTag() == PLAYER) {
-			status.Hp = 0; // 테스트를 위해 0으로 고정하고 죽지 않음
+			status.Hp = 0; 
 		} else {
 			status.IsAlive = false;
 			Die();

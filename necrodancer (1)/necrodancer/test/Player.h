@@ -1,13 +1,18 @@
 #pragma once
 #include "UnitBase.h"
 
+#include <vector>
+#include <utility>
+
 class Map;
+class ItemBase;
 
 class Player : public UnitBase
 {
 private:
 	bool  m_prevKeyState[4];
 	int   m_visionRadius;
+	std::vector<std::pair<ItemSlot, ItemBase*>> m_equips;
 
 
 public:
@@ -29,6 +34,11 @@ public:
 
 	int GetVisionRadius() const { return m_visionRadius; }
 	void SetVisionRadius(int radius) { m_visionRadius = radius; }
+
+	void Equip(ItemBase* pItem);
+	ItemBase* GetEquippedItem(ItemSlot slot) const;
+
+	int GetDigLevel() const;
 
 	virtual void Update();
 };
