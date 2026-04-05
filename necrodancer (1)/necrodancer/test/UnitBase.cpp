@@ -89,12 +89,12 @@ bool UnitBase::ColliderObject(int gridX, int gridY, int nextX, int nextY)
 	return false;
 }
 
-void UnitBase::TryMove(int dx, int dy)
+bool UnitBase::TryMove(int dx, int dy)
 {
-	if (dx == 0 && dy == 0) return;
+	if (dx == 0 && dy == 0) return true;
 
 	Map* pMap = MainGame::getInstance().GetMap();
-	if (!pMap) return;
+	if (!pMap) return false;
 
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
 	Vector2 logicalPos = GetLogicalPos();
@@ -111,14 +111,15 @@ void UnitBase::TryMove(int dx, int dy)
 
 	if (isWall || isWallTop) {
 		StartMoving({ (float)nextX, (float)nextY }, true);
-		return;
+		return false;
 	}
 
 	if (ColliderObject(gridX, gridY,nextX,nextY)) {
-		return;
+		return false;
 	}
 
 	StartMoving({ (float)nextX, (float)nextY }, false);
+	return true;
 }
 
 void UnitBase::Attack(UnitBase& Target)

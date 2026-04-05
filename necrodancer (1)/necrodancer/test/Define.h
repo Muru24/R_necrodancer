@@ -97,3 +97,10 @@ enum TileType
 	TILE_WALL_SHOP,
 	TILE_FLOOR
 };
+
+enum VisibilityType {
+	VIS_HIDDEN,   // 미탐사 (검정)
+	VIS_EXPLORED, // 탐사됨 (안개)
+	VIS_VISIBLE   // 현재 보임 (정상)
+};
+

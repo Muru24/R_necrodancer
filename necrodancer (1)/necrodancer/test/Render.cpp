@@ -8,6 +8,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include "Light.h"
 
 using namespace Gdiplus;
 
@@ -144,6 +145,29 @@ void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& 
 	if (m_pCachedBackground) {
 		graphics.DrawImage(m_pCachedBackground, -camX, -camY);
 	}
+
+	// 전장의 안개 (Fog of War) 및 시야 효과 적용
+	for (int y = 0; y < MAP_HEIGHT; y++) {
+		for (int x = 0; x < MAP_WIDTH; x++) {
+			VisibilityType vis = Light::getInstance().GetVisibility(x, y);
+
+			if (vis == VIS_VISIBLE) continue;
+
+			float drawX = (float)x * gridSize - camX;
+			float drawY = (float)y * gridSize - camY;
+
+			if (vis == VIS_HIDDEN) {
+				// 미탐사 구역: 완전 검정
+				SolidBrush blackBrush(Color(255, 0, 0, 0));
+				graphics.FillRectangle(&blackBrush, RectF(drawX, drawY, gridSize, gridSize));
+			}
+			else if (vis == VIS_EXPLORED) {
+				// 탐사된 구역: 반투명 검정 레이어 (어둡게 처리)
+				SolidBrush shadowBrush(Color(180, 0, 0, 0));
+				graphics.FillRectangle(&shadowBrush, RectF(drawX, drawY, gridSize, gridSize));
+			}
+		}
+	}
 }
  
 void Render::DrawPlayer(Graphics& graphics, ::UnitBase& unit, Camera& camera)
@@ -208,6 +232,11 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 		}
 		else if (unit->GetTag() == ENEMY)
 		{
+			// 적 유닛은 시야가 VIS_VISIBLE일 때만 출력
+			int gridX = (int)(unit->GetX() / (FRAME_SIZE * DRAW_SCALE));
+			int gridY = (int)(unit->GetY() / (FRAME_SIZE * DRAW_SCALE));
+			if (Light::getInstance().GetVisibility(gridX, gridY) != VIS_VISIBLE) continue;
+
 			int currentFrame = unit->GetCurrentFrame();
 			int srcX = currentFrame * FRAME_SIZE + 5;
 			int srcY = 0;
@@ -218,6 +247,13 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 		// 실시간 디버그 정보 (HP 등) 출력
 		float unitX = (float)unit->GetX() - camera.GetX();
 		float unitY = (float)unit->GetY() - camera.GetY();
+
+		// 적 유닛의 경우 시야(VIS_VISIBLE) 내에 있을 때만 디버그 정보 출력
+		if (unit->GetTag() == ENEMY) {
+			int gridX = (int)(unit->GetX() / (FRAME_SIZE * DRAW_SCALE));
+			int gridY = (int)(unit->GetY() / (FRAME_SIZE * DRAW_SCALE));
+			if (Light::getInstance().GetVisibility(gridX, gridY) != VIS_VISIBLE) continue;
+		}
 
 		WCHAR szBuf[128];
 		swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack());

@@ -29,11 +29,9 @@ void Slime::Move()
 	dx = (int)dir.X;
 	dy = (int)dir.Y;
 
-	MoveCount = (MoveCount + 1) % MaxMoveCount;
-	
-	if (dx != 0 || dy != 0)
+	if (TryMove(dx, dy))
 	{
-		TryMove(dx, dy);
+		MoveCount = (MoveCount + 1) % MaxMoveCount;
 	}
 }
 

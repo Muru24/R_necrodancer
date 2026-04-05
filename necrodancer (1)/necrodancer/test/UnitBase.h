@@ -43,7 +43,7 @@ public:
 	virtual ~UnitBase() {}
 
 	virtual void Move() =0;
-	void TryMove(int dx, int dy);
+	bool TryMove(int dx, int dy);
 
 	virtual void Attack(UnitBase& Target);
 

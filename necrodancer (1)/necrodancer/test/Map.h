@@ -16,6 +16,8 @@ public:
 	MapTile GetTile(int x, int y) const;
 
 	Vector2 GetRandomFloorPos() const;
+	const std::vector<Room*>& GetRooms() const { return m_rooms; }
+
 
 private:
 	void Divide(Room* node, int count);

@@ -8,6 +8,7 @@
 #include "Timer.h"
 #include "ObjectContainer.h"
 #include "Slime.h"
+#include "Light.h"
 
 #include <iostream>
 
@@ -25,6 +26,7 @@ void MainGame::Initialize()
 
 	m_pMap = new Map();
 	m_pMap->Generate();
+	Light::getInstance().Clear();
 
 	m_pCamera = new Camera();
 	m_pTimer = new Timer();
@@ -71,6 +73,11 @@ void MainGame::Update(HWND hWnd)
 	
 	if (m_pPlayer)
 	{
+		if (m_pMap)
+		{
+			Light::getInstance().Update(m_pPlayer->GetPos(), m_pPlayer->GetVisionRadius(), m_pMap->GetRooms());
+		}
+
 		if (m_pCamera)
 		{
 			m_pCamera->Update(m_pPlayer->GetPos());
