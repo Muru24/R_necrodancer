@@ -87,5 +87,7 @@ public:
 	void SetJumpHeight(float height) { jumpHeight = height; }
 	void SetLastAnimTime(unsigned long time) { m_lastAnimTime = time; }
 
-	bool ColliderObject(int gridX, int gridY,int nextX, int nextY);
+	void StartMoving(Vector2 targetPos, bool isBumping);
+
+	bool ColliderObject(int gridX, int gridY, int nextX, int nextY);
 };

@@ -133,7 +133,7 @@
     <ClCompile Include="ObjectContainer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Render.cpp" />
-    <ClCompile Include="Sliem.cpp" />
+    <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Struct.h" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -150,7 +150,7 @@
     <ClInclude Include="ObjectContainer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Render.h" />
-    <ClInclude Include="Sliem.h" />
+    <ClInclude Include="Slime.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="UnitBase.h" />

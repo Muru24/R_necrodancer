@@ -10,7 +10,7 @@
 using namespace std;
 
 Map::Map() : m_currentSplitCount(0), m_pRoot(nullptr) {
-	m_mapData.resize(MAP_HEIGHT, vector<MapTile>(MAP_WIDTH, {TILE_WALL_DEFULT, 0}));
+	m_mapData.resize(MAP_HEIGHT, vector<MapTile>(MAP_WIDTH, {TILE_WALL_DEFAULT, 0}));
 }
 
 Map::~Map() {
@@ -53,7 +53,7 @@ void Map::Generate() {
 			
 			for (int y = m_rooms[bossIdx]->GetRy(); y < m_rooms[bossIdx]->GetRy() + m_rooms[bossIdx]->GetRh(); ++y) {
 				for (int x = m_rooms[bossIdx]->GetRx(); x < m_rooms[bossIdx]->GetRx() + m_rooms[bossIdx]->GetRw(); ++x) {
-					if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) m_mapData[y][x] = {TILE_WALL_DEFULT, 0};
+					if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) m_mapData[y][x] = {TILE_WALL_DEFAULT, 0};
 				}
 			}
 
@@ -89,7 +89,7 @@ void Map::Generate() {
 
 				for (int y = m_rooms[shopIdx]->GetRy(); y < m_rooms[shopIdx]->GetRy() + m_rooms[shopIdx]->GetRh(); ++y) {
 					for (int x = m_rooms[shopIdx]->GetRx(); x < m_rooms[shopIdx]->GetRx() + m_rooms[shopIdx]->GetRw(); ++x) {
-						if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) m_mapData[y][x] = {TILE_WALL_DEFULT, 0};
+						if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) m_mapData[y][x] = {TILE_WALL_DEFAULT, 0};
 					}
 				}
 
@@ -139,7 +139,7 @@ void Map::Generate() {
 				for (int x = sRx - 1; x <= sRx + shopRw; ++x) {
 					if (x >= sRx && x < sRx + shopRw && y >= sRy && y < sRy + shopRh) continue;
 					if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
-						if (m_mapData[y][x].type == TILE_WALL_DEFULT) {
+						if (m_mapData[y][x].type == TILE_WALL_DEFAULT) {
 							m_mapData[y][x] = {TILE_WALL_SHOP, 0};
 						}
 					}
@@ -183,10 +183,10 @@ void Map::Generate() {
 
 	for (int y = 0; y < MAP_HEIGHT; ++y) {
 		for (int x = 0; x < MAP_WIDTH; ++x) {
-			if (m_mapData[y][x].type == TILE_WALL_DEFULT) {
+			if (m_mapData[y][x].type == TILE_WALL_DEFAULT) {
 				int d = dist[y][x];
 				if (d == 1) { 
-					m_mapData[y][x].type = TILE_WALL_DEFULT;
+					m_mapData[y][x].type = TILE_WALL_DEFAULT;
 					m_mapData[y][x].variant = rand() % (WALL_DEFAULT_RANGE + 1);
 				}
 				else if (d == 2) { 
@@ -200,36 +200,12 @@ void Map::Generate() {
 			}
 		}
 	}
-
-	cout << "Total Rooms Created: " << m_pRoot->GetRoomCount() << endl;
-
-	for (int y = 0; y < MAP_HEIGHT; y++) {
-		for (int x = 0; x < MAP_WIDTH; x++) {
-			if (m_mapData[y][x].type == TILE_WALL_DEFULT) cout << "1";
-			else if (m_mapData[y][x].type == TILE_WALL_SHOP) cout << "#"; 
-			else {
-				char tileChar = '0';
-				for (auto* room : m_rooms) {
-					if (x >= room->GetRx() && x < room->GetRx() + room->GetRw() &&
-						y >= room->GetRy() && y < room->GetRy() + room->GetRh()) {
-						switch (room->GetRoomType()) {
-						case START: tileChar = 's'; break;
-						case SHOP:  tileChar = 'h'; break;
-						case BOSS:  tileChar = 'b'; break;
-						}
-						break;
-					}
-				}
-				cout << tileChar;
-			}
-		}
-		cout << endl;
-	}
+	
 	Render::getInstance().InvalidateBackgroundCache();
 }
 
 MapTile Map::GetTile(int x, int y) const {
-	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) return {TILE_WALL_DEFULT, 0};
+	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) return {TILE_WALL_DEFAULT, 0};
 	return m_mapData[y][x];
 }
 
@@ -298,7 +274,7 @@ void Map::Clear() {
 	m_rooms.clear();
 	for (int i = 0; i < MAP_HEIGHT; i++) {
 		for (int j = 0; j < MAP_WIDTH; j++) {
-			m_mapData[i][j] = {TILE_WALL_DEFULT, 0};
+			m_mapData[i][j] = {TILE_WALL_DEFAULT, 0};
 		}
 	}
 }

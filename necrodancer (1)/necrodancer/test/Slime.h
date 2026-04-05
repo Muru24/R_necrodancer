@@ -3,14 +3,14 @@
 
 class Map;
 
-class Sliem : public UnitBase
+class Slime : public UnitBase
 {
 private:
 	int MoveCount = 0;
-	int MaxMoveCount;
+	int MaxMoveCount = 0;
 public:
-	Sliem(int hp, int attack, int movedistance, Vector2 pos, ObjectTag tag);
-	virtual ~Sliem() {}
+	Slime(int hp, int attack, int movedistance, Vector2 pos, ObjectTag tag);
+	virtual ~Slime() {}
 
 	virtual void Move();
 	virtual void Attack(UnitBase& Target);

@@ -32,8 +32,8 @@
 #define MAP_WIDTH           60
 #define MAP_HEIGHT          40
 
-#define Tile_DEFAULT_X      48
-#define Tile_DEFAULT_Y      0
+#define TILE_DEFAULT_X      48
+#define TILE_DEFAULT_Y      0
 
 #define WALL_DEFAULT_X      0
 #define WALL_DEFAULT_Y      0
@@ -91,7 +91,7 @@
 enum TileType
 {
 	TILE_EMPTY = 0,
-	TILE_WALL_DEFULT,
+	TILE_WALL_DEFAULT,
 	TILE_WALL_HARD,
 	TILE_WALL_BADROCK,
 	TILE_WALL_SHOP,

@@ -1,4 +1,4 @@
-#include "Sliem.h"
+#include "Slime.h"
 #include "Map.h"
 #include "MonsterMovePatten.h"
 #include <Windows.h>
@@ -7,12 +7,12 @@
 #include <cmath>
 #include <iostream>
 
-Sliem::Sliem(int hp, int attack, int movedistance, Vector2 pos, ObjectTag tag)
-	: UnitBase(hp, attack, movedistance, pos, tag)
+Slime::Slime(int hp, int attack, int movedistance, Vector2 pos, ObjectTag tag)
+	: UnitBase(hp, attack, movedistance, pos, tag), MoveCount(0), MaxMoveCount(0)
 {
 }
 
-void Sliem::Move()
+void Slime::Move()
 {
 	if (GetIsMoving()) return;
 
@@ -20,39 +20,39 @@ void Sliem::Move()
 	if (!pMap) return;
 
 	int dx = 0, dy = 0;
-	int gridSize = FRAME_SIZE * DRAW_SCALE;
+	// Slime_Move_Pattens는 외부(MonsterMovePatten.h)에 정의된 것으로 가정
+	if (Slime_Move_Pattens.empty() || Slime_Move_Pattens[0].empty()) return;
 
 	Vector2 dir = Slime_Move_Pattens[0][MoveCount];
-	MaxMoveCount = Slime_Move_Pattens[0].size();
+	MaxMoveCount = (int)Slime_Move_Pattens[0].size();
 
 	dx = (int)dir.X;
 	dy = (int)dir.Y;
 
-	MoveCount++;
-	if (MoveCount >= MaxMoveCount) MoveCount = 0;
+	MoveCount = (MoveCount + 1) % MaxMoveCount;
+	
 	if (dx != 0 || dy != 0)
 	{
 		TryMove(dx, dy);
 	}
 }
 
-void Sliem::Attack(UnitBase& Target)
+void Slime::Attack(UnitBase& Target)
 {
 	if (GetIsAlive())
 		UnitBase::Attack(Target);
 }
 
-void Sliem::TakeDamage(int atk)
+void Slime::TakeDamage(int atk)
 {
 	UnitBase::TakeDamage(atk);
 }
 
-void Sliem::Die()
+void Slime::Die()
 {
-
 }
 
-void Sliem::Update()
+void Slime::Update()
 {
 	int oldFrame = GetCurrentFrame();
 	UnitBase::Update();

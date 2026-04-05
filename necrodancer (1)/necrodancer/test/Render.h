@@ -20,11 +20,16 @@ private:
 	Gdiplus::Image* m_pWallImg;
 	Gdiplus::Image* m_pSlimeImg;
 	Gdiplus::Image* m_HUD;
-	
 	Gdiplus::Bitmap* m_pCachedBackground;
 	bool m_bCacheDirty;
 
+	Gdiplus::Font* m_pDefaultFont;
+	Gdiplus::Font* m_pBigFont;
+	Gdiplus::SolidBrush* m_pWhiteBrush;
+	Gdiplus::SolidBrush* m_pBlackBrush;
+
 	void DrawUnitInternal(Gdiplus::Graphics& graphics, Gdiplus::Image* pImg, class UnitBase& unit, Camera& camera, int srcX, int srcY, float offsetDrawY = 0.0f);
+
 
 public:
 	static Render& getInstance()

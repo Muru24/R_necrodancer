@@ -11,8 +11,9 @@
 
 using namespace Gdiplus;
 
-Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr), m_pSlimeImg(nullptr),
-m_pCachedBackground(nullptr), m_bCacheDirty(true)
+Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr), m_pSlimeImg(nullptr), m_HUD(nullptr),
+m_pCachedBackground(nullptr), m_bCacheDirty(true),
+m_pDefaultFont(nullptr), m_pBigFont(nullptr), m_pWhiteBrush(nullptr), m_pBlackBrush(nullptr)
 {
 }
 
@@ -30,6 +31,11 @@ void Render::Initialize(ULONG_PTR& gdiplusToken)
 	m_pWallImg = new Gdiplus::Image(SPRITEPATH_WALLS);
 	m_pSlimeImg = new Gdiplus::Image(SPRITEPATH_SLIMES);
 	m_HUD = new Gdiplus::Image(SPRITEPATH_HUD);
+
+	m_pDefaultFont = new Gdiplus::Font(L"맑은 고딕", 12, FontStyleBold);
+	m_pBigFont = new Gdiplus::Font(L"맑은 고딕", 24, FontStyleBold);
+	m_pWhiteBrush = new Gdiplus::SolidBrush(Color(255, 255, 255, 255));
+	m_pBlackBrush = new Gdiplus::SolidBrush(Color(255, 0, 0, 0));
 }
 
 void Render::Finalize(ULONG_PTR gdiplusToken)
@@ -41,24 +47,28 @@ void Render::Finalize(ULONG_PTR gdiplusToken)
 	if (m_pCachedBackground) delete m_pCachedBackground;
 	if (m_HUD) delete m_HUD;
 
+	if (m_pDefaultFont) delete m_pDefaultFont;
+	if (m_pBigFont) delete m_pBigFont;
+	if (m_pWhiteBrush) delete m_pWhiteBrush;
+	if (m_pBlackBrush) delete m_pBlackBrush;
+
 	GdiplusShutdown(gdiplusToken);
 }
 
 
-void Render::DrawString(Gdiplus::Graphics& graphics,WCHAR buf[], int size, int x, int y)
+void Render::DrawString(Gdiplus::Graphics& graphics, WCHAR buf[], int size, int x, int y)
 {
-	Gdiplus::Font font(L"맑은 고딕", 24, FontStyleBold);
-	Gdiplus::SolidBrush brush(Color(255, 255, 255, 255));
-	Gdiplus::PointF point(x, y);
+	if (!m_pBigFont || !m_pWhiteBrush || !m_pBlackBrush) return;
 
-	Gdiplus::SolidBrush shadowBrush(Color(255, 0, 0, 0));
+	Gdiplus::PointF point((float)x, (float)y);
+
 	for (int ox = -1; ox <= 1; ++ox) {
 		for (int oy = -1; oy <= 1; ++oy) {
 			if (ox == 0 && oy == 0) continue;
-			graphics.DrawString(buf, -1, &font, PointF(point.X + ox, point.Y + oy), &shadowBrush);
+			graphics.DrawString(buf, -1, m_pBigFont, PointF(point.X + ox, point.Y + oy), m_pBlackBrush);
 		}
 	}
-	graphics.DrawString(buf, -1, &font, point, &brush);
+	graphics.DrawString(buf, -1, m_pBigFont, point, m_pWhiteBrush);
 }
 
 void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& map, Camera& camera)
@@ -88,10 +98,10 @@ void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& 
 					if (tile.type == TILE_FLOOR) {
 						cacheG.DrawImage(m_pTileImg,
 							RectF((float)x * gridSize, (float)y * gridSize, gridSize, gridSize),
-							(REAL)Tile_DEFAULT_X, (REAL)Tile_DEFAULT_Y, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE,
+							(REAL)TILE_DEFAULT_X, (REAL)TILE_DEFAULT_Y, (REAL)FRAME_SIZE, (REAL)FRAME_SIZE,
 							UnitPixel);
 					}
-					else if (tile.type == TILE_WALL_DEFULT) {
+					else if (tile.type == TILE_WALL_DEFAULT) {
 						REAL srcX = (REAL)WALL_DEFAULT_X + (tile.variant * FRAME_SIZE);
 						cacheG.DrawImage(m_pWallImg,
 							RectF((float)x * gridSize, (float)y * gridSize - gridSize, gridSize, gridSize * 2.0f),
@@ -135,7 +145,7 @@ void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& 
 		graphics.DrawImage(m_pCachedBackground, -camX, -camY);
 	}
 }
-
+ 
 void Render::DrawPlayer(Graphics& graphics, ::UnitBase& unit, Camera& camera)
 {
 	if (!m_pSpriteAtlas || m_pSpriteAtlas->GetLastStatus() != Ok) return;
@@ -212,19 +222,18 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 		WCHAR szBuf[128];
 		swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack());
 
-		Gdiplus::Font font(L"맑은 고딕", 12, FontStyleBold);
-		Gdiplus::SolidBrush brush(Color(255, 255, 255, 255));
 		Gdiplus::PointF point(unitX, unitY - 30.0f);
 
-		// 외곽선 효과 (검은색)
-		Gdiplus::SolidBrush shadowBrush(Color(255, 0, 0, 0));
-		for (int ox = -1; ox <= 1; ++ox) {
-			for (int oy = -1; oy <= 1; ++oy) {
-				if (ox == 0 && oy == 0) continue;
-				graphics.DrawString(szBuf, -1, &font, PointF(point.X + ox, point.Y + oy), &shadowBrush);
+		if (m_pDefaultFont && m_pWhiteBrush && m_pBlackBrush) {
+			// 외곽선 효과 (검은색)
+			for (int ox = -1; ox <= 1; ++ox) {
+				for (int oy = -1; oy <= 1; ++oy) {
+					if (ox == 0 && oy == 0) continue;
+					graphics.DrawString(szBuf, -1, m_pDefaultFont, PointF(point.X + ox, point.Y + oy), m_pBlackBrush);
+				}
 			}
+			graphics.DrawString(szBuf, -1, m_pDefaultFont, point, m_pWhiteBrush);
 		}
-		graphics.DrawString(szBuf, -1, &font, point, &brush);
 	}
 }
 

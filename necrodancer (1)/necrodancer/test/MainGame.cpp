@@ -7,7 +7,7 @@
 #include "Camera.h"
 #include "Timer.h"
 #include "ObjectContainer.h"
-#include "Sliem.h"
+#include "Slime.h"
 
 #include <iostream>
 
@@ -36,7 +36,7 @@ void MainGame::Initialize()
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
 
 	Vector2 slimePos = { startPos.X + gridSize, startPos.Y };
-	Sliem* pSlime = new Sliem(5, 1, 0, slimePos, ENEMY);
+	Slime* pSlime = new Slime(5, 1, 0, slimePos, ENEMY);
 	ObjectContainer::getInstance().PushUnit(pSlime);
 }
 
