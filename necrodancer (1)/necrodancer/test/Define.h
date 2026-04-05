@@ -11,13 +11,29 @@
 #define DRAW_SCALE          3
 
 #define SCREEN_WIDTH        1280
-#define SCREEN_HEIGHT       720
+#define SCREEN_HEIGHT       800
+
+#define UI_HP_POS_X			1040
+#define UI_HP_POS_Y			10
+#define UI_MONEY_POS_X		1120
+#define UI_MONEY_POS_Y		10
+#define UI_JEWEL_POS_X		1120
+#define UI_JEWEL_POS_Y		90
+#define UI_INVEN_POS_X		20
+#define UI_INVEN_POS_Y		10
+#define UI_ITEM_POS_X		20
+#define UI_ITEM_POS_Y		110
+
+#define UI_MONEY_FONT_POS_X	1180
+#define UI_MONEY_FONT_POS_Y	48
+#define UI_JEWEL_FONT_POS_X	1180
+#define UI_JEWEL_FONT_POS_Y	118
 
 #define MAP_WIDTH           60
 #define MAP_HEIGHT          40
 
-#define Tile_DEFAULT_X      48
-#define Tile_DEFAULT_Y      0
+#define TILE_DEFAULT_X      48
+#define TILE_DEFAULT_Y      0
 
 #define WALL_DEFAULT_X      0
 #define WALL_DEFAULT_Y      0
@@ -28,6 +44,28 @@
 #define WALL_BADROCK_Y      288
 #define WALL_SHOP_X         0
 #define WALL_SHOP_Y         288
+
+#define UI_HP_SCR_X 0
+#define UI_HP_SCR_Y 0
+#define UI_NULL_HP_SCR_X 58
+#define UI_NULL_HP_SCR_Y 0
+#define UI_MONEY_SCR_X 85
+#define UI_MONEY_SCR_Y 24
+#define UI_JEWEL_SCR_X 88
+#define UI_JEWEL_SCR_Y 0
+
+#define UI_DRAW_SCALE 1.5f
+#define UI_INVEN_FRAME_X 31
+#define UI_INVEN_FRAME_Y 40
+#define UI_GAP   4.0f
+#define UI_INVEN_PNG_X   0
+#define UI_INVEN_PNG_Y   51
+#define UI_ITEM_GAP_Y 8.0f
+#define UI_ITEM_PNG_X 0
+#define UI_ITEM_PNG_Y 96
+#define UI_ITEM_FRAME_PNG_X 31
+#define UI_ITEM_FRAME_PNG_Y 35
+
 
 #define SPRITEPATH_FLOORS       L"Sprite/Floor/Floors.png"
 #define SPRITEPATH_WALLS        L"Sprite/Floor/Walls.png"
@@ -48,10 +86,12 @@
 #define SPRITEPATH_TORCHES		L"Sprite/Item/items_Torches.png"
 #define SPRITEPATH_WEAPONS		L"Sprite/Item/items_Weapons.png"
 
+#define SPRITEPATH_HUD			L"Sprite/Ui/HUD.png"
+
 enum TileType
 {
 	TILE_EMPTY = 0,
-	TILE_WALL_DEFULT,
+	TILE_WALL_DEFAULT,
 	TILE_WALL_HARD,
 	TILE_WALL_BADROCK,
 	TILE_WALL_SHOP,

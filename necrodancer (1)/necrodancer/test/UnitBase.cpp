@@ -52,6 +52,14 @@ void UnitBase::Update()
 
 
 
+void UnitBase::StartMoving(Vector2 targetPos, bool isBumping)
+{
+	m_vStartPos = GetPos();
+	m_vTargetPos = targetPos;
+	SetIsMoving(true);
+	m_isBumping = isBumping;
+}
+
 bool UnitBase::ColliderObject(int gridX, int gridY, int nextX, int nextY)
 {
 	UnitBase* target = ObjectContainer::getInstance().FindUnitAt(gridX, gridY);
@@ -62,30 +70,18 @@ bool UnitBase::ColliderObject(int gridX, int gridY, int nextX, int nextY)
 		if (myTag == PLAYER) {
 			if (targetTag == ENEMY) {
 				Attack(*target);
-				m_vStartPos = GetPos();
-				m_vTargetPos.X = (float)nextX;
-				m_vTargetPos.Y = (float)nextY;
-				SetIsMoving(true);
-				m_isBumping = true;
+				StartMoving({ (float)nextX, (float)nextY }, true);
 				return true;
 			}
 		}
 		else if (myTag == ENEMY) {
 			if (targetTag == PLAYER) {
 				Attack(*target);
-				m_vStartPos = GetPos();
-				m_vTargetPos.X = (float)nextX;
-				m_vTargetPos.Y = (float)nextY;
-				SetIsMoving(true);
-				m_isBumping = true;
+				StartMoving({ (float)nextX, (float)nextY }, true);
 				return true;
 			}
 			if (targetTag == ENEMY) {
-				m_vStartPos = GetPos();
-				m_vTargetPos.X = (float)nextX;
-				m_vTargetPos.Y = (float)nextY;
-				SetIsMoving(true);
-				m_isBumping = true;
+				StartMoving({ (float)nextX, (float)nextY }, true);
 				return true;
 			}
 		}
@@ -110,15 +106,11 @@ void UnitBase::TryMove(int dx, int dy)
 
 	TileType t = pMap->GetTile(gridX, gridY).type;
 	TileType tTop = pMap->GetTile(gridX, gridY + 1).type;
-	bool isWall = (t == TILE_WALL_DEFULT || t == TILE_WALL_HARD || t == TILE_WALL_BADROCK || t == TILE_WALL_SHOP);
-	bool isWallTop = (tTop == TILE_WALL_DEFULT || tTop == TILE_WALL_HARD || tTop == TILE_WALL_BADROCK || tTop == TILE_WALL_SHOP);
+	bool isWall = (t == TILE_WALL_DEFAULT || t == TILE_WALL_HARD || t == TILE_WALL_BADROCK || t == TILE_WALL_SHOP);
+	bool isWallTop = (tTop == TILE_WALL_DEFAULT || tTop == TILE_WALL_HARD || tTop == TILE_WALL_BADROCK || tTop == TILE_WALL_SHOP);
 
 	if (isWall || isWallTop) {
-		m_vStartPos = GetPos();
-		m_vTargetPos.X = (float)nextX;
-		m_vTargetPos.Y = (float)nextY;
-		SetIsMoving(true);
-		m_isBumping = true;
+		StartMoving({ (float)nextX, (float)nextY }, true);
 		return;
 	}
 
@@ -126,11 +118,7 @@ void UnitBase::TryMove(int dx, int dy)
 		return;
 	}
 
-	m_vStartPos = GetPos();
-	m_vTargetPos.X = (float)nextX;
-	m_vTargetPos.Y = (float)nextY;
-	SetIsMoving(true);
-	m_isBumping = false;
+	StartMoving({ (float)nextX, (float)nextY }, false);
 }
 
 void UnitBase::Attack(UnitBase& Target)
@@ -143,8 +131,12 @@ void UnitBase::TakeDamage(int atk)
 	status.Hp -= atk;
 	if (status.Hp <= 0)
 	{
-		status.IsAlive = false;
-		Die();
+		if (GetTag() == PLAYER) {
+			status.Hp = 0; // 테스트를 위해 0으로 고정하고 죽지 않음
+		} else {
+			status.IsAlive = false;
+			Die();
+		}
 	}
 }
 

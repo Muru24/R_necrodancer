@@ -19,11 +19,17 @@ private:
 	Gdiplus::Image* m_pSpriteAtlas;
 	Gdiplus::Image* m_pWallImg;
 	Gdiplus::Image* m_pSlimeImg;
-	
+	Gdiplus::Image* m_HUD;
 	Gdiplus::Bitmap* m_pCachedBackground;
 	bool m_bCacheDirty;
 
+	Gdiplus::Font* m_pDefaultFont;
+	Gdiplus::Font* m_pBigFont;
+	Gdiplus::SolidBrush* m_pWhiteBrush;
+	Gdiplus::SolidBrush* m_pBlackBrush;
+
 	void DrawUnitInternal(Gdiplus::Graphics& graphics, Gdiplus::Image* pImg, class UnitBase& unit, Camera& camera, int srcX, int srcY, float offsetDrawY = 0.0f);
+
 
 public:
 	static Render& getInstance()
@@ -36,7 +42,7 @@ public:
 
 	void Finalize(ULONG_PTR gdiplusToken);
 
-	void Draw(HWND hWnd, Map& map, Camera& camera);
+	void Draw(HWND hWnd, Map& map, Camera& camera, class UnitBase& player);
 
 	void DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& map, Camera& camera);
 
@@ -45,6 +51,10 @@ public:
 	void DrawUnit(Gdiplus::Graphics& graphics, Camera& camera);
 
 	void DrawUpdate(HWND hWnd, class UnitBase& unit);
+
+	void DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camera);
+
+	void DrawString(Gdiplus::Graphics& graphics,WCHAR buf[], int size, int x, int y);
 
 	void InvalidateBackgroundCache() { m_bCacheDirty = true; }
 

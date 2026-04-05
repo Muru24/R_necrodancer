@@ -69,7 +69,7 @@
     <ClCompile Include="UnitBase.cpp">
       <Filter>Unit</Filter>
     </ClCompile>
-    <ClCompile Include="Sliem.cpp">
+    <ClCompile Include="Slime.cpp">
       <Filter>Unit\Monster</Filter>
     </ClCompile>
     <ClCompile Include="ObjectContainer.cpp">
@@ -107,7 +107,7 @@
     <ClInclude Include="UnitBase.h">
       <Filter>Unit</Filter>
     </ClInclude>
-    <ClInclude Include="Sliem.h">
+    <ClInclude Include="Slime.h">
       <Filter>Unit\Monster</Filter>
     </ClInclude>
     <ClInclude Include="ObjectContainer.h">
