@@ -37,6 +37,9 @@
     <Filter Include="ObjectContainer">
       <UniqueIdentifier>{c1da979f-c370-4e8f-87c8-86f2c10e9b6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Light">
+      <UniqueIdentifier>{27d3fce2-a4db-4987-8987-ce2b47fbe341}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -74,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="ObjectContainer.cpp">
       <Filter>ObjectContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="MonsterMovePatten.h">
       <Filter>Unit\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Light</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
