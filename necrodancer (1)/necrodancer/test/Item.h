@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Define.h"
 #include "Struct.h"
 #include <string>
@@ -19,6 +19,7 @@ protected:
 	int m_visionBonus;
 	int m_digStrength;
 	int m_srcX, m_srcY, m_srcW, m_srcH;
+	int m_Price;
 
 public:
 	ItemBase(ItemID id, std::wstring name, ItemSlot slot, ItemMaterial mat = MAT_BASE)
@@ -46,6 +47,8 @@ public:
 	int GetSrcY() const { return m_srcY; }
 	int GetSrcW() const { return m_srcW; }
 	int GetSrcH() const { return m_srcH; }
+
+	void GetItem(Player* player);
 };
 
 class Weapon : public ItemBase
@@ -55,6 +58,7 @@ private:
 
 public:
 	Weapon(ItemID id, std::wstring name, int damage, std::vector<Vector2> range, ItemMaterial mat = MAT_BASE);
+
 	const std::vector<Vector2>& GetAttackRange() const { return m_attackRange; }
 };
 

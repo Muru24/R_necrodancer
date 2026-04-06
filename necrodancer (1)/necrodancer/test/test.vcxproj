@@ -138,12 +138,14 @@
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="RhythmManager.cpp" />
     <ClCompile Include="R_Note.cpp" />
+    <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Struct.h" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="UnitBase.cpp" />
+    <ClCompile Include="Shopkeeper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -160,10 +162,12 @@
     <ClInclude Include="Render.h" />
     <ClInclude Include="RhythmManager.h" />
     <ClInclude Include="R_Note.h" />
+    <ClInclude Include="Shop.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="UnitBase.h" />
+    <ClInclude Include="Shopkeeper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

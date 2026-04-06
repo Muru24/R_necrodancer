@@ -11,8 +11,12 @@ ItemBase* ItemFactory::Create(ItemID id)
 		pItem->SetSpriteInfo(0, 0, 24, 24);
 		break;
 	case ITEM_LONGSWORD:
-		pItem = new Weapon(id, L"롱소드", 3, { {0, 1}, {0, 2} }, MAT_BASE);
-		pItem->SetSpriteInfo(24, 0, 24, 24);
+		pItem = new Weapon(id, L"롱소드", 3, { {0, 1}, {-1, 1}, {1, 1} }, MAT_BASE);
+		pItem->SetSpriteInfo(ITEM_WEAPON_LONGSWORD_SCR_X, ITEM_WEAPON_LONGSWORD_SCR_Y, ITEM_WEAPON_LONGSWORD_FRAME_X, ITEM_WEAPON_LONGSWORD_FRAME_Y);
+		break;
+	case ITEM_RAPIER:
+		pItem = new Weapon(id, L"레이피어", 2, { {0, 1}, {0, 2} }, MAT_BASE);
+		pItem->SetSpriteInfo(ITEM_WEAPON_RAPIER_SCR_X, ITEM_WEAPON_RAPIER_SCR_Y, ITEM_WEAPON_RAPIER_FRAME_X, ITEM_WEAPON_RAPIER_FRAME_Y);
 		break;
 	case ITEM_GLASS_SWORD:
 		pItem = new Weapon(id, L"유리검", 5, { {0, 1} }, MAT_GLASS);
@@ -32,6 +36,10 @@ ItemBase* ItemFactory::Create(ItemID id)
 		break;
 	case ITEM_SHOVEL_IRON:
 		pItem = new Shovel(id, L"철 삽", 1);
+		pItem->SetSpriteInfo(0, 0, 24, 24);
+		break;
+	case ITEM_SHOVEL_GOLD:
+		pItem = new Shovel(id, L"금 삽", 2);
 		pItem->SetSpriteInfo(0, 0, 24, 24);
 		break;
 	}

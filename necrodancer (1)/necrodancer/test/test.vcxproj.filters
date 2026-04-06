@@ -19,9 +19,6 @@
     <Filter Include="Unit">
       <UniqueIdentifier>{79d259f8-b7e7-49b3-9f2d-91ec8335f7e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map">
-      <UniqueIdentifier>{eee20bfb-af3c-4a75-9b8d-09fc9f09aacd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{cbe43292-e36f-4df5-802a-99cdc12c0474}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,12 @@
     </Filter>
     <Filter Include="Rhythm">
       <UniqueIdentifier>{c4e0d6e3-010b-489f-b0fb-0bf74104efdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{eee20bfb-af3c-4a75-9b8d-09fc9f09aacd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shop">
+      <UniqueIdentifier>{ae674e56-8273-4ffd-9097-f59ca7f9cc0f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +81,9 @@
     <ClCompile Include="UnitBase.cpp">
       <Filter>Unit</Filter>
     </ClCompile>
+    <ClCompile Include="Shopkeeper.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
     <ClCompile Include="Slime.cpp">
       <Filter>Unit\Monster</Filter>
     </ClCompile>
@@ -98,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="R_Note.cpp">
       <Filter>Rhythm</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,6 +140,9 @@
     <ClInclude Include="UnitBase.h">
       <Filter>Unit</Filter>
     </ClInclude>
+    <ClInclude Include="Shopkeeper.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
     <ClInclude Include="Slime.h">
       <Filter>Unit\Monster</Filter>
     </ClInclude>
@@ -154,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="R_Note.h">
       <Filter>Rhythm</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
