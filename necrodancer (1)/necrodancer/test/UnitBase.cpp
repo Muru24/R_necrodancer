@@ -1,4 +1,4 @@
-﻿#include "UnitBase.h"
+#include "UnitBase.h"
 #include "MainGame.h"
 #include "Define.h"
 #include "Map.h"
@@ -6,6 +6,7 @@
 #include "Player.h"
 #include <cmath>
 #include <iostream>
+#include "Item.h"
 
 void UnitBase::Update()
 {
@@ -119,7 +120,42 @@ bool UnitBase::TryMove(int dx, int dy)
 		return false;
 	}
 
-	if (ColliderObject(gridX, gridY,nextX,nextY)) {
+	if (GetTag() == PLAYER) {
+		Player* pPlayer = static_cast<Player*>(this);
+		Weapon* pWeapon = static_cast<Weapon*>(pPlayer->GetEquippedItem(SLOT_WEAPON));
+		if (pWeapon) {
+			const std::vector<Vector2>& rangeList = pWeapon->GetAttackRange();
+			bool attacked = false;
+
+			for (const auto& relPos : rangeList) {
+				int lx = (int)relPos.X;
+				int ly = (int)relPos.Y;
+
+				int targetGridX, targetGridY;
+				if (dx != 0) { // 가로 이동
+					targetGridX = (int)floor(logicalPos.X / gridSize) + ly * dx;
+					targetGridY = (int)floor(logicalPos.Y / gridSize) + lx * dx;
+				}
+				else { // 세로 이동
+					targetGridX = (int)floor(logicalPos.X / gridSize) + lx * dy * -1;
+					targetGridY = (int)floor(logicalPos.Y / gridSize) + ly * dy;
+				}
+
+				UnitBase* target = ObjectContainer::getInstance().FindUnitAt(targetGridX, targetGridY);
+				if (target && target->GetTag() == ENEMY && target->GetIsAlive()) {
+					Attack(*target);
+					attacked = true;
+				}
+			}
+
+			if (attacked) {
+				StartMoving({ (float)nextX, (float)nextY }, true);
+				return false;
+			}
+		}
+	}
+
+	if (ColliderObject(gridX, gridY, nextX, nextY)) {
 		return false;
 	}
 

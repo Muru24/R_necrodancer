@@ -1,4 +1,4 @@
-#include "MainGame.h"
+﻿#include "MainGame.h"
 #include "Struct.h"
 #include "Define.h"
 #include "Map.h"
@@ -11,6 +11,7 @@
 #include "Light.h"
 #include "ItemFactory.h"
 #include "RhythmManager.h"
+#include "Shopkeeper.h"
 
 #include <iostream>
 
@@ -39,13 +40,30 @@ void MainGame::Initialize()
 	m_pPlayer = new Player(10, 2, MOVE_SPEED, startPos, PLAYER);
 	ObjectContainer::getInstance().PushUnit(m_pPlayer);
 
-	m_pPlayer->Equip(ItemFactory::Create(ITEM_SHOVEL_IRON));
+	m_pPlayer->Equip(ItemFactory::Create(ITEM_SHOVEL_GOLD));
+	m_pPlayer->Equip(ItemFactory::Create(ITEM_LONGSWORD));
 
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
 
 	Vector2 slimePos = { startPos.X + gridSize, startPos.Y };
 	Slime* pSlime = new Slime(5, 1, 0, slimePos, ENEMY);
 	ObjectContainer::getInstance().PushUnit(pSlime);
+
+	const std::vector<Room*>& rooms = m_pMap->GetRooms();
+	Room* pShop = nullptr;
+	for (Room* room : rooms) {
+		if (room->GetRoomType() == SHOP) {
+			pShop = room;
+			break;
+		}
+	}
+	if (pShop) {
+		int cx = pShop->GetRx() + pShop->GetRw() / 2;
+		int cy = pShop->GetRy() + pShop->GetRh() / 2;
+		Vector2 shopkeeperPos = { (float)cx * gridSize + gridSize, (float)cy * gridSize };
+		Shopkeeper* pShopkeeper = new Shopkeeper(999, 0, 0, shopkeeperPos, NPC);
+		ObjectContainer::getInstance().PushUnit(pShopkeeper);
+	}
 
 	beatInterval = 60000 / RHYTHM_BPM;
 	lastBeatTime = GetTickCount();

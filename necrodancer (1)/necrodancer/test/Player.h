@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "UnitBase.h"
 
 #include <vector>
@@ -10,6 +10,7 @@ class ItemBase;
 class Player : public UnitBase
 {
 private:
+	int m_Money;
 	bool  m_prevKeyState[4];
 	int   m_visionRadius;
 	bool  m_bActedThisBeat = false;
@@ -42,4 +43,7 @@ public:
 	int GetDigLevel() const;
 
 	virtual void Update();
+
+	int GetMoney()const { return m_Money; }
+	void SetMoney(int money) { m_Money += money; }
 };

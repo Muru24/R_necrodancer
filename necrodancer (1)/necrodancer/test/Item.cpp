@@ -1,4 +1,4 @@
-#include "Item.h"
+﻿#include "Item.h"
 #include "Player.h"
 
 void ItemBase::ApplySpecialAbility(AbilityTrigger trigger, UnitBase* pOwner, UnitBase* pTarget)
@@ -20,6 +20,16 @@ void ItemBase::ApplySpecialAbility(AbilityTrigger trigger, UnitBase* pOwner, Uni
 	}
 }
 
+void ItemBase::GetItem(Player* player)
+{
+	if (m_Price > player->GetMoney()) return;
+
+	player->SetMoney(player->GetMoney() - m_Price);
+	OnUnequip(player);
+	OnEquip(player);
+}
+
+
 Weapon::Weapon(ItemID id, std::wstring name, int damage, std::vector<Vector2> range, ItemMaterial mat)
 	: ItemBase(id, name, SLOT_WEAPON, mat), m_attackRange(range)
 {
@@ -34,6 +44,7 @@ Torch::Torch(ItemID id, std::wstring name, int visionBonus)
 
 void Torch::OnEquip(Player* pPlayer)
 {
+	ItemBase::OnEquip(pPlayer);
 	if (pPlayer) {
 		pPlayer->SetVisionRadius(pPlayer->GetVisionRadius() + m_visionBonus);
 	}
@@ -41,6 +52,7 @@ void Torch::OnEquip(Player* pPlayer)
 
 void Torch::OnUnequip(Player* pPlayer)
 {
+	ItemBase::OnUnequip(pPlayer);
 	if (pPlayer) {
 		pPlayer->SetVisionRadius(pPlayer->GetVisionRadius() - m_visionBonus);
 	}

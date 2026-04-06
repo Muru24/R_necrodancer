@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "Define.h"
 #include <windows.h>
 #include "Map.h"
@@ -11,7 +11,7 @@
 void Player::Move()
 {
 	if (!RhythmManager::getInstance().IsBeatWindow()) {
-		m_bActedThisBeat = false; // 박자 창 탈출 시 행동 여부 초기화
+		m_bActedThisBeat = false;
 
 		bool currentKeyState[4];
 		currentKeyState[0] = (GetAsyncKeyState(VK_UP) & 0x8000) != 0;
@@ -23,7 +23,6 @@ void Player::Move()
 	}
 
 	if (m_bActedThisBeat) {
-		// 이미 박자 행동을 한 경우, 입력 상태만 갱신하고 행동은 무시
 		bool currentKeyState[4];
 		currentKeyState[0] = (GetAsyncKeyState(VK_UP) & 0x8000) != 0;
 		currentKeyState[1] = (GetAsyncKeyState(VK_DOWN) & 0x8000) != 0;

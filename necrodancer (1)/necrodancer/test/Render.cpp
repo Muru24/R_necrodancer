@@ -1,4 +1,4 @@
-﻿#include "Define.h"
+#include "Define.h"
 #include "Render.h"
 #include "UnitBase.h"
 #include "Player.h"
@@ -15,6 +15,7 @@
 using namespace Gdiplus;
 
 Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr), m_pSlimeImg(nullptr), m_HUD(nullptr),
+m_pShopkeeper(nullptr), m_Note(nullptr),
 m_pCachedBackground(nullptr), m_bCacheDirty(true),
 m_pDefaultFont(nullptr), m_pBigFont(nullptr), m_pWhiteBrush(nullptr), m_pBlackBrush(nullptr)
 {
@@ -34,6 +35,7 @@ void Render::Initialize(ULONG_PTR& gdiplusToken)
 	m_pWallImg = new Gdiplus::Image(SPRITEPATH_WALLS);
 	m_pSlimeImg = new Gdiplus::Image(SPRITEPATH_SLIMES);
 	m_HUD = new Gdiplus::Image(SPRITEPATH_HUD);
+	m_pShopkeeper = new Gdiplus::Image(SPRITEPATH_SHOPKEPPER);
 
 	m_pDefaultFont = new Gdiplus::Font(L"맑은 고딕", 12, FontStyleBold);
 	m_pBigFont = new Gdiplus::Font(L"맑은 고딕", 24, FontStyleBold);
@@ -49,6 +51,8 @@ void Render::Finalize(ULONG_PTR gdiplusToken)
 	if (m_pSlimeImg)       delete m_pSlimeImg;
 	if (m_pCachedBackground) delete m_pCachedBackground;
 	if (m_HUD) delete m_HUD;
+	if (m_pShopkeeper) delete m_pShopkeeper;
+	if (m_Note) delete m_Note;
 
 	if (m_pDefaultFont) delete m_pDefaultFont;
 	if (m_pBigFont) delete m_pBigFont;
@@ -233,6 +237,36 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 
 			DrawUnitInternal(graphics, m_pSlimeImg, *unit, camera, srcX, srcY);
 		}
+		else if (unit->GetTag() == NPC)
+		{
+			int gridX = (int)(unit->GetX() / (FRAME_SIZE * DRAW_SCALE));
+			int gridY = (int)(unit->GetY() / (FRAME_SIZE * DRAW_SCALE));
+			if (Light::getInstance().GetVisibility(gridX, gridY) != VIS_VISIBLE) continue;
+			if (!m_pShopkeeper || m_pShopkeeper->GetLastStatus() != Ok) continue;
+
+			float gridSize = (float)(FRAME_SIZE * DRAW_SCALE);
+			float destX = (float)unit->GetX() - camera.GetX();
+			float destY = (float)unit->GetY() - camera.GetY();
+
+			int imgWidth = m_pShopkeeper->GetWidth();
+			int maxFrame = imgWidth / NPC_SHOPKEEPER_FRAME_X;
+			if (maxFrame == 0) maxFrame = 1;
+
+			int currentFrame = (GetTickCount() / ANIM_SPEED) % maxFrame;
+			float srcX = (float)(currentFrame * NPC_SHOPKEEPER_FRAME_X);
+			float srcY = 0.0f;
+
+			float drawW = (float)NPC_SHOPKEEPER_FRAME_X * NPC_SHOPKEEPER_DRAW_SCALE;
+			float drawH = (float)NPC_SHOPKEEPER_FRAME_Y * NPC_SHOPKEEPER_DRAW_SCALE;
+
+			destX += (gridSize - drawW) / 2.0f;
+			destY += (gridSize - drawH);
+
+			graphics.DrawImage(m_pShopkeeper,
+				RectF(destX, destY, drawW, drawH),
+				srcX, srcY, (float)NPC_SHOPKEEPER_FRAME_X, (float)NPC_SHOPKEEPER_FRAME_Y,
+				UnitPixel);
+		}
 
 		float unitX = (float)unit->GetX() - camera.GetX();
 		float unitY = (float)unit->GetY() - camera.GetY();
@@ -246,6 +280,9 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 		wchar_t szBuf[128];
 		if (unit->GetTag() == PLAYER) {
 			swprintf_s(szBuf, L"HP: %d/%d\nATK: %d\nDig: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack(), static_cast<Player*>(unit)->GetDigLevel());
+		}
+		else if (unit->GetTag() == NPC) {
+			continue; // Do not draw status text for NPC
 		}
 		else {
 			swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack());
