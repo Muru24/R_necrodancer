@@ -1,4 +1,4 @@
-#include "Define.h"
+﻿#include "Define.h"
 #include "Render.h"
 #include "UnitBase.h"
 #include "Player.h"
@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <cmath>
 #include "Light.h"
+#include "RhythmManager.h"
+#include "R_Note.h"
 
 using namespace Gdiplus;
 
@@ -158,7 +160,7 @@ void Render::DrawBackground(Gdiplus::Graphics& graphics, const RECT& rect, Map& 
 		}
 	}
 }
- 
+
 void Render::DrawPlayer(Graphics& graphics, ::UnitBase& unit, Camera& camera)
 {
 	if (!m_pSpriteAtlas || m_pSpriteAtlas->GetLastStatus() != Ok) return;
@@ -285,7 +287,8 @@ void Render::Draw(HWND hWnd, Map& map, Camera& camera, UnitBase& player)
 		Graphics graphics(memDC);
 		DrawBackground(graphics, rect, map, camera);
 		DrawUnit(graphics, camera);
-		DrawUi(graphics, player, camera);
+		DrawUi(graphics, player);
+		DrawRhythm(graphics);
 	}
 
 	BitBlt(hdc, 0, 0, w, h, memDC, 0, 0, SRCCOPY);
@@ -348,12 +351,11 @@ void Render::UpdateTileCache(int x, int y, Map* pMap)
 	}
 }
 
-void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camera)
+void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player)
 {
 	if (!m_HUD || m_HUD->GetLastStatus() != Ok) return;
 
 	graphics.SetInterpolationMode(InterpolationModeNearestNeighbor);
-
 	float drawSize = (float)(FRAME_SIZE * DRAW_SCALE);
 	int hp = player.GetHp();
 	int maxHp = player.GetMaxHp();
@@ -419,7 +421,63 @@ void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camer
 
 	wchar_t szBuf[128];
 	swprintf_s(szBuf, L" x%d", 0);
-	DrawString(graphics, szBuf,24, (float)UI_MONEY_FONT_POS_X, (float)UI_MONEY_FONT_POS_Y);
-	DrawString(graphics, szBuf,24, (float)UI_JEWEL_FONT_POS_X, (float)UI_JEWEL_FONT_POS_Y);
-	
+	DrawString(graphics, szBuf, 24, (float)UI_MONEY_FONT_POS_X, (float)UI_MONEY_FONT_POS_Y);
+	DrawString(graphics, szBuf, 24, (float)UI_JEWEL_FONT_POS_X, (float)UI_JEWEL_FONT_POS_Y);
+
 }
+
+void Render::DrawRhythm(Gdiplus::Graphics& graphics)
+{
+	if (!m_HUD || m_HUD->GetLastStatus() != Ok) return;
+
+	graphics.SetInterpolationMode(InterpolationModeNearestNeighbor);
+
+	int currentFrame = RhythmManager::getInstance().GetCurrentFrame();
+	int drawScale = DRAW_SCALE + 3;
+	float drawSize = (float)(FRAME_SIZE * drawScale);
+	float startX = UI_RHYTHM_HEART_POS_X - (drawSize / 2);
+
+	float srcX = (float)UI_RHYTHM_HEART_SCR_X + (currentFrame * UI_RHYTHM_HEART_FRAME_X);
+
+	graphics.DrawImage(m_HUD,
+		RectF(startX, (float)UI_RHYTHM_HEART_POS_Y, drawSize, drawSize),
+		srcX, (float)UI_RHYTHM_HEART_SCR_Y, (float)UI_RHYTHM_HEART_FRAME_X, (float)UI_RHYTHM_HEART_FRAME_Y,
+		UnitPixel);
+
+	R_Note* pNote = RhythmManager::getInstance().GetCurrentNote();
+	if (pNote) {
+		float cTime = pNote->Getcurrenttime();
+		float mTime = pNote->Getmaxtime();
+		float ratio = cTime / mTime;
+
+		float beatWidth = 300.0f;
+		SolidBrush whiteBrush(Color(255, 255, 255, 255));
+		Pen whitePen(Color(150, 255, 255, 255), 2);
+
+
+		for (int i = 1; i <= 4; ++i) {
+			float dist = (i - ratio) * beatWidth;
+			if (dist < 0) continue;
+
+			float leftNoteX = (float)UI_RHYTHM_BAR_POS_X - dist;
+			float rightNoteX = (float)UI_RHYTHM_BAR_POS_X + dist;
+
+			float noteW = 8.0f;
+
+			graphics.DrawImage(m_HUD,
+				RectF(leftNoteX - noteW / 2, (float)UI_RHYTHM_BAR_POS_Y + UI_RHYTHM_BAR_FRAME_Y / 2, UI_RHYTHM_BAR_FRAME_X * DRAW_SCALE, FRAME_SIZE * UI_BAR_DRAW_SCALE),
+				(float)UI_RHYTHM_BAR_SCR_X, (float)UI_RHYTHM_BAR_SCR_Y, (float)UI_RHYTHM_BAR_FRAME_X, (float)UI_RHYTHM_BAR_FRAME_Y,
+				UnitPixel);
+			graphics.DrawImage(m_HUD,
+				RectF(rightNoteX - noteW / 2, (float)UI_RHYTHM_BAR_POS_Y + UI_RHYTHM_BAR_FRAME_Y / 2, UI_RHYTHM_BAR_FRAME_X * DRAW_SCALE, FRAME_SIZE * UI_BAR_DRAW_SCALE),
+				(float)UI_RHYTHM_BAR_SCR_X, (float)UI_RHYTHM_BAR_SCR_Y, (float)UI_RHYTHM_BAR_FRAME_X, (float)UI_RHYTHM_BAR_FRAME_Y,
+				UnitPixel);
+		}
+
+		float marginRatio = RHYTHM_MARGIN / mTime;
+		float marginWidth = marginRatio * beatWidth;
+		SolidBrush marginBrush(Color(60, 0, 255, 0));
+		graphics.FillRectangle(&marginBrush, RectF((float)UI_RHYTHM_BAR_POS_X - marginWidth, (float)UI_RHYTHM_BAR_POS_Y, marginWidth * 2, 10));
+	}
+}
+

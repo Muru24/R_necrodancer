@@ -6,9 +6,33 @@
 #include <cmath>
 #include "Item.h"
 #include <iostream>
+#include "RhythmManager.h"
 
 void Player::Move()
 {
+	if (!RhythmManager::getInstance().IsBeatWindow()) {
+		m_bActedThisBeat = false; // 박자 창 탈출 시 행동 여부 초기화
+
+		bool currentKeyState[4];
+		currentKeyState[0] = (GetAsyncKeyState(VK_UP) & 0x8000) != 0;
+		currentKeyState[1] = (GetAsyncKeyState(VK_DOWN) & 0x8000) != 0;
+		currentKeyState[2] = (GetAsyncKeyState(VK_LEFT) & 0x8000) != 0;
+		currentKeyState[3] = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
+		for (int i = 0; i < 4; ++i) m_prevKeyState[i] = currentKeyState[i];
+		return;
+	}
+
+	if (m_bActedThisBeat) {
+		// 이미 박자 행동을 한 경우, 입력 상태만 갱신하고 행동은 무시
+		bool currentKeyState[4];
+		currentKeyState[0] = (GetAsyncKeyState(VK_UP) & 0x8000) != 0;
+		currentKeyState[1] = (GetAsyncKeyState(VK_DOWN) & 0x8000) != 0;
+		currentKeyState[2] = (GetAsyncKeyState(VK_LEFT) & 0x8000) != 0;
+		currentKeyState[3] = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
+		for (int i = 0; i < 4; ++i) m_prevKeyState[i] = currentKeyState[i];
+		return;
+	}
+
 	Map* pMap = MainGame::getInstance().GetMap();
 	if (!pMap) return;
 
@@ -36,6 +60,7 @@ void Player::Move()
 
 		if (dx != 0 || dy != 0) {
 			TryMove(dx, dy);
+			m_bActedThisBeat = true;
 		}
 	}
 

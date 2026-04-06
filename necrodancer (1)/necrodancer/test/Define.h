@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -9,6 +9,7 @@
 
 #define FRAME_SIZE          24
 #define DRAW_SCALE          3
+#define UI_BAR_DRAW_SCALE          5
 
 #define SCREEN_WIDTH        1280
 #define SCREEN_HEIGHT       800
@@ -23,6 +24,10 @@
 #define UI_INVEN_POS_Y		10
 #define UI_ITEM_POS_X		20
 #define UI_ITEM_POS_Y		110
+#define UI_RHYTHM_HEART_POS_X	640
+#define UI_RHYTHM_HEART_POS_Y	650
+#define UI_RHYTHM_BAR_POS_X 640
+#define UI_RHYTHM_BAR_POS_Y 650
 
 #define UI_MONEY_FONT_POS_X	1180
 #define UI_MONEY_FONT_POS_Y	48
@@ -53,6 +58,10 @@
 #define UI_MONEY_SCR_Y 24
 #define UI_JEWEL_SCR_X 88
 #define UI_JEWEL_SCR_Y 0
+#define UI_RHYTHM_HEART_SCR_X 115
+#define UI_RHYTHM_HEART_SCR_Y 0
+#define UI_RHYTHM_BAR_SCR_X 200
+#define UI_RHYTHM_BAR_SCR_Y 9
 
 #define UI_DRAW_SCALE 1.5f
 #define UI_INVEN_FRAME_X 31
@@ -65,7 +74,13 @@
 #define UI_ITEM_PNG_Y 96
 #define UI_ITEM_FRAME_PNG_X 31
 #define UI_ITEM_FRAME_PNG_Y 35
+#define UI_RHYTHM_HEART_FRAME_X 41
+#define UI_RHYTHM_HEART_FRAME_Y 50
+#define UI_RHYTHM_BAR_FRAME_X 7
+#define UI_RHYTHM_BAR_FRAME_Y 31
 
+#define RHYTHM_BPM 120
+#define RHYTHM_MARGIN	0.2f
 
 #define SPRITEPATH_FLOORS       L"Sprite/Floor/Floors.png"
 #define SPRITEPATH_WALLS        L"Sprite/Floor/Walls.png"
@@ -87,6 +102,8 @@
 #define SPRITEPATH_WEAPONS		L"Sprite/Item/items_Weapons.png"
 
 #define SPRITEPATH_HUD			L"Sprite/Ui/HUD.png"
+
+
 
 enum TileType
 {
@@ -124,23 +141,23 @@ enum AbilityTrigger {
 	TRIGGER_ON_KILL
 };
 
-enum ItemSlot { 
-	SLOT_WEAPON, 
-	SLOT_HEAD, 
-	SLOT_BODY, 
-	SLOT_FEET, 
-	SLOT_SHOVEL, 
-	SLOT_ACCESSORY, 
+enum ItemSlot {
+	SLOT_WEAPON,
+	SLOT_HEAD,
+	SLOT_BODY,
+	SLOT_FEET,
+	SLOT_SHOVEL,
+	SLOT_ACCESSORY,
 	SLOT_CONSUMABLE,
-	SLOT_COUNT 
+	SLOT_COUNT
 };
 
-enum ItemMaterial { 
-	MAT_BASE, 
-	MAT_OBSIDIAN, 
-	MAT_GLASS, 
-	MAT_GOLD, 
-	MAT_BLOOD, 
-	MAT_TITANIUM 
+enum ItemMaterial {
+	MAT_BASE,
+	MAT_OBSIDIAN,
+	MAT_GLASS,
+	MAT_GOLD,
+	MAT_BLOOD,
+	MAT_TITANIUM
 };
 

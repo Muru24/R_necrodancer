@@ -51,10 +51,5 @@ void Slime::Die()
 
 void Slime::Update()
 {
-	int oldFrame = GetCurrentFrame();
 	UnitBase::Update();
-
-	if (oldFrame != GetCurrentFrame()) {
-		Move();
-	}
 }

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include <vector>
 #include "Struct.h"
@@ -8,7 +8,7 @@ std::vector<Vector2> Slime_Default_Patten =
 	{-1,0},
 	{0,1},
 	{1,0},
-	{0,-1}
+	{0,-1} 
 };
 
 std::vector<Vector2> Slime_X_Patten =

@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 #include <windows.h>
 
 class Player;
 class Map;
 class Camera;
 class Timer;
-
+class RhythmManager;
 class MainGame
 {
 private:
@@ -18,6 +18,11 @@ private:
 	Timer*      m_pTimer;
 	float       m_fDeltaTime;
 	ULONG_PTR   m_gdiplusToken;
+	RhythmManager* m_Rhytm;
+
+	DWORD lastBeatTime;
+	DWORD beatInterval;
+	int currentBeatCount;
 
 public:
 	static MainGame& getInstance()
