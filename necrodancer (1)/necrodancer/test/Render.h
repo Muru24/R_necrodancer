@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <windows.h>
 #include <gdiplus.h>
 
@@ -18,6 +18,7 @@ private:
 	Gdiplus::Image* m_pWallImg;
 	Gdiplus::Image* m_pSlimeImg;
 	Gdiplus::Image* m_HUD;
+	Gdiplus::Image* m_Note;
 	Gdiplus::Bitmap* m_pCachedBackground;
 	bool m_bCacheDirty;
 
@@ -50,7 +51,9 @@ public:
 
 	void DrawUpdate(HWND hWnd, class UnitBase& unit);
 
-	void DrawUi(Gdiplus::Graphics& graphics, UnitBase& player, Camera& camera);
+	void DrawUi(Gdiplus::Graphics& graphics, UnitBase& player);
+
+	void DrawRhythm(Gdiplus::Graphics& graphics);
 
 	void DrawString(Gdiplus::Graphics& graphics, wchar_t buf[], int size, int x, int y);
 

@@ -43,6 +43,9 @@
     <Filter Include="Item">
       <UniqueIdentifier>{26397689-56de-4e5e-8820-28a73c515204}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rhythm">
+      <UniqueIdentifier>{c4e0d6e3-010b-489f-b0fb-0bf74104efdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -89,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="ItemFactory.cpp">
       <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="RhythmManager.cpp">
+      <Filter>Rhythm</Filter>
+    </ClCompile>
+    <ClCompile Include="R_Note.cpp">
+      <Filter>Rhythm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +148,12 @@
     </ClInclude>
     <ClInclude Include="ItemFactory.h">
       <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="RhythmManager.h">
+      <Filter>Rhythm</Filter>
+    </ClInclude>
+    <ClInclude Include="R_Note.h">
+      <Filter>Rhythm</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

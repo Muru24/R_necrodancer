@@ -10,6 +10,7 @@
 #include "Slime.h"
 #include "Light.h"
 #include "ItemFactory.h"
+#include "RhythmManager.h"
 
 #include <iostream>
 
@@ -31,7 +32,9 @@ void MainGame::Initialize()
 
 	m_pCamera = new Camera();
 	m_pTimer = new Timer();
-	
+	m_Rhytm = &RhythmManager::getInstance();
+	m_Rhytm->SetNoteList(RHYTHM_BPM);
+
 	Vector2 startPos = m_pMap->GetRandomFloorPos();
 	m_pPlayer = new Player(10, 2, MOVE_SPEED, startPos, PLAYER);
 	ObjectContainer::getInstance().PushUnit(m_pPlayer);
@@ -43,6 +46,10 @@ void MainGame::Initialize()
 	Vector2 slimePos = { startPos.X + gridSize, startPos.Y };
 	Slime* pSlime = new Slime(5, 1, 0, slimePos, ENEMY);
 	ObjectContainer::getInstance().PushUnit(pSlime);
+
+	beatInterval = 60000 / RHYTHM_BPM;
+	lastBeatTime = GetTickCount();
+	currentBeatCount = 0;
 }
 
 void MainGame::Finalize()
@@ -54,10 +61,10 @@ void MainGame::Finalize()
 
 	m_pPlayer = nullptr;
 
-	if (m_pMap)    { delete m_pMap;    m_pMap    = nullptr; }
+	if (m_pMap) { delete m_pMap;    m_pMap = nullptr; }
 	if (m_pCamera) { delete m_pCamera; m_pCamera = nullptr; }
-	if (m_pTimer)  { delete m_pTimer;  m_pTimer  = nullptr; }
-
+	if (m_pTimer) { delete m_pTimer;  m_pTimer = nullptr; }
+	if (m_Rhytm) { m_Rhytm->FinishRhythm(); m_Rhytm = nullptr; }
 	Render::getInstance().Finalize(m_gdiplusToken);
 }
 
@@ -67,13 +74,23 @@ void MainGame::Update(HWND hWnd)
 		m_fDeltaTime = m_pTimer->GetDeltaTime();
 	}
 
+	bool isBeat = false;
+	if (m_Rhytm)
+	{
+		isBeat = m_Rhytm->UpdateRhythm();
+	}
+
 	auto& unitContainer = ObjectContainer::getInstance().GetUnitContainer();
 	for (auto* unit : unitContainer) {
 		if (unit && unit->GetIsAlive()) {
 			unit->Update();
+
+			if (isBeat && unit->GetTag() == ENEMY) {
+				unit->Move();
+			}
 		}
 	}
-	
+
 	if (m_pPlayer)
 	{
 		if (m_pMap)
@@ -86,7 +103,7 @@ void MainGame::Update(HWND hWnd)
 			m_pCamera->Update(m_pPlayer->GetPos());
 		}
 	}
-	
+
 	Render::getInstance().DrawUpdate(hWnd, *m_pPlayer);
 }
 

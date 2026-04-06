@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Struct.h"
 #include "Collider.h"
 

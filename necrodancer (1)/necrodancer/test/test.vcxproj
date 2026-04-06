@@ -136,6 +136,8 @@
     <ClCompile Include="ObjectContainer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Render.cpp" />
+    <ClCompile Include="RhythmManager.cpp" />
+    <ClCompile Include="R_Note.cpp" />
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Struct.h" />
     <ClCompile Include="test.cpp" />
@@ -156,6 +158,8 @@
     <ClInclude Include="ObjectContainer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="RhythmManager.h" />
+    <ClInclude Include="R_Note.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Room.h" />
