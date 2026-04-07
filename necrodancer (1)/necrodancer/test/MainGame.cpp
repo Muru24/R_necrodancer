@@ -12,10 +12,11 @@
 #include "ItemFactory.h"
 #include "RhythmManager.h"
 #include "Shopkeeper.h"
+#include "Title.h"
 
 #include <iostream>
 
-MainGame::MainGame() : m_pPlayer(nullptr), m_pMap(nullptr), m_pCamera(nullptr), m_pTimer(nullptr), m_fDeltaTime(0.0f), m_gdiplusToken(0)
+MainGame::MainGame() : m_pPlayer(nullptr), m_pMap(nullptr), m_pCamera(nullptr), m_pTimer(nullptr), m_fDeltaTime(0.0f), m_gdiplusToken(0), m_pTitle(nullptr), m_eScene(SCENE_TITLE)
 {
 }
 
@@ -25,7 +26,14 @@ MainGame::~MainGame()
 
 void MainGame::Initialize()
 {
-	Render::getInstance().Initialize(m_gdiplusToken);
+	if (m_gdiplusToken == 0)
+		Render::getInstance().Initialize(m_gdiplusToken);
+
+	Finalize(); 
+
+	m_eScene = SCENE_TITLE;
+	m_pTitle = new Title();
+	m_pTitle->Initialize();
 
 	m_pMap = new Map();
 	m_pMap->Generate();
@@ -40,7 +48,6 @@ void MainGame::Initialize()
 	m_pPlayer = new Player(10, 2, MOVE_SPEED, startPos, PLAYER);
 	ObjectContainer::getInstance().PushUnit(m_pPlayer);	
 
-	// 초기 기본 아이템 지급
 	m_pPlayer->Equip(ItemFactory::Create(ITEM_DAGGER));
 
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
@@ -71,10 +78,7 @@ void MainGame::Initialize()
 
 void MainGame::Finalize()
 {
-	auto& unitContainer = ObjectContainer::getInstance().GetUnitContainer();
-	for (auto* unit : unitContainer) {
-		if (unit) delete unit;
-	}
+	ObjectContainer::getInstance().Clear();
 
 	m_pPlayer = nullptr;
 
@@ -82,11 +86,24 @@ void MainGame::Finalize()
 	if (m_pCamera) { delete m_pCamera; m_pCamera = nullptr; }
 	if (m_pTimer) { delete m_pTimer;  m_pTimer = nullptr; }
 	if (m_Rhytm) { m_Rhytm->FinishRhythm(); m_Rhytm = nullptr; }
+	if (m_pTitle) { delete m_pTitle;  m_pTitle = nullptr; }
+}
+
+void MainGame::Release()
+{
+	Finalize();
 	Render::getInstance().Finalize(m_gdiplusToken);
 }
 
 void MainGame::Update(HWND hWnd)
 {
+	if (m_eScene == SCENE_TITLE)
+	{
+		if (m_pTitle) m_pTitle->Update();
+		Render::getInstance().DrawUpdate(hWnd, *m_pPlayer);
+		return;
+	}
+
 	if (m_pTimer) {
 		m_fDeltaTime = m_pTimer->GetDeltaTime();
 	}
@@ -126,6 +143,13 @@ void MainGame::Update(HWND hWnd)
 
 void MainGame::Render(HWND hWnd)
 {
+	if (m_eScene == SCENE_TITLE)
+	{
+		if (m_pTitle)
+			Render::getInstance().DrawTitle(hWnd, *m_pTitle);
+		return;
+	}
+
 	if (m_pMap && m_pCamera)
 	{
 		Render::getInstance().Draw(hWnd, *m_pMap, *m_pCamera, *m_pPlayer);

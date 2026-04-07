@@ -1,4 +1,4 @@
-#include "Define.h"
+﻿#include "Define.h"
 #include "Render.h"
 #include "UnitBase.h"
 #include "Player.h"
@@ -11,6 +11,7 @@
 #include "Light.h"
 #include "RhythmManager.h"
 #include "R_Note.h"
+#include "Title.h"
 
 using namespace Gdiplus;
 
@@ -18,8 +19,8 @@ Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(null
 m_pShopkeeper(nullptr), m_pNote(nullptr),
 m_pItemWeapons(nullptr), m_pItemArmor(nullptr), m_pItemHeadwear(nullptr), m_pItemFootwear(nullptr),
 m_pItemShovels(nullptr), m_pItemTorches(nullptr), m_pItemResources(nullptr), m_pItemConsumables(nullptr),
-m_pCachedBackground(nullptr), m_bCacheDirty(true),
-m_pDefaultFont(nullptr), m_pBigFont(nullptr), m_pWhiteBrush(nullptr), m_pBlackBrush(nullptr)
+m_pTitleImg(nullptr), m_pCachedBackground(nullptr), m_bCacheDirty(true),
+m_pDefaultFont(nullptr), m_pBigFont(nullptr), m_pSelectedFont(nullptr), m_pWhiteBrush(nullptr), m_pBlackBrush(nullptr)
 {
 }
 
@@ -41,6 +42,7 @@ void Render::Initialize(ULONG_PTR& gdiplusToken)
 
 	m_pDefaultFont = new Gdiplus::Font(L"맑은 고딕", 12, FontStyleBold);
 	m_pBigFont = new Gdiplus::Font(L"맑은 고딕", 24, FontStyleBold);
+	m_pSelectedFont = new Gdiplus::Font(L"맑은 고딕", 32, FontStyleBold);
 	m_pWhiteBrush = new Gdiplus::SolidBrush(Color(255, 255, 255, 255));
 	m_pBlackBrush = new Gdiplus::SolidBrush(Color(255, 0, 0, 0));
 
@@ -52,6 +54,7 @@ void Render::Initialize(ULONG_PTR& gdiplusToken)
 	m_pItemTorches = new Gdiplus::Image(SPRITEPATH_TORCHES);
 	m_pItemResources = new Gdiplus::Image(SPRITEPATH_RESOURCES);
 	m_pItemConsumables = new Gdiplus::Image(SPRITEPATH_CONSUMABLES);
+	m_pTitleImg = new Gdiplus::Image(SPRITEPATH_SCENE_TITLE);
 }
 
 void Render::Finalize(ULONG_PTR gdiplusToken)
@@ -67,6 +70,7 @@ void Render::Finalize(ULONG_PTR gdiplusToken)
 
 	if (m_pDefaultFont) delete m_pDefaultFont;
 	if (m_pBigFont) delete m_pBigFont;
+	if (m_pSelectedFont) delete m_pSelectedFont;
 	if (m_pWhiteBrush) delete m_pWhiteBrush;
 	if (m_pBlackBrush) delete m_pBlackBrush;
 
@@ -78,10 +82,10 @@ void Render::Finalize(ULONG_PTR gdiplusToken)
 	if (m_pItemTorches) delete m_pItemTorches;
 	if (m_pItemResources) delete m_pItemResources;
 	if (m_pItemConsumables) delete m_pItemConsumables;
+	if (m_pTitleImg)        delete m_pTitleImg;
 
 	GdiplusShutdown(gdiplusToken);
 }
-
 
 void Render::DrawString(Gdiplus::Graphics& graphics, wchar_t buf[], int size, int x, int y)
 {
@@ -302,7 +306,7 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 			swprintf_s(szBuf, L"HP: %d/%d\nATK: %d\nDig: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack(), static_cast<Player*>(unit)->GetDigLevel());
 		}
 		else if (unit->GetTag() == NPC) {
-			continue; // Do not draw status text for NPC
+			continue; 
 		}
 		else {
 			swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack());
@@ -357,7 +361,7 @@ void Render::Draw(HWND hWnd, Map& map, Camera& camera, UnitBase& player)
 	EndPaint(hWnd, &ps);
 }
 
-void Render::DrawUpdate(HWND hWnd, UnitBase& player)
+void Render::DrawUpdate(HWND hWnd, UnitBase& unit)
 {
 	InvalidateRect(hWnd, NULL, FALSE);
 }
@@ -409,6 +413,45 @@ void Render::UpdateTileCache(int x, int y, Map* pMap)
 	}
 }
 
+void Render::DrawTitle(HWND hWnd, Title& title)
+{
+	PAINTSTRUCT ps;
+	HDC hdc = BeginPaint(hWnd, &ps);
+
+	HDC memDC = CreateCompatibleDC(hdc);
+	HBITMAP memBitmap = CreateCompatibleBitmap(hdc, SCREEN_WIDTH, SCREEN_HEIGHT);
+	HBITMAP oldBitmap = (HBITMAP)SelectObject(memDC, memBitmap);
+
+	{
+		Gdiplus::Graphics graphics(memDC);
+		graphics.SetSmoothingMode(SmoothingModeAntiAlias);
+		graphics.SetInterpolationMode(InterpolationModeHighQualityBicubic);
+
+		DrawTitleBackground(graphics);
+		title.tRender(graphics);
+	}
+
+	BitBlt(hdc, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, memDC, 0, 0, SRCCOPY);
+
+	SelectObject(memDC, oldBitmap);
+	DeleteObject(memBitmap);
+	DeleteDC(memDC);
+	EndPaint(hWnd, &ps);
+}
+
+void Render::DrawTitleBackground(Gdiplus::Graphics& graphics)
+{
+	if (!m_pTitleImg || m_pTitleImg->GetLastStatus() != Ok) return;
+
+	graphics.DrawImage(m_pTitleImg,
+		Gdiplus::Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+		SCENE_MAINMENU_POS_X, SCENE_MAINMENU_POS_Y,
+		SCENE_MAINMENU_SCR_X, SCENE_MAINMENU_SCR_Y,
+		Gdiplus::UnitPixel);
+}
+
+
+
 void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player)
 {
 	if (!m_HUD || m_HUD->GetLastStatus() != Ok) return;
@@ -453,13 +496,11 @@ void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player)
 		float destX = UI_INVEN_POS_X + i * (uiDrawWidth + UI_GAP);
 		float srcX = (float)(UI_INVEN_PNG_X + i * (UI_INVEN_FRAME_X + UI_GAP));
 
-		// 인벤토리 프레임 렌더링
 		graphics.DrawImage(m_HUD,
 			RectF(destX, UI_INVEN_POS_Y, uiDrawWidth, uiDrawHeight),
 			(float)srcX, (float)UI_INVEN_PNG_Y, (float)UI_INVEN_FRAME_X, (float)UI_INVEN_FRAME_Y,
 			UnitPixel);
 
-		// 장착된 아이템 아이콘 렌더링
 		ItemSlot slot;
 		switch (i) {
 			case 0: slot = SLOT_SHOVEL; break;
@@ -483,7 +524,7 @@ void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player)
 			}
 
 			if (pAtlas && pAtlas->GetLastStatus() == Ok) {
-				float iconSize = uiDrawWidth * 0.8f; // 프레임보다 조금 작게
+				float iconSize = uiDrawWidth * 0.8f; 
 				float iconX = destX + (uiDrawWidth - iconSize) / 2.0f;
 				float iconY = UI_INVEN_POS_Y + (uiDrawHeight - iconSize) / 2.0f;
 
@@ -519,7 +560,6 @@ void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player)
 	swprintf_s(szBuf, L" x%d", 0);
 	DrawString(graphics, szBuf, 24, (float)UI_MONEY_FONT_POS_X, (float)UI_MONEY_FONT_POS_Y);
 	DrawString(graphics, szBuf, 24, (float)UI_JEWEL_FONT_POS_X, (float)UI_JEWEL_FONT_POS_Y);
-
 }
 
 void Render::DrawRhythm(Gdiplus::Graphics& graphics)
@@ -618,3 +658,22 @@ void Render::DrawWorldItems(Gdiplus::Graphics& graphics, Map& map, Camera& camer
 	}
 }
 
+void Render::DrawTitleMenuOption(Gdiplus::Graphics& graphics, int nOptionIdx, bool bSelected, bool bDraw, float x, float y)
+{
+	const wchar_t* szMenus[] = { L"START", L"RESET", L"EXIT" };
+	if (nOptionIdx < 0 || nOptionIdx > 2) return;
+
+	Gdiplus::Font* pFont = bSelected ? m_pSelectedFont : m_pBigFont;
+	if (!pFont || !m_pWhiteBrush || !m_pBlackBrush) return;
+
+	Gdiplus::PointF point(x, y);
+
+	// 외곽선 효과
+	for (int ox = -1; ox <= 1; ++ox) {
+		for (int oy = -1; oy <= 1; ++oy) {
+			if (ox == 0 && oy == 0) continue;
+			graphics.DrawString(szMenus[nOptionIdx], -1, pFont, Gdiplus::PointF(point.X + ox, point.Y + oy), m_pBlackBrush);
+		}
+	}
+	graphics.DrawString(szMenus[nOptionIdx], -1, pFont, point, m_pWhiteBrush);
+}

@@ -1,4 +1,8 @@
-﻿#include "UnitBase.h"
+#include "UnitBase.h"
+
+void UnitBase::Move()
+{
+}
 
 void UnitBase::Attack(UnitBase& Target)
 {

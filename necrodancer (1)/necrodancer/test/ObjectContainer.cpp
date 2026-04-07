@@ -12,6 +12,15 @@ void ObjectContainer::PopUnit(int pos)
 	UnitContainer.erase(UnitContainer.begin()+pos);
 }
 
+void ObjectContainer::Clear()
+{
+	for (auto* unit : UnitContainer)
+	{
+		if (unit) delete unit;
+	}
+	UnitContainer.clear();
+}
+
 UnitBase* ObjectContainer::FindUnitAt(int gridX, int gridY)
 {
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
