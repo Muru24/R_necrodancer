@@ -144,6 +144,7 @@
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="UnitBase.cpp" />
     <ClCompile Include="Shopkeeper.cpp" />
   </ItemGroup>
@@ -166,6 +167,7 @@
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Room.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="UnitBase.h" />
     <ClInclude Include="Shopkeeper.h" />
   </ItemGroup>

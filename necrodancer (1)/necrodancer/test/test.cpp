@@ -1,4 +1,4 @@
-﻿#include <windows.h>
+#include <windows.h>
 #include <stdio.h>
 #include "MainGame.h"
 #include "Define.h"
@@ -66,6 +66,6 @@ int main() {
 		}
 	}
 
-	MainGame::getInstance().Finalize(); 
+	MainGame::getInstance().Release(); 
 	return (int)msg.wParam;
 }

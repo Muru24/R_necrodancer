@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -137,8 +137,17 @@
 #define SCENE_BOSS_ENTER_SCR_Y 150
 #define SCENE_BOSS_ENTER_UP_SCR_Y 360
 #define SCENE_BOSS_ENTER_UP_SCR_Y 50
-#define SCENE_BOSS_ENTER_DOWN_SRC_Y 305
 #define SCENE_BOSS_ENTER_DOWN_SRC_Y 30
+
+#define SCENE_MENU_SCR_W 200
+#define SCENE_MENU_SCR_H 50
+
+#define SCENE_MENU_START_POS_X 0
+#define SCENE_MENU_START_POS_Y 600
+#define SCENE_MENU_RESET_POS_X 0
+#define SCENE_MENU_RESET_POS_Y 650
+#define SCENE_MENU_EXIT_POS_X 0
+#define SCENE_MENU_EXIT_POS_Y 700
 
 #define SCENE_MAINMENU_POS_X 963
 #define SCENE_MAINMENU_POS_Y 335
@@ -182,6 +191,12 @@
 #define SPRITEPATH_HUD			L"Sprite/Ui/HUD.png"
 
 
+
+enum SceneType {
+	SCENE_TITLE,
+	SCENE_INGAME,
+	SCENE_BOSS
+};
 
 enum TileType
 {

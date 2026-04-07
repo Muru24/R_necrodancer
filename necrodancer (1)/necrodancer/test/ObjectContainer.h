@@ -17,5 +17,6 @@ public:
 
 	void PushUnit(UnitBase* unit);
 	void PopUnit(int pos);
+	void Clear();
 	UnitBase* FindUnitAt(int gridX, int gridY);
 };

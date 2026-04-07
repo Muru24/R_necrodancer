@@ -4,7 +4,12 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/솔루션 항목/">
+    <File Path="test/BGM/02 - Rhythmortis (Lobby).mp3" />
+    <File Path="test/BGM/04 - Disco Descent (1-1).mp3" />
+    <File Path="test/BGM/07 - Konga Conga Kappa (King Conga).mp3" />
     <File Path="test/Sprite/Characters.png" />
+    <File Path="test/Sprite/Effect/Effects_Attack.png" />
+    <File Path="test/Sprite/Effect/Effects_Spells.png" />
     <File Path="test/Sprite/Floor/Containers.png" />
     <File Path="test/Sprite/Floor/Floors.png" />
     <File Path="test/Sprite/Floor/Shrines.png" />
@@ -16,13 +21,17 @@
     <File Path="test/Sprite/Item/items_Headwear.png" />
     <File Path="test/Sprite/Item/items_Resources.png" />
     <File Path="test/Sprite/Item/items_Shovels.png" />
+    <File Path="test/Sprite/Item/Items_Spells.png" />
     <File Path="test/Sprite/Item/items_Torches.png" />
     <File Path="test/Sprite/Item/items_Weapons.png" />
     <File Path="test/Sprite/Monster/Monsters_Skeletons.png" />
     <File Path="test/Sprite/Monster/Monsters_Slimes.png" />
     <File Path="test/Sprite/Monster/Monsters_Wraiths.png" />
+    <File Path="test/Sprite/Monster/Monster_Boss_KingConga.png" />
     <File Path="test/Sprite/Monster/Monster_Dragons.png" />
     <File Path="test/Sprite/Monster/Monster_Minotaurs.png" />
+    <File Path="test/Sprite/Scene/Scene_Boss.png" />
+    <File Path="test/Sprite/Scene/Scene_Title.png" />
     <File Path="test/Sprite/Ui/HUD.png" />
   </Folder>
   <Project Path="test/test.vcxproj" Id="31cc8a77-8676-49bf-b78a-ce9f1470b823" />
