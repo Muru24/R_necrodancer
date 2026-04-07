@@ -3,40 +3,48 @@
   "WorkspaceRootPath": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\MainGame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\MainGame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Render.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Render.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\ItemFactory.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\ItemFactory.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{908E38B7-8455-3325-9CB1-71C76940CCB8}|\uC194\uB8E8\uC158 \uD56D\uBAA9{908E38B7-8455-3325-9CB1-71C76940CCB8}|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\Items_Armor.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
-      "RelativeMoniker": "D:0:0:{908E38B7-8455-3325-9CB1-71C76940CCB8}|\uC194\uB8E8\uC158 \uD56D\uBAA9{908E38B7-8455-3325-9CB1-71C76940CCB8}|solutionrelative:test\\Sprite\\Item\\Items_Armor.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Map.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Map.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Item.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Item.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Define.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Define.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Shopkeeper.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\MainGame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\MainGame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Shopkeeper.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Render.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Render.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Render.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Render.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{908E38B7-8455-3325-9CB1-71C76940CCB8}|\uC194\uB8E8\uC158 \uD56D\uBAA9{908E38B7-8455-3325-9CB1-71C76940CCB8}|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Resources.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
-      "RelativeMoniker": "D:0:0:{908E38B7-8455-3325-9CB1-71C76940CCB8}|\uC194\uB8E8\uC158 \uD56D\uBAA9{908E38B7-8455-3325-9CB1-71C76940CCB8}|solutionrelative:test\\Sprite\\Item\\items_Resources.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+      "AbsoluteMoniker": "D:0:0:{908E38B7-8455-3325-9CB1-71C76940CCB8}|\uC194\uB8E8\uC158 \uD56D\uBAA9{908E38B7-8455-3325-9CB1-71C76940CCB8}|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\Items_Armor.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{908E38B7-8455-3325-9CB1-71C76940CCB8}|\uC194\uB8E8\uC158 \uD56D\uBAA9{908E38B7-8455-3325-9CB1-71C76940CCB8}|solutionrelative:test\\Sprite\\Item\\Items_Armor.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Shopkeeper.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Render.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Render.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{908E38B7-8455-3325-9CB1-71C76940CCB8}|\uC194\uB8E8\uC158 \uD56D\uBAA9{908E38B7-8455-3325-9CB1-71C76940CCB8}|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Shovels.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
@@ -45,10 +53,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{908E38B7-8455-3325-9CB1-71C76940CCB8}|\uC194\uB8E8\uC158 \uD56D\uBAA9{908E38B7-8455-3325-9CB1-71C76940CCB8}|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Torches.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
       "RelativeMoniker": "D:0:0:{908E38B7-8455-3325-9CB1-71C76940CCB8}|\uC194\uB8E8\uC158 \uD56D\uBAA9{908E38B7-8455-3325-9CB1-71C76940CCB8}|solutionrelative:test\\Sprite\\Item\\items_Torches.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Item.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Item.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Player.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -111,10 +115,6 @@
       "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Camera.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Map.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Map.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Room.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{31CC8A77-8676-49BF-B78A-CE9F1470B823}|test\\test.vcxproj|solutionrelative:test\\Room.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -138,86 +138,59 @@
       "DocumentGroups": [
         {
           "DockedWidth": 206,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Items_Armor.png",
-              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\Items_Armor.png",
-              "RelativeDocumentMoniker": "test\\Sprite\\Item\\Items_Armor.png",
-              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\Items_Armor.png",
-              "RelativeToolTip": "test\\Sprite\\Item\\Items_Armor.png",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
-              "WhenOpened": "2026-04-06T07:20:55.433Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Shopkeeper.cpp",
-              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.cpp",
-              "RelativeDocumentMoniker": "test\\Shopkeeper.cpp",
-              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.cpp",
-              "RelativeToolTip": "test\\Shopkeeper.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvxMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-04-06T06:53:39.574Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Render.h",
-              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Render.h",
-              "RelativeDocumentMoniker": "test\\Render.h",
-              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Render.h",
-              "RelativeToolTip": "test\\Render.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Title": "Map.h",
+              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Map.h",
+              "RelativeDocumentMoniker": "test\\Map.h",
+              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Map.h",
+              "RelativeToolTip": "test\\Map.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxAAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-06T06:37:13.945Z",
+              "WhenOpened": "2026-04-07T05:33:12.823Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "items_Shovels.png",
-              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Shovels.png",
-              "RelativeDocumentMoniker": "test\\Sprite\\Item\\items_Shovels.png",
-              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Shovels.png",
-              "RelativeToolTip": "test\\Sprite\\Item\\items_Shovels.png",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
-              "WhenOpened": "2026-04-06T06:31:04.457Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "items_Torches.png",
-              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Torches.png",
-              "RelativeDocumentMoniker": "test\\Sprite\\Item\\items_Torches.png",
-              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Torches.png",
-              "RelativeToolTip": "test\\Sprite\\Item\\items_Torches.png",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
-              "WhenOpened": "2026-04-06T06:31:02.738Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "MainGame.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\MainGame.cpp",
               "RelativeDocumentMoniker": "test\\MainGame.cpp",
               "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\MainGame.cpp",
               "RelativeToolTip": "test\\MainGame.cpp",
-              "ViewState": "AgIAABYAAAAAAAAAAAAvwCwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAewDAAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-04-06T06:05:30.417Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 8,
+              "Title": "Items_Armor.png",
+              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\Items_Armor.png",
+              "RelativeDocumentMoniker": "test\\Sprite\\Item\\Items_Armor.png",
+              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\Items_Armor.png",
+              "RelativeToolTip": "test\\Sprite\\Item\\Items_Armor.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-04-06T07:20:55.433Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "items_Torches.png",
+              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Torches.png",
+              "RelativeDocumentMoniker": "test\\Sprite\\Item\\items_Torches.png",
+              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Torches.png",
+              "RelativeToolTip": "test\\Sprite\\Item\\items_Torches.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-04-06T06:31:02.738Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
               "Title": "UnitBase.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\UnitBase.cpp",
               "RelativeDocumentMoniker": "test\\UnitBase.cpp",
@@ -229,7 +202,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "Struct.h",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Struct.h",
               "RelativeDocumentMoniker": "test\\Struct.h",
@@ -241,7 +214,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "Slime.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Slime.cpp",
               "RelativeDocumentMoniker": "test\\Slime.cpp",
@@ -253,7 +226,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 2,
               "Title": "Item.h",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Item.h",
               "RelativeDocumentMoniker": "test\\Item.h",
@@ -261,32 +234,33 @@
               "RelativeToolTip": "test\\Item.h",
               "ViewState": "AgIAAAsAAAAAAAAAAAAewB0AAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-05T02:49:00.392Z"
+              "WhenOpened": "2026-04-05T02:49:00.392Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "ItemFactory.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\ItemFactory.cpp",
               "RelativeDocumentMoniker": "test\\ItemFactory.cpp",
               "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\ItemFactory.cpp",
               "RelativeToolTip": "test\\ItemFactory.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-04-05T03:10:53.911Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Shopkeeper.h",
-              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.h",
-              "RelativeDocumentMoniker": "test\\Shopkeeper.h",
-              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.h",
-              "RelativeToolTip": "test\\Shopkeeper.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-06T06:53:46.559Z",
+              "DocumentIndex": 6,
+              "Title": "Shopkeeper.cpp",
+              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.cpp",
+              "RelativeDocumentMoniker": "test\\Shopkeeper.cpp",
+              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.cpp",
+              "RelativeToolTip": "test\\Shopkeeper.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-04-06T06:53:39.574Z",
               "EditorCaption": ""
             },
             {
@@ -297,14 +271,62 @@
               "RelativeDocumentMoniker": "test\\Define.h",
               "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Define.h",
               "RelativeToolTip": "test\\Define.h",
-              "ViewState": "AgIAAGEAAAAAAAAAAAAuwHYAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAewIwAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-04-06T02:55:44.542Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Map.cpp",
+              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Map.cpp",
+              "RelativeDocumentMoniker": "test\\Map.cpp",
+              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Map.cpp",
+              "RelativeToolTip": "test\\Map.cpp",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAewGsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-04-05T01:53:08.689Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "items_Shovels.png",
+              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Shovels.png",
+              "RelativeDocumentMoniker": "test\\Sprite\\Item\\items_Shovels.png",
+              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Shovels.png",
+              "RelativeToolTip": "test\\Sprite\\Item\\items_Shovels.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-04-06T06:31:04.457Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 7,
+              "Title": "Render.h",
+              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Render.h",
+              "RelativeDocumentMoniker": "test\\Render.h",
+              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Render.h",
+              "RelativeToolTip": "test\\Render.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-06T06:37:13.945Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Shopkeeper.h",
+              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.h",
+              "RelativeDocumentMoniker": "test\\Shopkeeper.h",
+              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shopkeeper.h",
+              "RelativeToolTip": "test\\Shopkeeper.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-06T06:53:46.559Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "Render.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Render.cpp",
               "RelativeDocumentMoniker": "test\\Render.cpp",
@@ -312,24 +334,11 @@
               "RelativeToolTip": "test\\Render.cpp",
               "ViewState": "AgIAABUAAAAAAAAAAAAvwBwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-04-05T01:51:47.829Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-05T01:51:47.829Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "items_Resources.png",
-              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Resources.png",
-              "RelativeDocumentMoniker": "test\\Sprite\\Item\\items_Resources.png",
-              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Sprite\\Item\\items_Resources.png",
-              "RelativeToolTip": "test\\Sprite\\Item\\items_Resources.png",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
-              "WhenOpened": "2026-04-06T06:31:05.985Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "R_Note.h",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\R_Note.h",
               "RelativeDocumentMoniker": "test\\R_Note.h",
@@ -341,7 +350,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "Shop.h",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shop.h",
               "RelativeDocumentMoniker": "test\\Shop.h",
@@ -353,7 +362,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "test.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\test.cpp",
               "RelativeDocumentMoniker": "test\\test.cpp",
@@ -365,7 +374,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "Player.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Player.cpp",
               "RelativeDocumentMoniker": "test\\Player.cpp",
@@ -377,7 +386,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "Player.h",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Player.h",
               "RelativeDocumentMoniker": "test\\Player.h",
@@ -389,7 +398,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "R_Note.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\R_Note.cpp",
               "RelativeDocumentMoniker": "test\\R_Note.cpp",
@@ -401,7 +410,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "Shop.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Shop.cpp",
               "RelativeDocumentMoniker": "test\\Shop.cpp",
@@ -413,7 +422,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "Item.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Item.cpp",
               "RelativeDocumentMoniker": "test\\Item.cpp",
@@ -425,7 +434,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "RhythmManager.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\RhythmManager.cpp",
               "RelativeDocumentMoniker": "test\\RhythmManager.cpp",
@@ -437,7 +446,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "MainGame.h",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\MainGame.h",
               "RelativeDocumentMoniker": "test\\MainGame.h",
@@ -449,7 +458,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 26,
               "Title": "MonsterMovePatten.h",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\MonsterMovePatten.h",
               "RelativeDocumentMoniker": "test\\MonsterMovePatten.h",
@@ -461,7 +470,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": "Camera.cpp",
               "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Camera.cpp",
               "RelativeDocumentMoniker": "test\\Camera.cpp",
@@ -482,18 +491,6 @@
               "ViewState": "AgIAADEAAAAAAAAAAAAewEAAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-04-06T01:04:37.068Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "Map.cpp",
-              "DocumentMoniker": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Map.cpp",
-              "RelativeDocumentMoniker": "test\\Map.cpp",
-              "ToolTip": "C:\\git\\R_necrodancer\\necrodancer (1)\\necrodancer\\test\\Map.cpp",
-              "RelativeToolTip": "test\\Map.cpp",
-              "ViewState": "AgIAAFkAAAAAAAAAAAAewGsAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-04-05T01:53:08.689Z"
             },
             {
               "$type": "Document",

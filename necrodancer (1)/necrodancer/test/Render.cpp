@@ -15,7 +15,9 @@
 using namespace Gdiplus;
 
 Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr), m_pSlimeImg(nullptr), m_HUD(nullptr),
-m_pShopkeeper(nullptr), m_Note(nullptr),
+m_pShopkeeper(nullptr), m_pNote(nullptr),
+m_pItemWeapons(nullptr), m_pItemArmor(nullptr), m_pItemHeadwear(nullptr), m_pItemFootwear(nullptr),
+m_pItemShovels(nullptr), m_pItemTorches(nullptr), m_pItemResources(nullptr), m_pItemConsumables(nullptr),
 m_pCachedBackground(nullptr), m_bCacheDirty(true),
 m_pDefaultFont(nullptr), m_pBigFont(nullptr), m_pWhiteBrush(nullptr), m_pBlackBrush(nullptr)
 {
@@ -41,6 +43,15 @@ void Render::Initialize(ULONG_PTR& gdiplusToken)
 	m_pBigFont = new Gdiplus::Font(L"맑은 고딕", 24, FontStyleBold);
 	m_pWhiteBrush = new Gdiplus::SolidBrush(Color(255, 255, 255, 255));
 	m_pBlackBrush = new Gdiplus::SolidBrush(Color(255, 0, 0, 0));
+
+	m_pItemWeapons = new Gdiplus::Image(SPRITEPATH_WEAPONS);
+	m_pItemArmor = new Gdiplus::Image(SPRITEPATH_ARMOR);
+	m_pItemHeadwear = new Gdiplus::Image(SPRITEPATH_HEADWEAR);
+	m_pItemFootwear = new Gdiplus::Image(SPRITEPATH_FOOTWEAR);
+	m_pItemShovels = new Gdiplus::Image(SPRITEPATH_SHOVELS);
+	m_pItemTorches = new Gdiplus::Image(SPRITEPATH_TORCHES);
+	m_pItemResources = new Gdiplus::Image(SPRITEPATH_RESOURCES);
+	m_pItemConsumables = new Gdiplus::Image(SPRITEPATH_CONSUMABLES);
 }
 
 void Render::Finalize(ULONG_PTR gdiplusToken)
@@ -52,12 +63,21 @@ void Render::Finalize(ULONG_PTR gdiplusToken)
 	if (m_pCachedBackground) delete m_pCachedBackground;
 	if (m_HUD) delete m_HUD;
 	if (m_pShopkeeper) delete m_pShopkeeper;
-	if (m_Note) delete m_Note;
+	if (m_pNote) delete m_pNote;
 
 	if (m_pDefaultFont) delete m_pDefaultFont;
 	if (m_pBigFont) delete m_pBigFont;
 	if (m_pWhiteBrush) delete m_pWhiteBrush;
 	if (m_pBlackBrush) delete m_pBlackBrush;
+
+	if (m_pItemWeapons) delete m_pItemWeapons;
+	if (m_pItemArmor) delete m_pItemArmor;
+	if (m_pItemHeadwear) delete m_pItemHeadwear;
+	if (m_pItemFootwear) delete m_pItemFootwear;
+	if (m_pItemShovels) delete m_pItemShovels;
+	if (m_pItemTorches) delete m_pItemTorches;
+	if (m_pItemResources) delete m_pItemResources;
+	if (m_pItemConsumables) delete m_pItemConsumables;
 
 	GdiplusShutdown(gdiplusToken);
 }
@@ -323,6 +343,7 @@ void Render::Draw(HWND hWnd, Map& map, Camera& camera, UnitBase& player)
 	{
 		Graphics graphics(memDC);
 		DrawBackground(graphics, rect, map, camera);
+		DrawWorldItems(graphics, map, camera);
 		DrawUnit(graphics, camera);
 		DrawUi(graphics, player);
 		DrawRhythm(graphics);
@@ -426,14 +447,52 @@ void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player)
 
 	float uiDrawHeight = drawSize * UI_DRAW_SCALE;
 	float uiDrawWidth = uiDrawHeight * (UI_INVEN_FRAME_X / (float)UI_INVEN_FRAME_Y);
+
 	for (int i = 0; i < 6; i++)
 	{
 		float destX = UI_INVEN_POS_X + i * (uiDrawWidth + UI_GAP);
 		float srcX = (float)(UI_INVEN_PNG_X + i * (UI_INVEN_FRAME_X + UI_GAP));
+
+		// 인벤토리 프레임 렌더링
 		graphics.DrawImage(m_HUD,
 			RectF(destX, UI_INVEN_POS_Y, uiDrawWidth, uiDrawHeight),
 			(float)srcX, (float)UI_INVEN_PNG_Y, (float)UI_INVEN_FRAME_X, (float)UI_INVEN_FRAME_Y,
 			UnitPixel);
+
+		// 장착된 아이템 아이콘 렌더링
+		ItemSlot slot;
+		switch (i) {
+			case 0: slot = SLOT_SHOVEL; break;
+			case 1: slot = SLOT_WEAPON; break;
+			case 2: slot = SLOT_BODY; break;
+			case 3: slot = SLOT_HEAD; break;
+			case 4: slot = SLOT_FEET; break;
+			default: slot = SLOT_TORCH; break;
+		}
+
+		ItemBase* pEquipped = static_cast<Player&>(player).GetEquippedItem(slot);
+		if (pEquipped) {
+			Gdiplus::Image* pAtlas = nullptr;
+			switch (slot) {
+				case SLOT_WEAPON: pAtlas = m_pItemWeapons; break;
+				case SLOT_BODY:   pAtlas = m_pItemArmor; break;
+				case SLOT_HEAD:   pAtlas = m_pItemHeadwear; break;
+				case SLOT_FEET:   pAtlas = m_pItemFootwear; break;
+				case SLOT_SHOVEL: pAtlas = m_pItemShovels; break;
+				case SLOT_TORCH:  pAtlas = m_pItemTorches; break;
+			}
+
+			if (pAtlas && pAtlas->GetLastStatus() == Ok) {
+				float iconSize = uiDrawWidth * 0.8f; // 프레임보다 조금 작게
+				float iconX = destX + (uiDrawWidth - iconSize) / 2.0f;
+				float iconY = UI_INVEN_POS_Y + (uiDrawHeight - iconSize) / 2.0f;
+
+				graphics.DrawImage(pAtlas,
+					RectF(iconX, iconY, iconSize, iconSize),
+					(float)pEquipped->GetSrcX(), (float)pEquipped->GetSrcY(), (float)pEquipped->GetSrcW(), (float)pEquipped->GetSrcH(),
+					UnitPixel);
+			}
+		}
 	}
 
 	for (int i = 0; i < 2; i++)
@@ -515,6 +574,47 @@ void Render::DrawRhythm(Gdiplus::Graphics& graphics)
 		float marginWidth = marginRatio * beatWidth;
 		SolidBrush marginBrush(Color(60, 0, 255, 0));
 		graphics.FillRectangle(&marginBrush, RectF((float)UI_RHYTHM_BAR_POS_X - marginWidth, (float)UI_RHYTHM_BAR_POS_Y, marginWidth * 2, 10));
+	}
+}
+
+void Render::DrawWorldItems(Gdiplus::Graphics& graphics, Map& map, Camera& camera)
+{
+	const auto& worldItems = map.GetWorldItems();
+	if (worldItems.empty()) return;
+
+	float gridSize = (float)(FRAME_SIZE * DRAW_SCALE);
+	float camX = camera.GetX();
+	float camY = camera.GetY();
+
+	for (const auto& wi : worldItems)
+	{
+		if (!wi.item) continue;
+
+		float drawX = (float)wi.x * gridSize - camX;
+		float drawY = (float)wi.y * gridSize - camY;
+
+		if (drawX + gridSize < 0 || drawX > SCREEN_WIDTH || drawY + gridSize < 0 || drawY > SCREEN_HEIGHT)
+			continue;
+
+		Gdiplus::Image* pAtlas = nullptr;
+		switch (wi.item->GetSlot())
+		{
+		case SLOT_WEAPON:     pAtlas = m_pItemWeapons; break;
+		case SLOT_BODY:       pAtlas = m_pItemArmor; break;
+		case SLOT_HEAD:       pAtlas = m_pItemHeadwear; break;
+		case SLOT_FEET:       pAtlas = m_pItemFootwear; break;
+		case SLOT_SHOVEL:     pAtlas = m_pItemShovels; break;
+		case SLOT_CONSUMABLE: pAtlas = m_pItemConsumables; break;
+		default: pAtlas = m_pItemResources; break;
+		}
+
+		if (pAtlas && pAtlas->GetLastStatus() == Ok)
+		{
+			graphics.DrawImage(pAtlas,
+				RectF(drawX, drawY, gridSize, gridSize),
+				(float)wi.item->GetSrcX(), (float)wi.item->GetSrcY(), (float)wi.item->GetSrcW(), (float)wi.item->GetSrcH(),
+				UnitPixel);
+		}
 	}
 }
 

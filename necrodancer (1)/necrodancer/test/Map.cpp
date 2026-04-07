@@ -15,6 +15,7 @@ Map::Map() : m_currentSplitCount(0), m_pRoot(nullptr) {
 
 Map::~Map() {
 	Clear();
+	ClearWorldItems();
 }
 
 void Map::Generate() {
@@ -228,6 +229,39 @@ void Map::Generate() {
 	}
 	
 	Render::getInstance().InvalidateBackgroundCache();
+}
+ 
+void Map::AddWorldItem(ItemBase* pItem, int x, int y)
+{
+	if (!pItem) return;
+	m_worldItems.push_back({ pItem, x, y });
+}
+
+ItemBase* Map::PickupItem(int x, int y)
+{
+	for (auto it = m_worldItems.begin(); it != m_worldItems.end(); ++it)
+	{
+		if (it->x == x && it->y == y)
+		{
+			ItemBase* pItem = it->item;
+			m_worldItems.erase(it);
+			return pItem;
+		}
+	}
+	return nullptr;
+}
+
+void Map::ClearWorldItems()
+{
+	for (auto& wi : m_worldItems)
+	{
+		if (wi.item)
+		{
+			delete wi.item;
+			wi.item = nullptr;
+		}
+	}
+	m_worldItems.clear();
 }
 
 MapTile Map::GetTile(int x, int y) const {

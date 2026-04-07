@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "UnitBase.h"
 
 #include <vector>
@@ -30,7 +30,7 @@ public:
 
 	virtual void Attack(UnitBase& Target);
 
-	virtual void TakeDamage(int atk);
+	virtual void TakeDamage(float atk) override;
 
 	virtual void Die();
 
@@ -38,9 +38,11 @@ public:
 	void SetVisionRadius(int radius) { m_visionRadius = radius; }
 
 	void Equip(ItemBase* pItem);
+	void DestroyItem(ItemBase* pItem);
 	ItemBase* GetEquippedItem(ItemSlot slot) const;
+	virtual float GetProtection() const override;
 
-	int GetDigLevel() const;
+	float GetDigLevel() const;
 
 	virtual void Update();
 

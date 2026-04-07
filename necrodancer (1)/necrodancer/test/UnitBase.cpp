@@ -168,9 +168,12 @@ void UnitBase::Attack(UnitBase& Target)
 	Target.TakeDamage(GetAttack());
 }
 
-void UnitBase::TakeDamage(int atk)
+void UnitBase::TakeDamage(float atk)
 {
-	status.Hp -= atk;
+	float finalDmg = atk - GetProtection();
+	if (finalDmg < 0.5f) finalDmg = 0.5f;
+
+	status.Hp -= finalDmg;
 	if (status.Hp <= 0)
 	{
 		if (GetTag() == PLAYER) {
