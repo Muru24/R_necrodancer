@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Define.h"
 #include "Struct.h"
 #include <string>
@@ -14,10 +14,10 @@ protected:
 	std::wstring m_name;
 	ItemSlot m_slot;
 	ItemMaterial m_material;
-	int m_baseDamage;
-	int m_protection;
+	float m_baseDamage;
+	float m_protection;
 	int m_visionBonus;
-	int m_digStrength;
+	float m_digStrength;
 	int m_srcX, m_srcY, m_srcW, m_srcH;
 	int m_Price;
 
@@ -37,10 +37,10 @@ public:
 	ItemSlot GetSlot() const { return m_slot; }
 	ItemMaterial GetMaterial() const { return m_material; }
 
-	int GetBaseDamage() const { return m_baseDamage; }
-	int GetProtection() const { return m_protection; }
+	float GetBaseDamage() const { return m_baseDamage; }
+	float GetProtection() const { return m_protection; }
 	int GetVisionBonus() const { return m_visionBonus; }
-	int GetDigStrength() const { return m_digStrength; }
+	float GetDigStrength() const { return m_digStrength; }
 
 	void SetSpriteInfo(int x, int y, int w, int h) { m_srcX = x; m_srcY = y; m_srcW = w; m_srcH = h; }
 	int GetSrcX() const { return m_srcX; }
@@ -57,7 +57,7 @@ private:
 	std::vector<Vector2> m_attackRange;
 
 public:
-	Weapon(ItemID id, std::wstring name, int damage, std::vector<Vector2> range, ItemMaterial mat = MAT_BASE);
+	Weapon(ItemID id, std::wstring name, float damage, std::vector<Vector2> range, ItemMaterial mat = MAT_BASE);
 
 	const std::vector<Vector2>& GetAttackRange() const { return m_attackRange; }
 };
@@ -73,11 +73,11 @@ public:
 class Armor : public ItemBase
 {
 public:
-	Armor(ItemID id, std::wstring name, int protection);
+	Armor(ItemID id, std::wstring name, float protection);
 };
 
 class Shovel : public ItemBase
 {
 public:
-	Shovel(ItemID id, std::wstring name, int digStrength);
+	Shovel(ItemID id, std::wstring name, float digStrength);
 };

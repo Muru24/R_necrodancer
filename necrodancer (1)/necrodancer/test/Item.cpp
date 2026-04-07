@@ -1,4 +1,4 @@
-﻿#include "Item.h"
+#include "Item.h"
 #include "Player.h"
 
 void ItemBase::ApplySpecialAbility(AbilityTrigger trigger, UnitBase* pOwner, UnitBase* pTarget)
@@ -6,7 +6,10 @@ void ItemBase::ApplySpecialAbility(AbilityTrigger trigger, UnitBase* pOwner, Uni
 	switch (m_material)
 	{
 	case MAT_GLASS:
-		if (trigger == TRIGGER_ON_ATTACK || trigger == TRIGGER_ON_DAMAGED) {
+		if (trigger == TRIGGER_ON_ATTACK) {
+			if (pOwner->GetTag() == PLAYER) {
+				static_cast<Player*>(pOwner)->DestroyItem(this);
+			}
 		}
 		break;
 	case MAT_GOLD:
@@ -30,14 +33,14 @@ void ItemBase::GetItem(Player* player)
 }
 
 
-Weapon::Weapon(ItemID id, std::wstring name, int damage, std::vector<Vector2> range, ItemMaterial mat)
+Weapon::Weapon(ItemID id, std::wstring name, float damage, std::vector<Vector2> range, ItemMaterial mat)
 	: ItemBase(id, name, SLOT_WEAPON, mat), m_attackRange(range)
 {
 	m_baseDamage = damage;
 }
 
 Torch::Torch(ItemID id, std::wstring name, int visionBonus)
-	: ItemBase(id, name, SLOT_HEAD)
+	: ItemBase(id, name, SLOT_TORCH)
 {
 	m_visionBonus = visionBonus;
 }
@@ -58,13 +61,13 @@ void Torch::OnUnequip(Player* pPlayer)
 	}
 }
 
-Armor::Armor(ItemID id, std::wstring name, int protection)
+Armor::Armor(ItemID id, std::wstring name, float protection)
 	: ItemBase(id, name, SLOT_BODY)
 {
 	m_protection = protection;
 }
 
-Shovel::Shovel(ItemID id, std::wstring name, int digStrength)
+Shovel::Shovel(ItemID id, std::wstring name, float digStrength)
 	: ItemBase(id, name, SLOT_SHOVEL)
 {
 	m_digStrength = digStrength;

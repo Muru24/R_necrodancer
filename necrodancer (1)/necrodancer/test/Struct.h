@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Define.h"
 
 struct Vector2
@@ -14,9 +14,9 @@ struct Vector2
 
 struct UnitStatus
 {
-	int Hp;
-	int MaxHp;
-	int Attack;
+	float Hp;
+	float MaxHp;
+	float Attack;
 	int MoveDistance;
 	bool IsAlive;
 };

@@ -1,4 +1,4 @@
-﻿#include "MainGame.h"
+#include "MainGame.h"
 #include "Struct.h"
 #include "Define.h"
 #include "Map.h"
@@ -38,16 +38,16 @@ void MainGame::Initialize()
 
 	Vector2 startPos = m_pMap->GetRandomFloorPos();
 	m_pPlayer = new Player(10, 2, MOVE_SPEED, startPos, PLAYER);
-	ObjectContainer::getInstance().PushUnit(m_pPlayer);
+	ObjectContainer::getInstance().PushUnit(m_pPlayer);	
 
-	m_pPlayer->Equip(ItemFactory::Create(ITEM_SHOVEL_GOLD));
-	m_pPlayer->Equip(ItemFactory::Create(ITEM_LONGSWORD));
+	// 초기 기본 아이템 지급
+	m_pPlayer->Equip(ItemFactory::Create(ITEM_DAGGER));
 
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
 
-	Vector2 slimePos = { startPos.X + gridSize, startPos.Y };
-	Slime* pSlime = new Slime(5, 1, 0, slimePos, ENEMY);
-	ObjectContainer::getInstance().PushUnit(pSlime);
+	//Vector2 slimePos = { startPos.X + gridSize, startPos.Y };
+	//Slime* pSlime = new Slime(5, 1, 0, slimePos, ENEMY);
+	//ObjectContainer::getInstance().PushUnit(pSlime);
 
 	const std::vector<Room*>& rooms = m_pMap->GetRooms();
 	Room* pShop = nullptr;
@@ -64,7 +64,6 @@ void MainGame::Initialize()
 		Shopkeeper* pShopkeeper = new Shopkeeper(999, 0, 0, shopkeeperPos, NPC);
 		ObjectContainer::getInstance().PushUnit(pShopkeeper);
 	}
-
 	beatInterval = 60000 / RHYTHM_BPM;
 	lastBeatTime = GetTickCount();
 	currentBeatCount = 0;

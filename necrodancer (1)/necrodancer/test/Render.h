@@ -18,8 +18,17 @@ private:
 	Gdiplus::Image* m_pWallImg;
 	Gdiplus::Image* m_pSlimeImg;
 	Gdiplus::Image* m_HUD;
-	Gdiplus::Image* m_Note;
+	Gdiplus::Image* m_pNote;
 	Gdiplus::Image* m_pShopkeeper;
+
+	Gdiplus::Image* m_pItemWeapons;
+	Gdiplus::Image* m_pItemArmor;
+	Gdiplus::Image* m_pItemHeadwear;
+	Gdiplus::Image* m_pItemFootwear;
+	Gdiplus::Image* m_pItemShovels;
+	Gdiplus::Image* m_pItemTorches;
+	Gdiplus::Image* m_pItemResources;
+	Gdiplus::Image* m_pItemConsumables;
 	Gdiplus::Bitmap* m_pCachedBackground;
 	bool m_bCacheDirty;
 
@@ -54,6 +63,8 @@ public:
 	void DrawUi(Gdiplus::Graphics& graphics, UnitBase& player);
 
 	void DrawRhythm(Gdiplus::Graphics& graphics);
+
+	void DrawWorldItems(Gdiplus::Graphics& graphics, Map& map, Camera& camera);
 
 	void DrawString(Gdiplus::Graphics& graphics, wchar_t buf[], int size, int x, int y);
 

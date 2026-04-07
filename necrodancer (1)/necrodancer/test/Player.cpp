@@ -1,4 +1,4 @@
-﻿#include "Player.h"
+#include "Player.h"
 #include "Define.h"
 #include <windows.h>
 #include "Map.h"
@@ -58,7 +58,15 @@ void Player::Move()
 		}
 
 		if (dx != 0 || dy != 0) {
-			TryMove(dx, dy);
+			if (TryMove(dx, dy)) {
+				// 이동 후 아이템 습득 체크
+				int px = static_cast<int>(m_vTargetPos.X / gridSize);
+				int py = static_cast<int>(m_vTargetPos.Y / gridSize);
+				ItemBase* pFloorItem = pMap->PickupItem(px, py);
+				if (pFloorItem) {
+					Equip(pFloorItem);
+				}
+			}
 			m_bActedThisBeat = true;
 		}
 	}
@@ -70,27 +78,24 @@ void Player::Move()
 
 void Player::Attack(UnitBase& Target)
 {
-	int finalDmg = status.Attack;
+	float finalDmg = status.Attack;
 	ItemBase* pWeapon = GetEquippedItem(SLOT_WEAPON);
 	if (pWeapon) {
-		finalDmg = pWeapon->GetBaseDamage();
+		finalDmg += pWeapon->GetBaseDamage(); // 기본 공격력 + 무기 공격력
 		pWeapon->ApplySpecialAbility(TRIGGER_ON_ATTACK, this, &Target);
 	}
 	
 	Target.TakeDamage(finalDmg);
 }
 
-void Player::TakeDamage(int atk)
+void Player::TakeDamage(float atk)
 {
-	int finalDmg = atk;
 	ItemBase* pArmor = GetEquippedItem(SLOT_BODY);
 	if (pArmor) {
-		finalDmg -= pArmor->GetProtection();
-		if (finalDmg < 0) finalDmg = 0;
 		pArmor->ApplySpecialAbility(TRIGGER_ON_DAMAGED, this, nullptr);
 	}
 
-	UnitBase::TakeDamage(finalDmg);
+	UnitBase::TakeDamage(atk);
 }
 
 void Player::Die()
@@ -107,9 +112,23 @@ void Player::Equip(ItemBase* pItem)
 {
 	if (!pItem) return;
 
+	Map* pMap = MainGame::getInstance().GetMap();
+	int gridSize = FRAME_SIZE * DRAW_SCALE;
+	int px = static_cast<int>(GetLogicalPos().X / gridSize);
+	int py = static_cast<int>(GetLogicalPos().Y / gridSize);
+
 	for (auto it = m_equips.begin(); it != m_equips.end(); ++it) {
 		if (it->first == pItem->GetSlot()) {
-			it->second->OnUnequip(this);
+			ItemBase* oldItem = it->second;
+			oldItem->OnUnequip(this);
+			
+			// 기존 아이템을 현재 위치에 드랍
+			if (pMap) {
+				pMap->AddWorldItem(oldItem, px, py);
+			} else {
+				delete oldItem;
+			}
+
 			m_equips.erase(it);
 			break;
 		}
@@ -117,6 +136,21 @@ void Player::Equip(ItemBase* pItem)
 
 	m_equips.push_back(std::make_pair(pItem->GetSlot(), pItem));
 	pItem->OnEquip(this);
+}
+
+void Player::DestroyItem(ItemBase* pItem)
+{
+	if (!pItem) return;
+	for (auto it = m_equips.begin(); it != m_equips.end(); ++it) {
+		if (it->second == pItem) {
+			it->second->OnUnequip(this);
+			// 장착 목록에서 제거만 하고 메모리는 외부(또는 여기서) 해제 결정 필요
+			// 여기서는 장착 해제 후 삭제 처리
+			delete it->second;
+			m_equips.erase(it);
+			break;
+		}
+	}
 }
 
 ItemBase* Player::GetEquippedItem(ItemSlot slot) const
@@ -127,9 +161,18 @@ ItemBase* Player::GetEquippedItem(ItemSlot slot) const
 	return nullptr;
 }
 
-int Player::GetDigLevel() const
+float Player::GetProtection() const
 {
+	float totalProt = 0.0f;
+	ItemBase* pArmor = GetEquippedItem(SLOT_BODY);
+	if (pArmor) totalProt += pArmor->GetProtection();
+	return totalProt;
+}
+
+float Player::GetDigLevel() const
+{
+	float baseDig = 1.0f; // 기본 맨손(?) 굴착 등급
 	ItemBase* pShovel = GetEquippedItem(SLOT_SHOVEL);
 	if (pShovel) return pShovel->GetDigStrength();
-	return 0;
+	return baseDig;
 }
