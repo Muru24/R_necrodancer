@@ -52,6 +52,9 @@
     <Filter Include="Title">
       <UniqueIdentifier>{4dbcb5f5-78e2-447a-9157-491604f6e765}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AttackEffect">
+      <UniqueIdentifier>{bda2017c-dd2a-4636-b72d-10a53053e997}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">

@@ -6,6 +6,7 @@
 #include <cmath>
 #include "Item.h"
 #include <iostream>
+#include "ObjectContainer.h"
 #include "RhythmManager.h"
 
 void Player::Move()
@@ -64,7 +65,16 @@ void Player::Move()
 				int py = static_cast<int>(m_vTargetPos.Y / gridSize);
 				ItemBase* pFloorItem = pMap->PickupItem(px, py);
 				if (pFloorItem) {
-					Equip(pFloorItem);
+					int price = pFloorItem->GetPrice();
+					if (price > GetMoney()) {
+						// 돈이 부족하면 다시 내려놓기
+						pMap->AddWorldItem(pFloorItem, px, py);
+					}
+					else {
+						// 돈이 있으면 차감하고 장착 (SetMoney는 누적 방식이므로 음수로 전달)
+						if (price > 0) SetMoney(-price);
+						Equip(pFloorItem);
+					}
 				}
 			}
 			m_bActedThisBeat = true;
@@ -86,6 +96,40 @@ void Player::Attack(UnitBase& Target)
 	}
 	
 	Target.TakeDamage(finalDmg);
+
+	// 공격 이펙트 생성
+	float angle = 0.0f;
+	Vector2 myPos = GetLogicalPos();
+	Vector2 targetPos = Target.GetLogicalPos();
+	int gridSize = FRAME_SIZE * DRAW_SCALE;
+
+	int myGridX = (int)(myPos.X / gridSize);
+	int myGridY = (int)(myPos.Y / gridSize);
+	int targetGridX = (int)(targetPos.X / gridSize);
+	int targetGridY = (int)(targetPos.Y / gridSize);
+
+	Vector2 effectPos = myPos;
+	if (targetGridX > myGridX) {
+		angle = 0.0f;
+		effectPos.X += gridSize;
+	}
+	else if (targetGridY > myGridY) {
+		angle = 90.0f;
+		effectPos.Y += gridSize;
+	}
+	else if (targetGridX < myGridX) {
+		angle = 180.0f;
+		effectPos.X -= gridSize;
+	}
+	else if (targetGridY < myGridY) {
+		angle = 270.0f;
+		effectPos.Y -= gridSize;
+	}
+
+	ItemID weaponID = ITEM_DAGGER;
+	if (pWeapon) weaponID = pWeapon->GetID();
+
+	ObjectContainer::getInstance().AddAttackEffect(weaponID, effectPos, angle);
 }
 
 void Player::TakeDamage(float atk)
@@ -112,6 +156,17 @@ void Player::Equip(ItemBase* pItem)
 {
 	if (!pItem) return;
 
+	if (pItem->GetID() == ITEM_GOLD_COIN) {
+		SetMoney(1); 
+		delete pItem;
+		return;
+	}
+	if (pItem->GetID() == ITEM_BOMB) {
+		AddBombs(1);
+		delete pItem;
+		return;
+	}
+
 	Map* pMap = MainGame::getInstance().GetMap();
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
 	int px = static_cast<int>(GetLogicalPos().X / gridSize);
@@ -122,7 +177,6 @@ void Player::Equip(ItemBase* pItem)
 			ItemBase* oldItem = it->second;
 			oldItem->OnUnequip(this);
 			
-			// 기존 아이템을 현재 위치에 드랍
 			if (pMap) {
 				pMap->AddWorldItem(oldItem, px, py);
 			} else {

@@ -19,6 +19,8 @@ void ObjectContainer::Clear()
 		if (unit) delete unit;
 	}
 	UnitContainer.clear();
+
+	ClearEffects();
 }
 
 UnitBase* ObjectContainer::FindUnitAt(int gridX, int gridY)
@@ -38,4 +40,42 @@ UnitBase* ObjectContainer::FindUnitAt(int gridX, int gridY)
 		}
 	}
 	return nullptr;
+}
+
+void ObjectContainer::AddAttackEffect(ItemID id, Vector2 pos, float angle)
+{
+	AttackEffect* effect = new AttackEffect();
+	effect->id = id;
+	effect->pos = pos;
+	effect->angle = angle;
+	effect->timer = 0.0f;
+	effect->duration = 0.2f;
+	effect->maxFrames = (id == ITEM_RAPIER) ? 4 : 3;
+	m_attackEffects.push_back(effect);
+}
+
+void ObjectContainer::UpdateEffects(float deltaTime)
+{
+	for (auto it = m_attackEffects.begin(); it != m_attackEffects.end(); )
+	{
+		(*it)->timer += deltaTime;
+		if ((*it)->timer >= (*it)->duration)
+		{
+			delete* it;
+			it = m_attackEffects.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
+void ObjectContainer::ClearEffects()
+{
+	for (auto* effect : m_attackEffects)
+	{
+		if (effect) delete effect;
+	}
+	m_attackEffects.clear();
 }

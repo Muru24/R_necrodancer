@@ -11,6 +11,7 @@ class Player : public UnitBase
 {
 private:
 	int m_Money;
+	int m_Bombs;
 	bool  m_prevKeyState[4];
 	int   m_visionRadius;
 	bool  m_bActedThisBeat = false;
@@ -18,11 +19,11 @@ private:
 
 
 public:
-	Player() : m_visionRadius(3), m_bActedThisBeat(false) {
+	Player() : m_Money(0), m_Bombs(1), m_visionRadius(3), m_bActedThisBeat(false) {
 		for (int i = 0; i < 4; ++i) m_prevKeyState[i] = false;
 	}
 	Player(int hp, int attack, int movespeed, Vector2 pos, ObjectTag tag)
-		: UnitBase(hp, attack, movespeed, pos, tag), m_visionRadius(3), m_bActedThisBeat(false) {
+		: UnitBase(hp, attack, movespeed, pos, tag), m_Money(0), m_Bombs(1), m_visionRadius(3), m_bActedThisBeat(false) {
 		for (int i = 0; i < 4; ++i) m_prevKeyState[i] = false;
 	}
 
@@ -46,6 +47,9 @@ public:
 
 	virtual void Update();
 
-	int GetMoney()const { return m_Money; }
 	void SetMoney(int money) { m_Money += money; }
+	int GetMoney()const { return m_Money; }
+
+	int GetBombs() const { return m_Bombs; }
+	void AddBombs(int amount) { m_Bombs += amount; }
 };

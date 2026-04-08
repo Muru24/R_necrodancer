@@ -12,11 +12,12 @@
 #include "RhythmManager.h"
 #include "R_Note.h"
 #include "Title.h"
+#include "Camera.h"
 
 using namespace Gdiplus;
 
 Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr), m_pSlimeImg(nullptr), m_HUD(nullptr),
-m_pShopkeeper(nullptr), m_pNote(nullptr),
+m_pShopkeeper(nullptr), m_pNote(nullptr), m_pEffectAttack(nullptr),
 m_pItemWeapons(nullptr), m_pItemArmor(nullptr), m_pItemHeadwear(nullptr), m_pItemFootwear(nullptr),
 m_pItemShovels(nullptr), m_pItemTorches(nullptr), m_pItemResources(nullptr), m_pItemConsumables(nullptr),
 m_pTitleImg(nullptr), m_pCachedBackground(nullptr), m_bCacheDirty(true),
@@ -55,6 +56,7 @@ void Render::Initialize(ULONG_PTR& gdiplusToken)
 	m_pItemResources = new Gdiplus::Image(SPRITEPATH_RESOURCES);
 	m_pItemConsumables = new Gdiplus::Image(SPRITEPATH_CONSUMABLES);
 	m_pTitleImg = new Gdiplus::Image(SPRITEPATH_SCENE_TITLE);
+	m_pEffectAttack = new Gdiplus::Image(SPRITEPATH_EFFECT_ATTACK);
 }
 
 void Render::Finalize(ULONG_PTR gdiplusToken)
@@ -67,6 +69,7 @@ void Render::Finalize(ULONG_PTR gdiplusToken)
 	if (m_HUD) delete m_HUD;
 	if (m_pShopkeeper) delete m_pShopkeeper;
 	if (m_pNote) delete m_pNote;
+	if (m_pEffectAttack) delete m_pEffectAttack;
 
 	if (m_pDefaultFont) delete m_pDefaultFont;
 	if (m_pBigFont) delete m_pBigFont;
@@ -256,10 +259,37 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 			if (Light::getInstance().GetVisibility(gridX, gridY) != VIS_VISIBLE) continue;
 
 			int currentFrame = unit->GetCurrentFrame();
-			int srcX = currentFrame * FRAME_SIZE + 5;
-			int srcY = 0;
+			float srcX = (float)MONSTER_SLIME_POS_X + (currentFrame * MONSTER_SLIME_SCR_X);
+			float srcY = (float)MONSTER_SLIME_POS_Y;
 
-			DrawUnitInternal(graphics, m_pSlimeImg, *unit, camera, srcX, srcY);
+			float unitX = (float)unit->GetX() - camera.GetX();
+			float unitY = (float)unit->GetY() - camera.GetY();
+
+			float jumpOffsetY = 0.0f;
+			if (unit->GetIsMoving()) {
+				float progress = unit->GetMoveProgress();
+				float jumpHeight = unit->GetJumpHeight();
+				jumpOffsetY = sinf(progress * 3.141592f) * jumpHeight;
+			}
+
+			bool isLookLeft = unit->GetIsLookLeft();
+			float drawWidth = (float)(MONSTER_SLIME_SCR_X * DRAW_SCALE);
+			float drawHeight = (float)(MONSTER_SLIME_SCR_Y * DRAW_SCALE);
+
+			float gridSize = (float)(FRAME_SIZE * DRAW_SCALE);
+			float offsetX = (gridSize - drawWidth) / 2.0f;
+			float offsetY = (gridSize - drawHeight);
+
+			if (isLookLeft) {
+				graphics.DrawImage(m_pSlimeImg,
+					RectF(unitX + offsetX + drawWidth, (unitY - jumpOffsetY) + offsetY, -drawWidth, drawHeight),
+					(float)srcX, (float)srcY, (float)MONSTER_SLIME_SCR_X, (float)MONSTER_SLIME_SCR_Y, UnitPixel);
+			}
+			else {
+				graphics.DrawImage(m_pSlimeImg,
+					RectF(unitX + offsetX, (unitY - jumpOffsetY) + offsetY, drawWidth, drawHeight),
+					(float)srcX, (float)srcY, (float)MONSTER_SLIME_SCR_X, (float)MONSTER_SLIME_SCR_Y, UnitPixel);
+			}
 		}
 		else if (unit->GetTag() == NPC)
 		{
@@ -291,38 +321,7 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 				srcX, srcY, (float)NPC_SHOPKEEPER_FRAME_X, (float)NPC_SHOPKEEPER_FRAME_Y,
 				UnitPixel);
 		}
-
-		float unitX = (float)unit->GetX() - camera.GetX();
-		float unitY = (float)unit->GetY() - camera.GetY();
-
-		if (unit->GetTag() == ENEMY) {
-			int gridX = (int)(unit->GetX() / (FRAME_SIZE * DRAW_SCALE));
-			int gridY = (int)(unit->GetY() / (FRAME_SIZE * DRAW_SCALE));
-			if (Light::getInstance().GetVisibility(gridX, gridY) != VIS_VISIBLE) continue;
-		}
-
-		wchar_t szBuf[128];
-		if (unit->GetTag() == PLAYER) {
-			swprintf_s(szBuf, L"HP: %d/%d\nATK: %d\nDig: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack(), static_cast<Player*>(unit)->GetDigLevel());
-		}
-		else if (unit->GetTag() == NPC) {
-			continue; 
-		}
-		else {
-			swprintf_s(szBuf, L"HP: %d/%d\nATK: %d", unit->GetHp(), unit->GetMaxHp(), unit->GetAttack());
-		}
-
-		Gdiplus::PointF point(unitX, unitY - 30.0f);
-
-		if (m_pDefaultFont && m_pWhiteBrush && m_pBlackBrush) {
-			for (int ox = -1; ox <= 1; ++ox) {
-				for (int oy = -1; oy <= 1; ++oy) {
-					if (ox == 0 && oy == 0) continue;
-					graphics.DrawString(szBuf, -1, m_pDefaultFont, PointF(point.X + ox, point.Y + oy), m_pBlackBrush);
-				}
-			}
-			graphics.DrawString(szBuf, -1, m_pDefaultFont, point, m_pWhiteBrush);
-		}
+		
 	}
 }
 
@@ -349,6 +348,15 @@ void Render::Draw(HWND hWnd, Map& map, Camera& camera, UnitBase& player)
 		DrawBackground(graphics, rect, map, camera);
 		DrawWorldItems(graphics, map, camera);
 		DrawUnit(graphics, camera);
+
+		for (auto* effect : ObjectContainer::getInstance().GetAttackEffects())
+		{
+			if (effect) DrawAttackEffect(graphics, *effect, camera);
+		}
+
+
+		
+
 		DrawUi(graphics, player);
 		DrawRhythm(graphics);
 	}
@@ -551,14 +559,19 @@ void Render::DrawUi(Gdiplus::Graphics& graphics, UnitBase& player)
 		(float)UI_MONEY_SCR_X, (float)UI_MONEY_SCR_Y, (float)FRAME_SIZE, (float)FRAME_SIZE,
 		UnitPixel);
 
-	graphics.DrawImage(m_HUD,
-		RectF(UI_JEWEL_POS_X, UI_JEWEL_POS_Y, drawSize, drawSize),
-		(float)UI_JEWEL_SCR_X, (float)UI_JEWEL_SCR_Y, (float)FRAME_SIZE, (float)FRAME_SIZE,
-		UnitPixel);
+	if (m_pItemConsumables && m_pItemConsumables->GetLastStatus() == Gdiplus::Ok) {
+		graphics.DrawImage(m_pItemConsumables,
+			RectF(UI_JEWEL_POS_X, UI_JEWEL_POS_Y, drawSize, drawSize),
+			(float)ITEM_BOMB_SCR_X, (float)ITEM_BOMB_SCR_Y, (float)ITEM_BOMB_FRAME, (float)ITEM_BOMB_FRAME,
+			UnitPixel);
+	}
 
+	Player& p = static_cast<Player&>(player);
 	wchar_t szBuf[128];
-	swprintf_s(szBuf, L" x%d", 0);
+	swprintf_s(szBuf, L" x%d", p.GetMoney());
 	DrawString(graphics, szBuf, 24, (float)UI_MONEY_FONT_POS_X, (float)UI_MONEY_FONT_POS_Y);
+	
+	swprintf_s(szBuf, L" x%d", p.GetBombs());
 	DrawString(graphics, szBuf, 24, (float)UI_JEWEL_FONT_POS_X, (float)UI_JEWEL_FONT_POS_Y);
 }
 
@@ -617,6 +630,61 @@ void Render::DrawRhythm(Gdiplus::Graphics& graphics)
 	}
 }
 
+void Render::DrawAttackEffect(Gdiplus::Graphics& graphics, AttackEffect& effect, Camera& camera)
+{
+	if (!m_pEffectAttack || m_pEffectAttack->GetLastStatus() != Ok) return;
+
+	graphics.SetInterpolationMode(InterpolationModeNearestNeighbor);
+
+	float gridSize = (float)(FRAME_SIZE * DRAW_SCALE);
+	float worldX = (float)effect.pos.X - camera.GetX();
+	float worldY = (float)effect.pos.Y - camera.GetY();
+
+	float srcX = 0, srcY = 0, srcW = 0, srcH = 0;
+	float angle = effect.angle;
+
+	ItemID id = effect.id;
+	if (id == ITEM_DAGGER) {
+		srcY = (float)EFFECT_DAGGER_POS_Y;
+		srcW = (float)EFFECT_DAGGER_SCR_X;
+		srcH = (float)EFFECT_DAGGER_SCR_Y;
+		srcX = (float)EFFECT_DAGGER_POS_X;
+	}
+	else if (id == ITEM_LONGSWORD) {
+		srcY = (float)EFFECT_LONGSWORD_POS_Y;
+		srcW = (float)EFFECT_LONGSWORD_SCR_X;
+		srcH = (float)EFFECT_LONGSWORD_SCR_Y;
+		srcX = (float)EFFECT_LONGSWORD_POS_X;
+	}
+	else if (id == ITEM_RAPIER) {
+		srcY = (float)EFFECT_RAPIER_POS_Y;
+		srcW = (float)EFFECT_RAPIER_SCR_X;
+		srcH = (float)EFFECT_RAPIER_SCR_Y;
+		srcX = (float)EFFECT_RAPIER1_POS_X; 
+	}
+
+	float progress = effect.timer / effect.duration;
+	if (progress > 1.0f) progress = 1.0f;
+	int frameIndex = (int)(progress * effect.maxFrames);
+	if (frameIndex >= effect.maxFrames) frameIndex = effect.maxFrames - 1;
+
+	srcX += (frameIndex * srcW);
+
+	float drawW = srcW * DRAW_SCALE;
+	float drawH = srcH * DRAW_SCALE;
+
+	Gdiplus::GraphicsState state = graphics.Save();
+	
+	graphics.TranslateTransform(worldX + gridSize / 2.0f, worldY + gridSize / 2.0f);
+	graphics.RotateTransform(angle);
+	
+	graphics.DrawImage(m_pEffectAttack,
+		Gdiplus::RectF(-drawW / 2.0f, -drawH / 2.0f, drawW, drawH),
+		srcX, srcY, srcW, srcH, UnitPixel);
+
+	graphics.Restore(state);
+}
+
 void Render::DrawWorldItems(Gdiplus::Graphics& graphics, Map& map, Camera& camera)
 {
 	const auto& worldItems = map.GetWorldItems();
@@ -629,6 +697,10 @@ void Render::DrawWorldItems(Gdiplus::Graphics& graphics, Map& map, Camera& camer
 	for (const auto& wi : worldItems)
 	{
 		if (!wi.item) continue;
+
+		// 시야 체크: 현재 시야 범위 내(VIS_VISIBLE)에 있을 때만 아이템 렌더링
+		if (Light::getInstance().GetVisibility(wi.x, wi.y) != VIS_VISIBLE)
+			continue;
 
 		float drawX = (float)wi.x * gridSize - camX;
 		float drawY = (float)wi.y * gridSize - camY;
@@ -655,6 +727,21 @@ void Render::DrawWorldItems(Gdiplus::Graphics& graphics, Map& map, Camera& camer
 				(float)wi.item->GetSrcX(), (float)wi.item->GetSrcY(), (float)wi.item->GetSrcW(), (float)wi.item->GetSrcH(),
 				UnitPixel);
 		}
+
+		// 가격 표시 (상점 아이템 등)
+		if (wi.item->GetPrice() > 0) {
+			wchar_t szPrice[32];
+			swprintf_s(szPrice, L"%dG", wi.item->GetPrice());
+			
+			Gdiplus::PointF point(drawX + (gridSize * 0.2f), drawY + gridSize);
+			for (int ox = -1; ox <= 1; ++ox) {
+				for (int oy = -1; oy <= 1; ++oy) {
+					if (ox == 0 && oy == 0) continue;
+					graphics.DrawString(szPrice, -1, m_pDefaultFont, Gdiplus::PointF(point.X + ox, point.Y + oy), m_pBlackBrush);
+				}
+			}
+			graphics.DrawString(szPrice, -1, m_pDefaultFont, point, m_pWhiteBrush);
+		}
 	}
 }
 
@@ -668,7 +755,6 @@ void Render::DrawTitleMenuOption(Gdiplus::Graphics& graphics, int nOptionIdx, bo
 
 	Gdiplus::PointF point(x, y);
 
-	// 외곽선 효과
 	for (int ox = -1; ox <= 1; ++ox) {
 		for (int oy = -1; oy <= 1; ++oy) {
 			if (ox == 0 && oy == 0) continue;

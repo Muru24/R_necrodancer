@@ -6,6 +6,7 @@ class Map;
 class Camera;
 class UnitBase;
 struct MapTile;
+struct AttackEffect;
 
 class Render
 {
@@ -20,6 +21,7 @@ private:
 	Gdiplus::Image* m_HUD;
 	Gdiplus::Image* m_pNote;
 	Gdiplus::Image* m_pShopkeeper;
+	Gdiplus::Image* m_pEffectAttack;
 
 	Gdiplus::Image* m_pItemWeapons;
 	Gdiplus::Image* m_pItemArmor;
@@ -61,6 +63,7 @@ public:
 	void DrawTitleMenuOption(Gdiplus::Graphics& graphics, int nOptionIdx, bool bSelected, bool bDraw, float x, float y);
 	void DrawRhythm(Gdiplus::Graphics& graphics);
 	void DrawWorldItems(Gdiplus::Graphics& graphics, Map& map, Camera& camera);
+	void DrawAttackEffect(Gdiplus::Graphics& graphics, AttackEffect& effect, Camera& camera);
 	void DrawString(Gdiplus::Graphics& graphics, wchar_t buf[], int size, int x, int y);
 	void UpdateTileCache(int x, int y, Map* pMap);
 	void InvalidateBackgroundCache() { m_bCacheDirty = true; }

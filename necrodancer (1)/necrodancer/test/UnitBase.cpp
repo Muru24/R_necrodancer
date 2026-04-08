@@ -7,6 +7,7 @@
 #include <cmath>
 #include <iostream>
 #include "Item.h"
+#include "ItemFactory.h"
 
 void UnitBase::Update()
 {
@@ -187,4 +188,18 @@ void UnitBase::TakeDamage(float atk)
 
 void UnitBase::Die()
 {
+	// 몬스터(ENEMY)일 경우에만 골드 드랍
+	if (GetTag() == ENEMY) {
+		Map* pMap = MainGame::getInstance().GetMap();
+		if (pMap) {
+			int gridSize = FRAME_SIZE * DRAW_SCALE;
+			int gridX = static_cast<int>(GetPos().X / gridSize);
+			int gridY = static_cast<int>(GetPos().Y / gridSize);
+
+			ItemBase* pGold = ItemFactory::Create(ITEM_GOLD_COIN);
+			if (pGold) {
+				pMap->AddWorldItem(pGold, gridX, gridY);
+			}
+		}
+	}
 }

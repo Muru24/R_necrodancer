@@ -230,6 +230,19 @@ void Map::Generate() {
 	
 	Render::getInstance().InvalidateBackgroundCache();
 }
+
+Room* Map::GetRoomAt(int x, int y) const
+{
+	for (Room* room : m_rooms)
+	{
+		if (x >= room->GetRx() && x < room->GetRx() + room->GetRw() &&
+			y >= room->GetRy() && y < room->GetRy() + room->GetRh())
+		{
+			return room;
+		}
+	}
+	return nullptr;
+}
  
 void Map::AddWorldItem(ItemBase* pItem, int x, int y)
 {

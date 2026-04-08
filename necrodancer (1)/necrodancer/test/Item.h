@@ -22,9 +22,7 @@ protected:
 	int m_Price;
 
 public:
-	ItemBase(ItemID id, std::wstring name, ItemSlot slot, ItemMaterial mat = MAT_BASE)
-		: m_id(id), m_name(name), m_slot(slot), m_material(mat), m_baseDamage(0), m_protection(0), m_visionBonus(0), m_digStrength(0),
-		  m_srcX(0), m_srcY(0), m_srcW(FRAME_SIZE), m_srcH(FRAME_SIZE) {}
+	ItemBase(ItemID id, std::wstring name, ItemSlot slot, ItemMaterial mat = MAT_BASE);
 	virtual ~ItemBase() {}
 
 	virtual void OnEquip(Player* pPlayer) {}
@@ -47,6 +45,9 @@ public:
 	int GetSrcY() const { return m_srcY; }
 	int GetSrcW() const { return m_srcW; }
 	int GetSrcH() const { return m_srcH; }
+
+	void SetPrice(int price) { m_Price = price; }
+	int GetPrice() const { return m_Price; }
 
 	void GetItem(Player* player);
 };
