@@ -38,13 +38,13 @@ void Title::Update()
 
 	if (bEnter && !bEnterPrev) {
 		switch (m_nSelectedIdx) {
-		case 0: // START
+		case 0: 
 			MainGame::getInstance().SetScene(SCENE_INGAME);
 			break;
-		case 1: // RESET
+		case 1: 
 			MainGame::getInstance().Initialize();
 			break;
-		case 2: // EXIT
+		case 2: 
 			PostQuitMessage(0);
 			break;
 		}

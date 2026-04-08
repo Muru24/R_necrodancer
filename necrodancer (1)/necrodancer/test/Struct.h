@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Define.h"
 
 struct Vector2
@@ -46,4 +46,14 @@ struct MapTile
 	TileType type;
 	int variant;
 	int durability;
+};
+
+struct AttackEffect
+{
+	ItemID id;
+	Vector2 pos;
+	float angle;
+	float timer;
+	float duration;
+	int maxFrames;
 };

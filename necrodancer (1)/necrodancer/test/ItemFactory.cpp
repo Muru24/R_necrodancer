@@ -116,6 +116,13 @@ ItemBase* ItemFactory::Create(ItemID id, int variantIdx)
 		frameW = ITEM_GOLD_FRAME;
 		frameH = ITEM_GOLD_FRAME;
 		break;
+	case ITEM_BOMB:
+		pItem = new ItemBase(id, L"폭탄", SLOT_CONSUMABLE);
+		srcX = ITEM_BOMB_SCR_X + (ITEM_BOMB_FRAME * variantIdx);
+		srcY = ITEM_BOMB_SCR_Y;
+		frameW = ITEM_BOMB_FRAME;
+		frameH = ITEM_BOMB_FRAME;
+		break;
 	case ITEM_CHEESE:
 		pItem = new ItemBase(id, L"식량", SLOT_CONSUMABLE);
 		srcX = ITEM_CHEESE_SCR_X + (ITEM_CONSUMABLE_FRAME * variantIdx);

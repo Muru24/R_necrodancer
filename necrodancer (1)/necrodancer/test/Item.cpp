@@ -1,5 +1,8 @@
-#include "Item.h"
-#include "Player.h"
+﻿#include"Item.h"
+#include"Player.h"
+ItemBase::ItemBase(ItemID id, std::wstring name, ItemSlot slot, ItemMaterial mat)
+	: m_id(id), m_name(name), m_slot(slot), m_material(mat), m_baseDamage(0), m_protection(0), m_visionBonus(0), m_digStrength(0),
+	  m_srcX(0), m_srcY(0), m_srcW(24), m_srcH(24), m_Price(0) {}
 
 void ItemBase::ApplySpecialAbility(AbilityTrigger trigger, UnitBase* pOwner, UnitBase* pTarget)
 {
@@ -27,7 +30,7 @@ void ItemBase::GetItem(Player* player)
 {
 	if (m_Price > player->GetMoney()) return;
 
-	player->SetMoney(player->GetMoney() - m_Price);
+	player->SetMoney(-m_Price); 
 	OnUnequip(player);
 	OnEquip(player);
 }

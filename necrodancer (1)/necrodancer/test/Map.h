@@ -24,6 +24,7 @@ public:
 	Vector2 GetRandomFloorPos() const;
 	bool DigTile(int x, int y, int digLevel);
 	const std::vector<Room*>& GetRooms() const { return m_rooms; }
+	Room* GetRoomAt(int x, int y) const;
 
 	void AddWorldItem(ItemBase* pItem, int x, int y);
 	ItemBase* PickupItem(int x, int y);
