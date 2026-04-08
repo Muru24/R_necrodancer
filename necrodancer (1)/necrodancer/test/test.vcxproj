@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemFactory.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="RhythmManager.cpp" />
     <ClCompile Include="R_Note.cpp" />
     <ClCompile Include="Shop.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Struct.h" />
     <ClCompile Include="test.cpp" />
@@ -149,6 +151,7 @@
     <ClCompile Include="Shopkeeper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bat.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Item.h" />
@@ -164,6 +167,7 @@
     <ClInclude Include="RhythmManager.h" />
     <ClInclude Include="R_Note.h" />
     <ClInclude Include="Shop.h" />
+    <ClInclude Include="Skeleton.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Room.h" />

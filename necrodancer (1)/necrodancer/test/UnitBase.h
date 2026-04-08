@@ -19,6 +19,7 @@ protected:
 	Vector2 m_vTargetPos;
 	Vector2 m_vStartPos;
 	bool m_isBumping;
+	MonsterType m_monsterType = MONSTER_NONE;
 
 public:
 	UnitBase() : isLookLeft(false), m_currentFrame(0), m_lastAnimTime(0), m_isMoving(false), moveProgress(0.0f), jumpHeight(30.0f), m_isBumping(false) {
@@ -27,8 +28,8 @@ public:
 		m_vTargetPos = { 0, 0 };
 		m_vStartPos = { 0, 0 };
 	}
-	UnitBase(float hp, float attack, int movedistance, Vector2 pos, ObjectTag tag)
-		: isLookLeft(false), m_currentFrame(0), m_lastAnimTime(0), m_isMoving(false), moveProgress(0.0f), jumpHeight(30.0f), m_isBumping(false)
+	UnitBase(float hp, float attack, int movedistance, Vector2 pos, ObjectTag tag, MonsterType monsterType = MONSTER_NONE)
+		: isLookLeft(false), m_currentFrame(0), m_lastAnimTime(0), m_isMoving(false), moveProgress(0.0f), jumpHeight(30.0f), m_isBumping(false), m_monsterType(monsterType)
 	{
 		status.Hp = hp;
 		status.MaxHp = hp;
@@ -82,6 +83,8 @@ public:
 	void setIsLookLeft(bool islookleft) { isLookLeft = islookleft; }
 	void SetPos(Vector2 pos) { obj.Position = pos; }
 	void SetTag(ObjectTag tag) { obj.Tag = tag; }
+	void SetMonsterType(MonsterType type) { m_monsterType = type; }
+	MonsterType GetMonsterType() const { return m_monsterType; }
 
 	void SetCurrentFrame(int frame) { m_currentFrame = frame; }
 	void SetIsMoving(bool moving) { m_isMoving = moving; }

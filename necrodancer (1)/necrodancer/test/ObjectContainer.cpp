@@ -31,8 +31,8 @@ UnitBase* ObjectContainer::FindUnitAt(int gridX, int gridY)
 		if (!unit || !unit->GetIsAlive()) continue;
 
 		Vector2 logicalPos = unit->GetLogicalPos();
-		int uGridX = (int)floor((logicalPos.X + gridSize * 0.5f) / gridSize);
-		int uGridY = (int)floor((logicalPos.Y + gridSize * 0.5f) / gridSize);
+		int uGridX = (int)floor(((float)logicalPos.X + gridSize * 0.5f) / gridSize);
+		int uGridY = (int)floor(((float)logicalPos.Y + gridSize * 0.5f) / gridSize);
 
 		if (uGridX == gridX && uGridY == gridY)
 		{

@@ -1,4 +1,4 @@
-﻿#include "RhythmManager.h"
+#include "RhythmManager.h"
 #include "R_Note.h"
 
 void RhythmManager::SetNoteList(float bpm)
@@ -20,7 +20,7 @@ bool RhythmManager::UpdateRhythm()
 
 	if (Note!= nullptr) {
 		float ratio = Note->Getcurrenttime() / Note->Getmaxtime();
-		if (ratio < 0.15f || ratio > 0.85f)
+		if (ratio < RHYTHM_MARGIN || ratio > (1.0f - RHYTHM_MARGIN))
 			SetCurrentFrame(1);
 		else
 			SetCurrentFrame(0);
@@ -40,4 +40,10 @@ void RhythmManager::FinishRhythm()
 	if (Note == nullptr) return;
 	
 	delete Note;
+}
+
+float RhythmManager::GetRatio() const
+{
+	if (Note == nullptr) return 0.0f;
+	return Note->Getcurrenttime() / Note->Getmaxtime();
 }

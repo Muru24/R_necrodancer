@@ -18,6 +18,8 @@ private:
 	Gdiplus::Image* m_pSpriteAtlas;
 	Gdiplus::Image* m_pWallImg;
 	Gdiplus::Image* m_pSlimeImg;
+	Gdiplus::Image* m_pSkeletonImg;
+	Gdiplus::Image* m_pBatImg;
 	Gdiplus::Image* m_HUD;
 	Gdiplus::Image* m_pNote;
 	Gdiplus::Image* m_pShopkeeper;

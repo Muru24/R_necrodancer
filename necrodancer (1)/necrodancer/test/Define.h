@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -31,6 +31,7 @@
 #define MONSTER_SLIME_SCR_Y 26
 #define MONSTER_SLIME_POS_X 0
 #define MONSTER_SLIME_POS_Y 0
+
 
 //UI Pos
 #define UI_HP_POS_X			1040
@@ -109,7 +110,7 @@
 
 //Rhythm
 #define RHYTHM_BPM 120
-#define RHYTHM_MARGIN	0.2f
+#define RHYTHM_MARGIN	0.3f
 
 //Item_Frame
 #define ITEM_ARMOR_FRAME 26
@@ -202,6 +203,11 @@
 #define EFFECT_BOMB_POS_X 105
 #define EFFECT_BOMB_POS_Y 243
 
+#define EFFECT_ENEMY_ATTACK_SCR_X 30
+#define EFFECT_ENEMY_ATTACK_SCR_X 24
+#define EFFECT_ENEMY_ATTACK_POS_X 589
+#define EFFECT_ENEMY_ATTACK_POS_Y 165
+
 #define SPRITEPATH_FLOORS       L"Sprite/Floor/Floors.png"
 #define SPRITEPATH_WALLS        L"Sprite/Floor/Walls.png"
 
@@ -209,6 +215,7 @@
 #define SPRITEPATH_SLIMES       L"Sprite/Monster/Monsters_Slimes.png"
 #define SPRITEPATH_WRAITHS      L"Sprite/Monster/Monsters_Wraiths.png"
 #define SPRITEPATH_SKELETONS    L"Sprite/Monster/Monsters_Skeletons.png"
+#define SPRITEPATH_BAT    L"Sprite/Monster/Monster_Bats.png"
 #define SPRITEPATH_DRAGONS      L"Sprite/Monster/Monsters_Dragons.png"
 #define SPRITEPATH_MINOTAURS    L"Sprite/Monster/Monsters_Minotaurs.png"
 #define SPRITEPATH_KINGCONGA    L"Sprite/Monster/Monster_Boss_KingConga.png"

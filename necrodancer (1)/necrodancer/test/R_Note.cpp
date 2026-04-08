@@ -1,9 +1,10 @@
-﻿#include "R_Note.h"
+#include "R_Note.h"
 #include "Timer.h"
 
 bool R_Note::OnNoteInputCompleted()
 {
-	if (cTime <= p_checkTime || cTime >= m_checkTime)
+	float margin = mTime * RHYTHM_MARGIN;
+	if (cTime <= margin || cTime >= (mTime - margin))
 		return true;
 
 	return false;

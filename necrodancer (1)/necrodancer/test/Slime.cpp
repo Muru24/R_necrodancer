@@ -8,7 +8,7 @@
 #include <iostream>
 
 Slime::Slime(int hp, int attack, int movedistance, Vector2 pos, ObjectTag tag)
-	: UnitBase(hp, attack, movedistance, pos, tag), MoveCount(0), MaxMoveCount(0), m_patternIndex(0)
+	: UnitBase(hp, attack, movedistance, pos, tag, MONSTER_SLIME), MoveCount(0), MaxMoveCount(0), m_patternIndex(0)
 {
 	if (!Slime_Move_Pattens.empty())
 		m_patternIndex = rand() % (int)Slime_Move_Pattens.size();
