@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Timer.h"
 
 class R_Note;
@@ -32,5 +32,6 @@ public:
 	void FinishRhythm();
 
 	R_Note* GetCurrentNote() { return Note == nullptr ? nullptr : Note; }
+	float GetRatio() const;
 };
 

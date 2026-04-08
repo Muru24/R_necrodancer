@@ -16,7 +16,7 @@
 
 using namespace Gdiplus;
 
-Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr), m_pSlimeImg(nullptr), m_HUD(nullptr),
+Render::Render() : m_pTileImg(nullptr), m_pSpriteAtlas(nullptr), m_pWallImg(nullptr), m_pSlimeImg(nullptr), m_pSkeletonImg(nullptr), m_pBatImg(nullptr), m_HUD(nullptr),
 m_pShopkeeper(nullptr), m_pNote(nullptr), m_pEffectAttack(nullptr),
 m_pItemWeapons(nullptr), m_pItemArmor(nullptr), m_pItemHeadwear(nullptr), m_pItemFootwear(nullptr),
 m_pItemShovels(nullptr), m_pItemTorches(nullptr), m_pItemResources(nullptr), m_pItemConsumables(nullptr),
@@ -38,6 +38,8 @@ void Render::Initialize(ULONG_PTR& gdiplusToken)
 	m_pTileImg = new Gdiplus::Image(SPRITEPATH_FLOORS);
 	m_pWallImg = new Gdiplus::Image(SPRITEPATH_WALLS);
 	m_pSlimeImg = new Gdiplus::Image(SPRITEPATH_SLIMES);
+	m_pSkeletonImg = new Gdiplus::Image(SPRITEPATH_SKELETONS);
+	m_pBatImg = new Gdiplus::Image(SPRITEPATH_BAT);
 	m_HUD = new Gdiplus::Image(SPRITEPATH_HUD);
 	m_pShopkeeper = new Gdiplus::Image(SPRITEPATH_SHOPKEPPER);
 
@@ -65,6 +67,8 @@ void Render::Finalize(ULONG_PTR gdiplusToken)
 	if (m_pTileImg)        delete m_pTileImg;
 	if (m_pWallImg)        delete m_pWallImg;
 	if (m_pSlimeImg)       delete m_pSlimeImg;
+	if (m_pSkeletonImg)   delete m_pSkeletonImg;
+	if (m_pBatImg)        delete m_pBatImg;
 	if (m_pCachedBackground) delete m_pCachedBackground;
 	if (m_HUD) delete m_HUD;
 	if (m_pShopkeeper) delete m_pShopkeeper;
@@ -259,8 +263,33 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 			if (Light::getInstance().GetVisibility(gridX, gridY) != VIS_VISIBLE) continue;
 
 			int currentFrame = unit->GetCurrentFrame();
-			float srcX = (float)MONSTER_SLIME_POS_X + (currentFrame * MONSTER_SLIME_SCR_X);
-			float srcY = (float)MONSTER_SLIME_POS_Y;
+			MonsterType mType = unit->GetMonsterType();
+			Gdiplus::Image* pImg = nullptr;
+			float srcX = 0, srcY = 0, srcW = 0, srcH = 0;
+
+			if (mType == MONSTER_SLIME) {
+				pImg = m_pSlimeImg;
+				srcW = (float)MONSTER_SLIME_SCR_X;
+				srcH = (float)MONSTER_SLIME_SCR_Y;
+				srcX = (float)MONSTER_SLIME_POS_X + (currentFrame * srcW);
+				srcY = (float)MONSTER_SLIME_POS_Y;
+			}
+			else if (mType == MONSTER_BAT) {
+				pImg = m_pBatImg;
+				srcW = (float)MONSTER_BAT_SCR_X;
+				srcH = (float)MONSTER_BAT_SCR_Y;
+				srcX = (float)MONSTER_BAT_POS_X + (currentFrame * srcW);
+				srcY = (float)MONSTER_BAT_POS_Y;
+			}
+			else if (mType == MONSTER_SKELETON) {
+				pImg = m_pSkeletonImg;
+				srcW = (float)MONSTER_SKELETON_SCR_X;
+				srcH = (float)MONSTER_SKELETON_SCR_Y;
+				srcX = (float)MONSTER_SKELETON_POS_X + (currentFrame * srcW);
+				srcY = (float)MONSTER_SKELETON_POS_Y;
+			}
+
+			if (!pImg || pImg->GetLastStatus() != Ok) continue;
 
 			float unitX = (float)unit->GetX() - camera.GetX();
 			float unitY = (float)unit->GetY() - camera.GetY();
@@ -273,22 +302,22 @@ void Render::DrawUnit(Gdiplus::Graphics& graphics, Camera& camera)
 			}
 
 			bool isLookLeft = unit->GetIsLookLeft();
-			float drawWidth = (float)(MONSTER_SLIME_SCR_X * DRAW_SCALE);
-			float drawHeight = (float)(MONSTER_SLIME_SCR_Y * DRAW_SCALE);
+			float drawWidth = (float)(srcW * DRAW_SCALE);
+			float drawHeight = (float)(srcH * DRAW_SCALE);
 
 			float gridSize = (float)(FRAME_SIZE * DRAW_SCALE);
 			float offsetX = (gridSize - drawWidth) / 2.0f;
 			float offsetY = (gridSize - drawHeight);
 
 			if (isLookLeft) {
-				graphics.DrawImage(m_pSlimeImg,
+				graphics.DrawImage(pImg,
 					RectF(unitX + offsetX + drawWidth, (unitY - jumpOffsetY) + offsetY, -drawWidth, drawHeight),
-					(float)srcX, (float)srcY, (float)MONSTER_SLIME_SCR_X, (float)MONSTER_SLIME_SCR_Y, UnitPixel);
+					srcX, srcY, srcW, srcH, UnitPixel);
 			}
 			else {
-				graphics.DrawImage(m_pSlimeImg,
+				graphics.DrawImage(pImg,
 					RectF(unitX + offsetX, (unitY - jumpOffsetY) + offsetY, drawWidth, drawHeight),
-					(float)srcX, (float)srcY, (float)MONSTER_SLIME_SCR_X, (float)MONSTER_SLIME_SCR_Y, UnitPixel);
+					srcX, srcY, srcW, srcH, UnitPixel);
 			}
 		}
 		else if (unit->GetTag() == NPC)

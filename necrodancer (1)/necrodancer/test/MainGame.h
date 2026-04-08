@@ -46,5 +46,6 @@ public:
 	SceneType GetScene() const { return m_eScene; }
 
 	Map* GetMap() const { return m_pMap; }
+	Player* GetPlayer() const { return m_pPlayer; }
 	float GetDeltaTime() const { return m_fDeltaTime; }
 };

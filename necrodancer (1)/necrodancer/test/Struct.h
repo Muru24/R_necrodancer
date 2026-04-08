@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Define.h"
 
 struct Vector2
@@ -10,6 +10,14 @@ struct Vector2
 	Vector2 operator-(const Vector2& other) const { return { X - other.X, Y - other.Y }; }
 	Vector2 operator*(float scalar) const { return { X * scalar, Y * scalar }; }
 	bool operator==(const Vector2& other) const { return X == other.X && Y == other.Y; }
+};
+
+enum MonsterType
+{
+	MONSTER_NONE = 0,
+	MONSTER_SLIME,
+	MONSTER_BAT,
+	MONSTER_SKELETON
 };
 
 struct UnitStatus

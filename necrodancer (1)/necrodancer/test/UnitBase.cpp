@@ -8,6 +8,7 @@
 #include <iostream>
 #include "Item.h"
 #include "ItemFactory.h"
+#include "RhythmManager.h"
 
 void UnitBase::Update()
 {
@@ -47,10 +48,9 @@ void UnitBase::Update()
 		}
 	}
 
-	if (GetTickCount() - GetLastAnimTime() >= ANIM_SPEED) {
-		SetCurrentFrame((GetCurrentFrame() + 1) % 4);
-		SetLastAnimTime(GetTickCount());
-	}
+	// 애니메이션 처리: 박자 비율(ratio)에 따라 4프레임을 나눔
+	float ratio = RhythmManager::getInstance().GetRatio();
+	SetCurrentFrame((int)(ratio * 4) % 4);
 }
 
 void UnitBase::StartMoving(Vector2 targetPos, bool isBumping)
@@ -69,19 +69,15 @@ bool UnitBase::ColliderObject(int gridX, int gridY, int nextX, int nextY)
 		ObjectTag targetTag = target->GetTag();
 
 		if (myTag == PLAYER) {
-			if (targetTag == ENEMY) {
-				Attack(*target);
+			if (targetTag == ENEMY || targetTag == NPC) {
+				if (targetTag == ENEMY) Attack(*target);
 				StartMoving({ (float)nextX, (float)nextY }, true);
 				return true;
 			}
 		}
 		else if (myTag == ENEMY) {
-			if (targetTag == PLAYER) {
-				Attack(*target);
-				StartMoving({ (float)nextX, (float)nextY }, true);
-				return true;
-			}
-			if (targetTag == ENEMY) {
+			if (targetTag == PLAYER || targetTag == ENEMY || targetTag == NPC) {
+				if (targetTag == PLAYER) Attack(*target);
 				StartMoving({ (float)nextX, (float)nextY }, true);
 				return true;
 			}
@@ -99,11 +95,11 @@ bool UnitBase::TryMove(int dx, int dy)
 
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
 	Vector2 logicalPos = GetLogicalPos();
-	int nextX = (int)logicalPos.X + dx * gridSize;
-	int nextY = (int)logicalPos.Y + dy * gridSize;
+	int nextX = (int)floor(logicalPos.X + 0.5f) + dx * gridSize;
+	int nextY = (int)floor(logicalPos.Y + 0.5f) + dy * gridSize;
 
-	int gridX = nextX / gridSize;
-	int gridY = nextY / gridSize;
+	int gridX = (int)floor((float)nextX / gridSize);
+	int gridY = (int)floor((float)nextY / gridSize);
 
 	TileType t = pMap->GetTile(gridX, gridY).type;
 	TileType tTop = pMap->GetTile(gridX, gridY + 1).type;
@@ -133,13 +129,16 @@ bool UnitBase::TryMove(int dx, int dy)
 				int ly = (int)relPos.Y;
 
 				int targetGridX, targetGridY;
+				int curGridX = (int)floor((float)logicalPos.X / gridSize);
+				int curGridY = (int)floor((float)logicalPos.Y / gridSize);
+
 				if (dx != 0) { // 가로 이동
-					targetGridX = (int)floor(logicalPos.X / gridSize) + ly * dx;
-					targetGridY = (int)floor(logicalPos.Y / gridSize) + lx * dx;
+					targetGridX = curGridX + (int)ly * dx;
+					targetGridY = curGridY + (int)lx; // 가로 이동 시 ly가 전진, lx가 측면 옵셋
 				}
 				else { // 세로 이동
-					targetGridX = (int)floor(logicalPos.X / gridSize) + lx * dy * -1;
-					targetGridY = (int)floor(logicalPos.Y / gridSize) + ly * dy;
+					targetGridX = curGridX + (int)lx; // 세로 이동 시 ly가 전진, lx가 측면 옵셋
+					targetGridY = curGridY + (int)ly * dy;
 				}
 
 				UnitBase* target = ObjectContainer::getInstance().FindUnitAt(targetGridX, targetGridY);

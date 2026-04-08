@@ -8,6 +8,8 @@
 #include "Timer.h"
 #include "ObjectContainer.h"
 #include "Slime.h"
+#include "Bat.h"
+#include "Skeleton.h"
 #include "Light.h"
 #include "ItemFactory.h"
 #include "RhythmManager.h"
@@ -81,11 +83,19 @@ void MainGame::Initialize()
 			int attempts = 0;
 			bool success = false;
 			do {
-				tx = room->GetRx() + (rand() % rw);
-				ty = room->GetRy() + (rh > 0 ? (rand() % rh) : 0);
+				if (rw >= 3 && rh >= 3) {
+					tx = room->GetRx() + 1 + (rand() % (rw - 2));
+					ty = room->GetRy() + 1 + (rand() % (rh - 2));
+				}
+				else {
+					tx = room->GetRx() + (rand() % rw);
+					ty = room->GetRy() + (rh > 0 ? (rand() % rh) : 0);
+				}
 				attempts++;
 
-				if (spawnedPos.count({ tx, ty }) == 0 && m_pMap->GetTile(tx, ty).type == TILE_FLOOR) {
+				if (spawnedPos.count({ tx, ty }) == 0 && 
+					m_pMap->GetTile(tx, ty).type == TILE_FLOOR &&
+					ObjectContainer::getInstance().FindUnitAt(tx, ty) == nullptr) {
 					success = true;
 					break;
 				}
@@ -94,9 +104,23 @@ void MainGame::Initialize()
 			if (!success) continue;
 
 			spawnedPos.insert({ tx, ty });
-			Vector2 slimePos = { (float)tx * gridSize, (float)ty * gridSize };
-			Slime* pSlime = new Slime(5, 1, 0, slimePos, ENEMY); 
-			ObjectContainer::getInstance().PushUnit(pSlime);
+			Vector2 monsterPos = { (float)tx * gridSize, (float)ty * gridSize };
+
+			UnitBase* pMonster = nullptr;
+			int dice = rand() % 3;
+			if (dice == 0) {
+				pMonster = new Slime(2, 1, 0, monsterPos, ENEMY);
+			}
+			else if (dice == 1) {
+				pMonster = new Bat(1, 1, 0, monsterPos, ENEMY);
+			}
+			else {
+				pMonster = new Skeleton(3, 2, 0, monsterPos, ENEMY);
+			}
+
+			if (pMonster) {
+				ObjectContainer::getInstance().PushUnit(pMonster);
+			}
 		}
 	}
 
