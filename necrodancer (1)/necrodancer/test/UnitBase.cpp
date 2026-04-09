@@ -1,4 +1,4 @@
-#include "UnitBase.h"
+﻿#include "UnitBase.h"
 #include "MainGame.h"
 #include "Define.h"
 #include "Map.h"
@@ -48,7 +48,7 @@ void UnitBase::Update()
 		}
 	}
 
-	// 애니메이션 처리: 박자 비율(ratio)에 따라 4프레임을 나눔
+
 	float ratio = RhythmManager::getInstance().GetRatio();
 	SetCurrentFrame((int)(ratio * 4) % 4);
 }
@@ -109,17 +109,17 @@ bool UnitBase::TryMove(int dx, int dy)
 	if (isWall || isWallTop) {
 		if (GetTag() == PLAYER) {
 			if (isWallTop)
-				pMap->DigTile(gridX, gridY + 1, static_cast<Player*>(this)->GetDigLevel());
+				pMap->DigTile(gridX, gridY + 1, GetDigLevel());
 			else if (isWall)
-				pMap->DigTile(gridX, gridY, static_cast<Player*>(this)->GetDigLevel());
+				pMap->DigTile(gridX, gridY, GetDigLevel());
 		}
 		StartMoving({ (float)nextX, (float)nextY }, true);
 		return false;
 	}
 
 	if (GetTag() == PLAYER) {
-		Player* pPlayer = static_cast<Player*>(this);
-		Weapon* pWeapon = static_cast<Weapon*>(pPlayer->GetEquippedItem(SLOT_WEAPON));
+		ItemBase* pWeaponItem = GetEquippedItem(SLOT_WEAPON);
+		Weapon* pWeapon = static_cast<Weapon*>(pWeaponItem);
 		if (pWeapon) {
 			const std::vector<Vector2>& rangeList = pWeapon->GetAttackRange();
 			bool attacked = false;
@@ -132,12 +132,12 @@ bool UnitBase::TryMove(int dx, int dy)
 				int curGridX = (int)floor((float)logicalPos.X / gridSize);
 				int curGridY = (int)floor((float)logicalPos.Y / gridSize);
 
-				if (dx != 0) { // 가로 이동
+				if (dx != 0) {
 					targetGridX = curGridX + (int)ly * dx;
-					targetGridY = curGridY + (int)lx; // 가로 이동 시 ly가 전진, lx가 측면 옵셋
+					targetGridY = curGridY + (int)lx;
 				}
-				else { // 세로 이동
-					targetGridX = curGridX + (int)lx; // 세로 이동 시 ly가 전진, lx가 측면 옵셋
+				else {
+					targetGridX = curGridX + (int)lx;
 					targetGridY = curGridY + (int)ly * dy;
 				}
 
@@ -187,16 +187,22 @@ void UnitBase::TakeDamage(float atk)
 
 void UnitBase::Die()
 {
-	// 몬스터(ENEMY)일 경우에만 골드 드랍
+
 	if (GetTag() == ENEMY) {
 		Map* pMap = MainGame::getInstance().GetMap();
-		if (pMap) {
+
+		Player* pPlayer = static_cast<Player*>(MainGame::getInstance().GetPlayer());
+
+		if (pMap && pPlayer) {
 			int gridSize = FRAME_SIZE * DRAW_SCALE;
 			int gridX = static_cast<int>(GetPos().X / gridSize);
 			int gridY = static_cast<int>(GetPos().Y / gridSize);
 
-			ItemBase* pGold = ItemFactory::Create(ITEM_GOLD_COIN);
+			int combo = pPlayer->GetComboCount();
+
+			ItemBase* pGold = ItemFactory::Create(ITEM_GOLD_COIN, combo);
 			if (pGold) {
+				pGold->SetPrice(-(1 + combo));
 				pMap->AddWorldItem(pGold, gridX, gridY);
 			}
 		}

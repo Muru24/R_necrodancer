@@ -129,6 +129,8 @@
   <ItemGroup>
     <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DeadRinger.cpp" />
+    <ClCompile Include="DeadRingerPhantom.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemFactory.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -137,6 +139,7 @@
     <ClCompile Include="ObjectContainer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Render.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RhythmManager.cpp" />
     <ClCompile Include="R_Note.cpp" />
     <ClCompile Include="Shop.cpp" />
@@ -149,10 +152,13 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="UnitBase.cpp" />
     <ClCompile Include="Shopkeeper.cpp" />
+    <ClCompile Include="UtilPathFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bat.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DeadRinger.h" />
+    <ClInclude Include="DeadRingerPhantom.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemFactory.h" />
@@ -164,6 +170,7 @@
     <ClInclude Include="ObjectContainer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RhythmManager.h" />
     <ClInclude Include="R_Note.h" />
     <ClInclude Include="Shop.h" />
@@ -174,6 +181,7 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="UnitBase.h" />
     <ClInclude Include="Shopkeeper.h" />
+    <ClInclude Include="UtilPathFinder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

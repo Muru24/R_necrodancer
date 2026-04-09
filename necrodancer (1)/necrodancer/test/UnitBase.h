@@ -55,6 +55,10 @@ public:
 	virtual void Die();
 
 	virtual void Update();
+	virtual class ItemBase* GetEquippedItem(ItemSlot slot) const { return nullptr; }
+	virtual int GetVisionRadius() const { return 0; }
+	virtual float GetDigLevel() const { return 1.0f; }
+	virtual int GetComboCount() const { return 0; }
 
 	const float GetHp() const { return status.Hp; }
 	const float GetMaxHp() const { return status.MaxHp; }
@@ -67,6 +71,7 @@ public:
 	const Vector2 GetPos() const { return obj.Position; }
 	const ObjectTag GetTag() const { return obj.Tag; }
 	const Vector2 GetLogicalPos() const { return m_isMoving ? m_vTargetPos : obj.Position; }
+	const Vector2 GetStartPos() const { return m_vStartPos; }
 
 	int GetCurrentFrame() const { return m_currentFrame; }
 	bool GetIsMoving() const { return m_isMoving; }

@@ -11,8 +11,6 @@ public:
 	virtual ~Skeleton() {}
 
 	virtual void Move();
+	virtual void Die();
 	virtual void Update();
-
-private:
-	Vector2 FindNextStepAStar(Vector2 startGrid, Vector2 targetGrid);
 };

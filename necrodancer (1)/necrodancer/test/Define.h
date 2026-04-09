@@ -23,7 +23,7 @@
 #define MONSTER_SKELETON_SCR_Y 32
 #define MONSTER_SKELETON_POS_X 0
 #define MONSTER_SKELETON_POS_Y 0
-#define MONSTER_BAT_SCR_X 23 
+#define MONSTER_BAT_SCR_X 24
 #define MONSTER_BAT_SCR_Y 24 
 #define MONSTER_BAT_POS_X 0
 #define MONSTER_BAT_POS_Y 0
@@ -55,11 +55,20 @@
 
 //Map Size
 #define MAP_WIDTH           60
-#define MAP_HEIGHT          40
+#define MAP_HEIGHT          70
 
 //Tile Frame
 #define TILE_DEFAULT_X      48
 #define TILE_DEFAULT_Y      0
+
+#define TILE_SCR_X		  26
+#define TILE_SCR_Y		  26
+#define TILE_ANI_POS_X 25
+#define TILE_ANI_POS_Y 25
+
+// Boss Special Tile (floors.png - 3rd row, 7th tile)
+#define TILE_BOSS_FLOOR_SRC_X 156
+#define TILE_BOSS_FLOOR_SRC_Y 52
 
 //Wall Frame
 #define WALL_DEFAULT_X      0
@@ -110,7 +119,7 @@
 
 //Rhythm
 #define RHYTHM_BPM 120
-#define RHYTHM_MARGIN	0.3f
+#define RHYTHM_MARGIN	0.4f
 
 //Item_Frame
 #define ITEM_ARMOR_FRAME 26
@@ -208,6 +217,19 @@
 #define EFFECT_ENEMY_ATTACK_POS_X 589
 #define EFFECT_ENEMY_ATTACK_POS_Y 165
 
+#define MONSTER_DEAD_RINGER_SCR_X 40
+#define MONSTER_DEAD_RINGER_SCR_Y 39
+#define MONSTER_DEAD_RINGER_POS_X 10
+#define MONSTER_DEAD_RINGER_POS_Y 10
+#define MONSTER_DEAD_RINGER_SKILL1_SCR_X 50
+#define MONSTER_DEAD_RINGER_SKILL1_SCR_Y 46
+#define MONSTER_DEAD_RINGER_SKILL1_POS_X 339
+#define MONSTER_DEAD_RINGER_SKILL1_POS_Y 6
+#define MONSTER_DEAD_RINGER_SKILL2_SCR_X 34
+#define MONSTER_DEAD_RINGER_SKILL2_SCR_Y 52
+#define MONSTER_DEAD_RINGER_SKILL2_POS_X 74
+#define MONSTER_DEAD_RINGER_SKILL2_POS_Y 103
+
 #define SPRITEPATH_FLOORS       L"Sprite/Floor/Floors.png"
 #define SPRITEPATH_WALLS        L"Sprite/Floor/Walls.png"
 
@@ -219,6 +241,8 @@
 #define SPRITEPATH_DRAGONS      L"Sprite/Monster/Monsters_Dragons.png"
 #define SPRITEPATH_MINOTAURS    L"Sprite/Monster/Monsters_Minotaurs.png"
 #define SPRITEPATH_KINGCONGA    L"Sprite/Monster/Monster_Boss_KingConga.png"
+#define SPRITEPATH_Dead_Ringer    L"Sprite/Monster/Monster_Dead_Ringer.png"
+
 #define SPRITEPATH_SHOPKEPPER   L"Sprite/NPC/NPC_Shopkeeper.png"
 
 #define SPRITEPATH_EFFECT_ATTACK	L"Sprite/Effect/Effects_Attack.png"
@@ -254,7 +278,8 @@ enum TileType
 	TILE_WALL_HARD,
 	TILE_WALL_BADROCK,
 	TILE_WALL_SHOP,
-	TILE_FLOOR
+	TILE_FLOOR,
+	TILE_BOSS_SPECIAL_FLOOR
 };
 
 enum Visibility {

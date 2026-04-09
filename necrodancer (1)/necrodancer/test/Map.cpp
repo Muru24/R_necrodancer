@@ -22,8 +22,8 @@ void Map::Generate() {
 	Clear();
 	srand((unsigned int)time(NULL));
 
-	m_pRoot = new Room(0, 0, MAP_WIDTH, MAP_HEIGHT, DEFAULT);
-	Divide(m_pRoot, 7);
+	m_pRoot = new Room(0, 0, 60, 40, DEFAULT);
+	Divide(m_pRoot, 4);
 	m_pRoot->CreateRoom();
 	FillMap(m_pRoot);
 	
@@ -122,6 +122,12 @@ void Map::Generate() {
 					}
 				}
 			}
+
+			int centerX = bRx + bossRw / 2;
+			int centerY = bRy + bossRh / 2;
+			if (centerY < MAP_HEIGHT && centerX < MAP_WIDTH) {
+				m_mapData[centerY][centerX] = { TILE_BOSS_SPECIAL_FLOOR, 0 };
+			}
 		} 
 		else if (room->GetRoomType() == SHOP) {
 			int shopRh = (int)m_ShopMapData.size();
@@ -172,14 +178,15 @@ void Map::Generate() {
 		}
 	}
 
-	std::vector<std::vector<int>> dist(MAP_HEIGHT, std::vector<int>(MAP_WIDTH, 9999));
+
+	std::vector<int> dist(MAP_WIDTH * MAP_HEIGHT, 9999);
 	std::vector<std::pair<int, int>> queue;
 
 	for (int y = 0; y < MAP_HEIGHT; ++y) {
 		for (int x = 0; x < MAP_WIDTH; ++x) {
 			if (m_mapData[y][x].type == TILE_FLOOR) {
-				dist[y][x] = 0;
-				queue.push_back({x, y});
+				dist[y * MAP_WIDTH + x] = 0;
+				queue.push_back({ x, y });
 			}
 		}
 	}
@@ -197,9 +204,10 @@ void Map::Generate() {
 			int nx = cx + dx[i];
 			int ny = cy + dy[i];
 			if (nx >= 0 && nx < MAP_WIDTH && ny >= 0 && ny < MAP_HEIGHT) {
-				if (dist[ny][nx] > dist[cy][cx] + 1) {
-					dist[ny][nx] = dist[cy][cx] + 1;
-					queue.push_back({nx, ny});
+				int nextDist = dist[cy * MAP_WIDTH + cx] + 1;
+				if (nextDist <= 2 && dist[ny * MAP_WIDTH + nx] > nextDist) {
+					dist[ny * MAP_WIDTH + nx] = nextDist;
+					queue.push_back({ nx, ny });
 				}
 			}
 		}
@@ -208,7 +216,7 @@ void Map::Generate() {
 	for (int y = 0; y < MAP_HEIGHT; ++y) {
 		for (int x = 0; x < MAP_WIDTH; ++x) {
 			if (m_mapData[y][x].type == TILE_WALL_DEFAULT) {
-				int d = dist[y][x];
+				int d = dist[y * MAP_WIDTH + x];
 				if (d == 1) { 
 					m_mapData[y][x].type = TILE_WALL_DEFAULT;
 					m_mapData[y][x].variant = rand() % (WALL_DEFAULT_RANGE + 1);
@@ -228,6 +236,33 @@ void Map::Generate() {
 		}
 	}
 	
+
+	int secretBossStartX = 0;
+	int secretBossStartY = 50;
+	int secretBossSize = 13;
+	for (int y = secretBossStartY; y < secretBossStartY + secretBossSize; ++y) {
+		for (int x = secretBossStartX; x < secretBossStartX + secretBossSize; ++x) {
+			if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
+				if (y == secretBossStartY || y == secretBossStartY + secretBossSize - 1 ||
+					x == secretBossStartX || x == secretBossStartX + secretBossSize - 1) {
+					m_mapData[y][x] = { TILE_WALL_HARD, 0, 2 };
+				}
+				else {
+					m_mapData[y][x] = { TILE_FLOOR, 0 };
+				}
+			}
+		}
+	}
+
+
+	Room* secretRoom = new Room(secretBossStartX, secretBossStartY, secretBossSize, secretBossSize, BOSS);
+	secretRoom->SetRx(secretBossStartX + 1);
+	secretRoom->SetRy(secretBossStartY + 1);
+	secretRoom->SetRw(secretBossSize - 2);
+	secretRoom->SetRh(secretBossSize - 2);
+	secretRoom->SetHasRoom(true);
+	m_rooms.push_back(secretRoom);
+
 	Render::getInstance().InvalidateBackgroundCache();
 }
 
@@ -294,6 +329,7 @@ bool Map::DigTile(int x, int y, int digLevel)
 		if (digLevel >= 1) {
 			tile.type = TILE_FLOOR;
 			Render::getInstance().UpdateTileCache(x, y, this);
+			Render::getInstance().UpdateTileCache(x, y - 1, this);
 			return true;
 		}
 	}
@@ -301,6 +337,7 @@ bool Map::DigTile(int x, int y, int digLevel)
 		if (digLevel >= 3) {
 			tile.type = TILE_FLOOR;
 			Render::getInstance().UpdateTileCache(x, y, this);
+			Render::getInstance().UpdateTileCache(x, y - 1, this);
 			return true;
 		}
 		else if (digLevel == 2) {
@@ -308,6 +345,7 @@ bool Map::DigTile(int x, int y, int digLevel)
 			if (tile.durability <= 0) {
 				tile.type = TILE_FLOOR;
 				Render::getInstance().UpdateTileCache(x, y, this);
+				Render::getInstance().UpdateTileCache(x, y - 1, this);
 				return true;
 			}
 		}
@@ -341,7 +379,7 @@ Vector2 Map::GetRandomFloorPos() const {
 }
 
 void Map::Divide(Room* node, int count) {
-	const int MAX_ROOMS = 20;
+	const int MAX_ROOMS = 6;
 	const int MIN_SIZE = 8;
 	if (count <= 0 || m_currentSplitCount >= MAX_ROOMS - 1) return;
 

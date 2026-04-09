@@ -55,4 +55,5 @@ public:
 	void SetRy(int _ry) { ry = _ry; }
 	void SetRw(int _rw) { rw = _rw; }
 	void SetRh(int _rh) { rh = _rh; }
+	void SetHasRoom(bool _hasRoom) { hasRoom = _hasRoom; }
 };

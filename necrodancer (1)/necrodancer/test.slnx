@@ -29,6 +29,7 @@
     <File Path="test/Sprite/Monster/Monsters_Wraiths.png" />
     <File Path="test/Sprite/Monster/Monster_Bats.png" />
     <File Path="test/Sprite/Monster/Monster_Boss_KingConga.png" />
+    <File Path="test/Sprite/Monster/Monster_Dead_Ringer.png" />
     <File Path="test/Sprite/Monster/Monster_Dragons.png" />
     <File Path="test/Sprite/Monster/Monster_Minotaurs.png" />
     <File Path="test/Sprite/Scene/Scene_Boss.png" />

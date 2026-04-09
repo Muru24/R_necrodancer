@@ -1,4 +1,4 @@
-#include "MainGame.h"
+﻿#include "MainGame.h"
 #include "Struct.h"
 #include "Define.h"
 #include "Map.h"
@@ -15,6 +15,7 @@
 #include "RhythmManager.h"
 #include "Shopkeeper.h"
 #include "Title.h"
+#include "DeadRinger.h"
 
 #include <iostream>
 #include <set>
@@ -50,10 +51,12 @@ void MainGame::Initialize()
 	m_Rhytm->SetNoteList(RHYTHM_BPM);
 
 	Vector2 startPos = m_pMap->GetRandomFloorPos();
-	m_pPlayer = new Player(3, 2, MOVE_SPEED, startPos, PLAYER);
+	m_pPlayer = new Player(3, 0, MOVE_SPEED, startPos, PLAYER);
 	ObjectContainer::getInstance().PushUnit(m_pPlayer);	
 
-	m_pPlayer->Equip(ItemFactory::Create(ITEM_RAPIER));
+	m_pPlayer->Equip(ItemFactory::Create(ITEM_DAGGER));
+	m_pPlayer->Equip(ItemFactory::Create(ITEM_SHOVEL_IRON));
+	m_pPlayer->Equip(ItemFactory::Create(ITEM_CHEESE));
 
 	int gridSize = FRAME_SIZE * DRAW_SCALE;
 	int px = static_cast<int>(startPos.X / gridSize);
@@ -124,6 +127,8 @@ void MainGame::Initialize()
 		}
 	}
 
+	m_pPlayer->SetMoney(20);
+
 	Room* pShop = nullptr;
 	for (Room* room : rooms) {
 		if (room->GetRoomType() == SHOP) {
@@ -138,12 +143,17 @@ void MainGame::Initialize()
 		Shopkeeper* pShopkeeper = new Shopkeeper(999, 0, 0, shopkeeperPos, NPC);
 		ObjectContainer::getInstance().PushUnit(pShopkeeper);
 
-		// 상점 주인 아래에 랜덤 아이템 3개 배치 (가격 10G)
+
 		ItemID shopItems[] = { ITEM_DAGGER, ITEM_LONGSWORD, ITEM_RAPIER };
+		for (int i = 0; i < 3; ++i) {
+			int r = i + rand() % (3 - i);
+			std::swap(shopItems[i], shopItems[r]);
+		}
+
 		for (int i = 0; i < 3; ++i) {
 			int itemX = cx - 1 + i;
 			int itemY = cy + 1;
-			ItemBase* pItem = ItemFactory::Create(shopItems[rand() % 3]);
+			ItemBase* pItem = ItemFactory::Create(shopItems[i]);
 			if (pItem) {
 				pItem->SetPrice(10);
 				m_pMap->AddWorldItem(pItem, itemX, itemY);
@@ -153,6 +163,19 @@ void MainGame::Initialize()
 	beatInterval = 60000 / RHYTHM_BPM;
 	lastBeatTime = GetTickCount();
 	currentBeatCount = 0;
+
+
+	int brCenterX = 6;
+	int brTopY = 51;
+	gridSize = FRAME_SIZE * DRAW_SCALE;
+	Vector2 deadRingerPos = { (float)brCenterX * gridSize, (float)brTopY * gridSize };
+	DeadRinger* pDeadRinger = new DeadRinger(6, 2, 0, deadRingerPos, ENEMY);
+	if (pDeadRinger) {
+		ObjectContainer::getInstance().PushUnit(pDeadRinger);
+	}
+
+
+	ObjectContainer::getInstance().ProcessSpawnQueue();
 }
 
 void MainGame::Finalize()
@@ -188,11 +211,31 @@ void MainGame::Update(HWND hWnd)
 	}
 
 	ObjectContainer::getInstance().UpdateEffects(m_fDeltaTime);
+	ObjectContainer::getInstance().UpdateExplosions(m_fDeltaTime);
 
 	bool isBeat = false;
 	if (m_Rhytm)
 	{
 		isBeat = m_Rhytm->UpdateRhythm();
+		if (isBeat) {
+			ObjectContainer::getInstance().UpdateBombs();
+		}
+		if (isBeat && m_pPlayer) {
+			int prevCombo = m_pPlayer->GetComboCount();
+
+
+			if (!m_pPlayer->GetActedThisBeat()) {
+				m_pPlayer->SetComboCount(0);
+			}
+
+
+			int currentCombo = m_pPlayer->GetComboCount();
+			if (currentCombo >= 1 || (prevCombo > 0 && currentCombo == 0)) {
+				Render::getInstance().ToggleAniPhase();
+			}
+
+			m_pPlayer->ResetActedThisBeat();
+		}
 	}
 
 	auto& unitContainer = ObjectContainer::getInstance().GetUnitContainer();
@@ -223,6 +266,9 @@ void MainGame::Update(HWND hWnd)
 			}
 		}
 	}
+
+
+	ObjectContainer::getInstance().ProcessSpawnQueue();
 
 	if (m_pPlayer)
 	{

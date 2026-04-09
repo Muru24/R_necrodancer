@@ -55,6 +55,12 @@
     <Filter Include="AttackEffect">
       <UniqueIdentifier>{bda2017c-dd2a-4636-b72d-10a53053e997}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{7bcba850-b386-46b5-a31a-dfcb306edb55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UtilPathFinder">
+      <UniqueIdentifier>{2dcd6aec-156b-457b-a73b-1eab6d23b215}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -121,6 +127,18 @@
       <Filter>Unit\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Skeleton.cpp">
+      <Filter>Unit\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DeadRinger.cpp">
+      <Filter>Unit\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilPathFinder.cpp">
+      <Filter>UtilPathFinder</Filter>
+    </ClCompile>
+    <ClCompile Include="DeadRingerPhantom.cpp">
       <Filter>Unit\Monster</Filter>
     </ClCompile>
   </ItemGroup>
@@ -192,6 +210,18 @@
       <Filter>Unit\Monster</Filter>
     </ClInclude>
     <ClInclude Include="Skeleton.h">
+      <Filter>Unit\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadRinger.h">
+      <Filter>Unit\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilPathFinder.h">
+      <Filter>UtilPathFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadRingerPhantom.h">
       <Filter>Unit\Monster</Filter>
     </ClInclude>
   </ItemGroup>

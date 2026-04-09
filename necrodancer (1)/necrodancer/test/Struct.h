@@ -17,7 +17,8 @@ enum MonsterType
 	MONSTER_NONE = 0,
 	MONSTER_SLIME,
 	MONSTER_BAT,
-	MONSTER_SKELETON
+	MONSTER_SKELETON,
+	MONSTER_DEAD_RINGER
 };
 
 struct UnitStatus
@@ -64,4 +65,18 @@ struct AttackEffect
 	float timer;
 	float duration;
 	int maxFrames;
+};
+
+struct Bomb
+{
+	Vector2 pos;
+	int beatsRemaining = 5;
+};
+
+struct ExplosionEffect
+{
+	Vector2 pos;
+	float timer;
+	float duration;
+	int maxFrames = 8;
 };
